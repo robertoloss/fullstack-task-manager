@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Cool webiste</title>
+    <link rel="stylesheet" href="./output.css">
+  </head>
+  <body class="flex flex-col items-center py-10 gap-y-10">
+		<div class="flex flex-col gap-y-4 items-start mb-10 max-w-[400px] w-full">
+			<h1 class="text-4xl font-bold w-full">Sign-Up</h1>
+			<form id="signup-form" method="post" action="/auth/register" class="flex flex-col gap-y-2">
+				<input type="text" id="email" name="email" class="border border-black px-2"/>
+				<input type="text" id="password" name="password" class="border border-black px-2"/>
+				<button type="submit"
+					class="rounded-md bg-gray-300 font-light text-sm px-2 py-1 min-w-14 hover:brightness-95
+						transition-all"
+				>
+					Sign-Up
+				</button>
+			</form>
+		</div>
+		<div class="flex flex-col max-w-[400px] w-full gap-y-4">
+			<h1 id="hello" class="text-4xl font-bold">List of names</h1>
+			<form id="add-name-form" method="post" action="/list" target="hidden-iframe">
+				<input type="text" id="new-name" name="name" class="mb-4 border border-black px-2"/>
+				<button type="submit" 
+					class="rounded-md bg-gray-300 font-light text-sm px-2 py-1 min-w-14 hover:brightness-95
+						transition-all" 
+				>
+					Add
+				</button>
+				<iframe name="hidden-iframe" style="display:none;"></iframe>
+			</form>
+			<div id="list"></div>
+			<div id="testButton" class="cursor-pointer select-none">CLICK</div>
+			<div id="test"></div>
+		</div>
+		<script type="module" src="index.js"></script>
+  </body>
+</html>
