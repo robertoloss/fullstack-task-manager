@@ -1,6 +1,6 @@
 import express from 'express'
 import { userWithEmailExists } from '../db/users';
-import { hashPassword } from '../helpers';
+import { hashPassword, verifyPassword } from '../helpers';
 import { db } from '..';
 
 
@@ -39,11 +39,39 @@ export async function register(req: express.Request, res: express.Response) {
 	}
 }
 
-
 export async function login(req: express.Request, res: express.Response) {
 	try {
+		const { email, password } = req.body;
+		if (!email) res.sendStatus(404)
+
+		const result = await db.query(`
+			SELECT password FROM users
+			WHERE email = $1
+		`, [email])
+
+		if (result.rowCount > 0) {
+			const storedHash = result.rows[0].password;
+			if (verifyPassword(storedHash,password)) {
+				res.sendStatus(200)
+			} else res.sendStatus(403)
+		} else res.sendStatus(400) 
 
 	} catch(error) {
 		console.error(error)
 	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

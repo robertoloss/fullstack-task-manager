@@ -1412,6 +1412,11 @@ video {
   justify-items: stretch;
 }
 
+.gap-x-10 {
+  -moz-column-gap: 2.5rem;
+       column-gap: 2.5rem;
+}
+
 .gap-y-10 {
   row-gap: 2.5rem;
 }

@@ -1,6 +1,7 @@
 
 
 const list = document.getElementById('list')
+const listOfUsers = document.getElementById('list-of-users')
 const form = document.getElementById('add-name-form')
 const signupForm = document.getElementById('signup-form')
 
@@ -15,10 +16,24 @@ signupForm.addEventListener('submit', async (event) => {
 	})
 	if (response.ok) {
 		form.reset
+		getUsers()
 	} else {
 		console.error("There was an error while creating the user")
 	}
 })
+
+async function getUsers() {
+	const response = await fetch('http://localhost:8090/users');
+	const users = await response.json();
+	console.log("getUsers = ", users)
+	renderUsers(users)
+}
+
+function renderUsers(users) {
+	listOfUsers.innerHTML = users.map(user => `
+		<div>${user.email}</div>
+	`).join('')
+}
 
 async function getList() {
 	const response = await fetch('http://localhost:8090/list');
@@ -29,7 +44,7 @@ async function getList() {
 function renderList(names) {
 	list.innerHTML = names.map(name => `
 		<div class="flex flex-row justify-between w-full group hover:bg-yellow-100">
-			<div class="name-item group-hover:text-blue-600" data-id="${name.id}">
+			<div class="name-item group-hover:text-blue-600 cursor-pointer" data-id="${name.id}">
 				${name.name}
 			</div>
 			<button class="delete-button text-gray-300 cursor-pointer hover:text-red-600" data-id="${name.id}">
@@ -103,6 +118,7 @@ async function deleteName(event) {
 }
 
 getList()
+getUsers()
 
 document.querySelector('iframe').onload = function() {
 	location.reload();
