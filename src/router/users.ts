@@ -3,5 +3,5 @@ import express from 'express';
 
 export default function(router: express.Router) {
 	router.get('/users', getAllUsers)
-	router.delete('/users', deleteUser)
+	router.delete('/users/:id', deleteUser)
 }

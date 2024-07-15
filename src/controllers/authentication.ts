@@ -1,6 +1,6 @@
 import express from 'express'
 import { userWithEmailExists } from '../db/users';
-import { hashPassword, verifyPassword } from '../helpers';
+import { generateToken, hashPassword, verifyPassword } from '../helpers';
 import { db } from '..';
 
 
@@ -12,13 +12,13 @@ export async function register(req: express.Request, res: express.Response) {
 			res.sendStatus(400)
 		}
 		console.log("Credentials: ok", email, password)
-		const userExists = await userWithEmailExists(email);
+		const { userExists } = await userWithEmailExists(email);
 		console.log("here")
 		if (userExists) {
 			console.log("user exists")
 			res.sendStatus(400)
 		} else if (userExists === 'error') {
-			console.log("userExists error!")
+			console.log("userExists error!!")
 			res.sendStatus(400)
 		} else {
 			const hash = await hashPassword(password)
@@ -42,17 +42,28 @@ export async function register(req: express.Request, res: express.Response) {
 export async function login(req: express.Request, res: express.Response) {
 	try {
 		const { email, password } = req.body;
+		console.log("Email and password for login: ", email, password)
 		if (!email) res.sendStatus(404)
 
 		const result = await db.query(`
-			SELECT password FROM users
+			SELECT * FROM users
 			WHERE email = $1
 		`, [email])
-
+		const user = result.rows[0]
 		if (result.rowCount > 0) {
 			const storedHash = result.rows[0].password;
-			if (verifyPassword(storedHash,password)) {
+			console.log(storedHash)
+			console.log("verify: ", await verifyPassword(password, storedHash))
+			if (await verifyPassword(password, storedHash)) {
+					const token = generateToken(user)
+					res.cookie('token', token, {
+						httpOnly: true,
+						secure: false, // true, // Use true if using HTTPS
+						maxAge: 3600000 // 1 hour
+					});
+				res.send('Logged in');
 				res.sendStatus(200)
+				console.log("verified!")
 			} else res.sendStatus(403)
 		} else res.sendStatus(400) 
 

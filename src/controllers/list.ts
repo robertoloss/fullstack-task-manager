@@ -2,7 +2,7 @@ import { db } from ".."
 import pg from 'pg'
 import express from 'express'
 
-export async function getList(_req: express.Request, res: express.Response) {
+export async function getList(req: express.Request, res: express.Response) {
 		db.query(`
 			SELECT *
 			FROM test
@@ -12,7 +12,12 @@ export async function getList(_req: express.Request, res: express.Response) {
 				console.error(err)
 				return
 			} else {
-				res.send(result.rows)
+				const user = (req as any).user;
+				const finalResult = {
+					names: result.rows,
+					user
+				}
+				res.send(finalResult)
 			} 
 		})
 	}

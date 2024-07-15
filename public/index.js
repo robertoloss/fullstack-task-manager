@@ -1,9 +1,38 @@
-
-
 const list = document.getElementById('list')
 const listOfUsers = document.getElementById('list-of-users')
 const form = document.getElementById('add-name-form')
 const signupForm = document.getElementById('signup-form')
+const loginForm = document.getElementById('login-form')
+const buttonGetUser = document.getElementById('get-current-user')
+const displayUser = document.getElementById('display-current-user')
+
+buttonGetUser.addEventListener('click', async () => {
+	try {
+		const user = await getCurrentUser()
+		displayUser.innerHTML = `${user}`	
+	} catch (error) {
+		console.error(error)
+	}
+})
+
+loginForm.addEventListener('submit', async (event) => {
+	event.preventDefault()
+	try {
+		const { email, password } = Object.fromEntries(new FormData(loginForm))
+		const response = await fetch('http://localhost:8090/auth/login', {
+			method: 'POST',
+			credentials: 'include',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({ email: email, password: password})
+		})
+		if (response.ok) {
+			form.reset()
+			console.log(`User successfully logged in`)
+		}
+	} catch (error) {
+		console.error("There was an error while trying to login the user: ", )
+	}
+})
 
 signupForm.addEventListener('submit', async (event) => {
 	event.preventDefault();
@@ -22,6 +51,16 @@ signupForm.addEventListener('submit', async (event) => {
 	}
 })
 
+async function getCurrentUser() {
+	const response = await fetch('http://localhost:8090/current-user', {
+		method: 'GET',
+		credentials: 'include'
+	})
+	console.log("Response: ", response)
+	const data = await response.json()
+	if (data) return data.user
+}
+
 async function getUsers() {
 	const response = await fetch('http://localhost:8090/users');
 	const users = await response.json();
@@ -31,13 +70,17 @@ async function getUsers() {
 
 function renderUsers(users) {
 	listOfUsers.innerHTML = users.map(user => `
-		<div>${user.email}</div>
+		<div class="user-item cursor-pointer" data-id="${user.id}">${user.email}</div>
 	`).join('')
 }
 
 async function getList() {
-	const response = await fetch('http://localhost:8090/list');
-	const names = await response.json()
+	const response = await fetch('http://localhost:8090/list', {
+		method: 'GET',
+		credentials: 'include'	
+	});
+	const { names, user } = await response.json()
+	console.log("Current User: ", user)
 	renderList(names)
 }
 
@@ -62,7 +105,11 @@ list.addEventListener('click', (event) => {
     }
 });
 
-
+listOfUsers.addEventListener('click', (event) => {
+	if (event.target.classList.contains('user-item')) {
+		deleteUser(event)
+	}
+})
 
 form.addEventListener('submit', async (event) => {
 	event.preventDefault();
@@ -114,6 +161,19 @@ async function deleteName(event) {
 	} else {
 			console.error('Failed to delete the name');
 			list.innerHTML = savedList
+	}
+}
+
+async function deleteUser(event) {
+	const id = event.target.getAttribute('data-id')
+	const response = await fetch(`http://localhost:8090/users/${id}`,{
+		method: 'DELETE'
+	})
+	if (response.ok) {
+		getUsers()
+	} else {
+		console.error("Failed to delete user");
+		console.log("response: ", response)
 	}
 }
 
