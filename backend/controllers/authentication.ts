@@ -17,7 +17,7 @@ export async function register(req: express.Request, res: express.Response) {
 		if (userExists) {
 			console.log("user exists")
 			res.sendStatus(400)
-		} else if (userExists === 'error') {
+		} else if ((userExists as boolean | 'error') === 'error') {
 			console.log("userExists error!!")
 			res.sendStatus(400)
 		} else {
@@ -50,7 +50,7 @@ export async function login(req: express.Request, res: express.Response) {
 			WHERE email = $1
 		`, [email])
 		const user = result.rows[0]
-		if (result.rowCount > 0) {
+		if (result.rowCount && result.rowCount > 0) {
 			const storedHash = result.rows[0].password;
 			console.log(storedHash)
 			console.log("verify: ", await verifyPassword(password, storedHash))

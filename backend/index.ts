@@ -23,11 +23,11 @@ app.use(express.json())
 app.use(express.urlencoded({
 	extended: true
 }))
-app.use(express.static("public"))
+app.use(express.static("frontend"))
 app.use('/',router())
 
 app.get('*', (_req, res) => {
-	res.sendFile(path.join(process.cwd(), 'public', 'index.html'))
+	res.sendFile(path.join(process.cwd(), 'frontend', 'index.html'))
 });
 
 const { Pool } = pg

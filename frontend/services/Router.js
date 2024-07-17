@@ -1,5 +1,7 @@
 
 
+
+
 const Router = {
 	init: () => {
 		document.querySelectorAll('a.navlink').forEach(a => {

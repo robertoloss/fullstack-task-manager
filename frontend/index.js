@@ -1,4 +1,5 @@
 import Router from "./services/Router.js"
+import { LoginPage } from "./components/LoginPage.js"
 
 const list = document.getElementById('list')
 const listOfUsers = document.getElementById('list-of-users')
