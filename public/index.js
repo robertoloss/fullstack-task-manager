@@ -1,3 +1,6 @@
+import { printApp } from "./services/Router.js"
+
+
 const list = document.getElementById('list')
 const listOfUsers = document.getElementById('list-of-users')
 const form = document.getElementById('add-name-form')
@@ -5,6 +8,18 @@ const signupForm = document.getElementById('signup-form')
 const loginForm = document.getElementById('login-form')
 const buttonGetUser = document.getElementById('get-current-user')
 const displayUser = document.getElementById('display-current-user')
+const buttonNewPage = document.getElementById('new-page')
+
+window.app = {}
+
+
+window.addEventListener('DOMContentLoaded', ()=>console.log("DOMContentLoaded!"))
+
+window.addEventListener('popstate', event => console.log(location.href));
+
+buttonNewPage.addEventListener('click', () => {
+	history.pushState(null,null,'/new-page')
+})
 
 buttonGetUser.addEventListener('click', async () => {
 	try {
