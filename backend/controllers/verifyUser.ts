@@ -14,7 +14,7 @@ export async function verifyUser(req: express.Request, res: express.Response) {
 	console.log("req.cookies (verifyUser): ", req.cookies)
 	if (!token) {
 		console.log("no token (verify user)")
-		return res.status(302).redirect('/login')
+		return res.status(401).json({ redirect: 'login' })
 	}
 	try {
 		console.log("verifyToken: try")
@@ -22,7 +22,7 @@ export async function verifyUser(req: express.Request, res: express.Response) {
 		 if (decoded) {
 			 console.log("JWT OK: ", decoded.email);
 			 (req as any).user = decoded.email;
-			 res.sendStatus(200)
+			 res.status(200).json({ status: '200' })
 		 } else {
 			 console.log("redirect")
 			 res.redirect('/login')

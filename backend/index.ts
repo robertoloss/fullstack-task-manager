@@ -13,10 +13,8 @@ import { verifyUser } from './controllers/verifyUser'
 
 dotenv.config()
 const dbUrl = process.env.DB_URL;
-
 const port = 8090
 const app = express()
-
 //app.use(cors({
 //	credentials: true
 //}))
@@ -26,10 +24,6 @@ app.use(express.json())
 app.use(express.urlencoded({
 	extended: true
 }))
-app.use(express.static("frontend"))
-
-
-console.log('\n\nServer!')
 
 app.use('/signup', (_req, res) => {
 	res.send('signup')
@@ -41,8 +35,10 @@ app.post('/auth/login', login)
 app.post('/auth/register', register)
 app.post('/auth/verify', verifyUser)
 
-app.use(verifyToken)
 app.use('/', router())
+app.use(express.static("frontend"))
+
+app.use(verifyToken)
 app.get('*', (_req, res) => {
 	res.sendFile(path.join(process.cwd(), 'frontend', 'index.html'))
 });

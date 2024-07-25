@@ -1,4 +1,5 @@
 import { LoginPage } from "../components/LoginPage.js"
+import { MainPage } from "../components/MainPage.js"
 
 const Router = {
 	init: () => {
@@ -17,32 +18,33 @@ const Router = {
 		console.log("initial location: ", location.href)
 		console.log("path: ", path)
 
-		Router.go(location.href)
 		window.addEventListener('popstate', event => {
 			Router.go(event.state.route, false)
 		});
+		
 		if (path === '/login') {
-			document.querySelector('main').remove()
-			//document.getElementById('header-bar').remove()
-			console.log("Path is: login")	
-
 			const login = new LoginPage()
 			document.body.appendChild(login)
-
+		} else {
+			Router.go(location.href)
 		}
-
 	},
 	go: async (route, addToHistory=true) => {
 		console.log(`Going to ${route}`)
 		
-		const path = location.href.substring(location.origin.length)
 		const exceptions = ['/login','/signup']
-		if (!exceptions.includes(path)) {
+		if (!exceptions.includes(route)) {
 			console.log('not an exception')
 			const res = await fetch('http://localhost:8090/auth/verify', {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
 			})
+			const data = await res.json()
+			if (data.redirect) {
+				console.log("redirecting client-side")
+				window.location.href = data.redirect
+				return
+			}
 			console.log("verification status: ", JSON.stringify(res))
 		}
 		console.log("here")
@@ -53,17 +55,23 @@ const Router = {
 		}
 		const origin = location.origin
 		switch (route) {
-			case origin + '/new-page':
-				document.getElementById('list').setAttribute('hidden',true)
-				console.log('here')
-				break
 			case origin + '/':
-				document.getElementById('list').removeAttribute('hidden')
-				const main = document.querySelector('main')
-				//main.innerHTML = ""
+				console.log("Router: we are at /")
+				document.body.innerHTML = ''
+				const main = new MainPage()
+				document.body.appendChild(main)
 				break
+			case origin + '/login':
+				console.log("rerouted to /login")
+				//document.querySelector('main').remove()
+				const login = new LoginPage()
+				document.body.appendChild(login)
 			default:
-				true
+				console.log("Router: we are at /")
+				document.body.innerHTML = ''
+				const main2 = new MainPage()
+				document.body.appendChild(main2)
+				break
 		}
 	}
 }

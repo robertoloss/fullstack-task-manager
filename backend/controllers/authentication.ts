@@ -61,8 +61,7 @@ export async function login(req: express.Request, res: express.Response) {
 						secure: false, // true, // Use true if using HTTPS
 						maxAge: 3600000 // 1 hour
 					});
-				res.send('Logged in');
-				res.sendStatus(200)
+				res.sendStatus(200);
 				console.log("verified!")
 			} else res.sendStatus(403)
 		} else res.sendStatus(400) 
