@@ -7,6 +7,9 @@ import pg from 'pg'
 import router from './router'
 import path from 'path'
 import dotenv from 'dotenv'
+import { verifyToken } from './middleware'
+import { login, register } from './controllers/authentication'
+import { verifyUser } from './controllers/verifyUser'
 
 dotenv.config()
 const dbUrl = process.env.DB_URL;
@@ -24,11 +27,26 @@ app.use(express.urlencoded({
 	extended: true
 }))
 app.use(express.static("frontend"))
-app.use('/',router())
 
+
+console.log('\n\nServer!')
+
+app.use('/signup', (_req, res) => {
+	res.send('signup')
+})
+app.use('/login', (_req, res)=> {
+	res.sendFile(path.join(process.cwd(), 'frontend', 'index.html'))
+}) 
+app.post('/auth/login', login)
+app.post('/auth/register', register)
+app.post('/auth/verify', verifyUser)
+
+app.use(verifyToken)
+app.use('/', router())
 app.get('*', (_req, res) => {
 	res.sendFile(path.join(process.cwd(), 'frontend', 'index.html'))
 });
+
 
 const { Pool } = pg
 export const db = new Pool({

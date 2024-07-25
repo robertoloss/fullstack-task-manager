@@ -72,6 +72,10 @@ export async function login(req: express.Request, res: express.Response) {
 	}
 }
 
+export async function logOut(_req: express.Request, res: express.Response) {
+	res.clearCookie('token')
+	res.status(200).json({ message: "Logged out succesfully"})
+}
 
 
 

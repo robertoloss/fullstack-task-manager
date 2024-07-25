@@ -8,8 +8,8 @@
     <link rel="stylesheet" href="./output.css">
 		<script type="module" src="index.js" defer></script>
   </head>
-  <body class="flex flex-col items-center py-10 gap-y-10">
-		<div class="flex flex-row justify-center w-full gap-x-6 bg-red-50">
+  <body class="flex flex-col items-center py-10 gap-y-10 bg-gray-200">
+		<div id="header-bar" class="flex flex-row justify-center w-full gap-x-6">
 			<a href="/" class="navlink cursor-pointer w-fit">
 				Home
 			</a>
@@ -17,54 +17,67 @@
 				New Page
 			</a>
 		</div>
-		<div class="flex flex-col gap-y-4 items-start mb-10 max-w-[400px] w-full">
-			<h1 class="text-4xl font-bold w-full">Login</h1>
-			<form id="login-form" method="post" action="/auth/login" class="flex flex-col gap-y-2">
-				<input type="text" id="email" name="email" class="border border-black px-2"/>
-				<input type="text" id="password" name="password" class="border border-black px-2"/>
-				<button type="submit"
-					class="rounded-md bg-gray-300 font-light text-sm px-2 py-1 min-w-14 hover:brightness-95
-						transition-all"
-				>
-					Login
-				</button>
-			</form>
-		</div>
-		<div>
-			<button id="get-current-user"> Get Current User</button>
-			<div id="display-current-user"></div>
-		</div>
-		<div class="flex flex-row gap-x-10 w-full justify-center max-w-[400px]">
-			<div class="flex flex-col gap-y-4 items-start mb-10 w-full">
-				<h1 class="text-4xl font-bold w-full">Sign-Up</h1>
-				<form id="signup-form" method="post" action="/auth/register" class="flex flex-col gap-y-2">
-					<input type="text" id="email" name="email" class="border border-black px-2"/>
-					<input type="text" id="password" name="password" class="border border-black px-2"/>
-					<button type="submit"
-						class="rounded-md bg-gray-300 font-light text-sm px-2 py-1 min-w-14 hover:brightness-95
-							transition-all"
-					>
-						Sign-Up
-					</button>
-				</form>
+		<template id="login-page">
+				<div class="flex flex-col gap-y-4 items-start mb-10 max-w-[400px] w-full">
+					<h1 class="text-4xl font-bold w-full">
+						Login
+				  </h1>
+					<form id="login-form" method="post" action="/auth/login" class="flex flex-col gap-y-2">
+						<input type="text" id="email" name="email" class="border border-black px-2"/>
+						<input type="text" id="password" name="password" class="border border-black px-2"/>
+						<button type="submit"
+							class="rounded-md bg-gray-300 font-light text-sm px-2 py-1 min-w-14 hover:brightness-95
+								transition-all"
+						>
+							Login
+						</button>
+						<button id="log-out" 
+							class="rounded-md bg-gray-300 font-light text-sm px-2 py-1 min-w-14 hover:brightness-95 transition-all"
+						>
+							Logout
+						</button>
+					</form>
+				</div>
+			</template>
+		<main>
+			
+			<login-page></login-page>
+			<div>
+				<button id="get-current-user"> Get Current User</button>
+				<div id="display-current-user"></div>
 			</div>
-			<div id="list-of-users" class=" flex flex-col"></div>
-		</div>
-		<div class="flex flex-col max-w-[400px] w-full gap-y-4">
-			<h1 id="hello" class="text-4xl font-bold">List of names</h1>
-			<form id="add-name-form" method="post" action="/list" target="hidden-iframe">
-				<input type="text" id="new-name" name="name" class="mb-4 border border-black px-2"/>
-				<button type="submit" 
-					class="rounded-md bg-gray-300 font-light text-sm px-2 py-1 min-w-14 hover:brightness-95
-						transition-all" 
-				>
-					Add
-				</button>
-				<iframe name="hidden-iframe" style="display:none;"></iframe>
-			</form>
-			<div id="list"></div>
-			<div id="testButton" class="cursor-pointer select-none">CLICK</div>
-			<div id="test"></div>
-		</div>
+			<div class="flex flex-row gap-x-10 w-full justify-center max-w-[400px]">
+				<div class="flex flex-col gap-y-4 items-start mb-10 w-full">
+					<h1 class="text-4xl font-bold w-full">Sign-Up</h1>
+					<form id="signup-form" method="post" action="/auth/register" class="flex flex-col gap-y-2">
+						<input type="text" id="email" name="email" class="border border-black px-2"/>
+						<input type="text" id="password" name="password" class="border border-black px-2"/>
+						<button type="submit"
+							class="rounded-md bg-gray-300 font-light text-sm px-2 py-1 min-w-14 hover:brightness-95
+								transition-all"
+						>
+							Sign-Up
+						</button>
+					</form>
+				</div>
+				<div id="list-of-users" class=" flex flex-col"></div>
+			</div>
+			<div class="flex flex-col max-w-[400px] w-full gap-y-4">
+				<h1 id="hello" class="text-4xl font-bold">List of names</h1>
+				<form id="add-name-form" method="post" action="/list" target="hidden-iframe">
+					<input type="text" id="new-name" name="name" class="mb-4 border border-black px-2"/>
+					<button type="submit" 
+						class="rounded-md bg-gray-300 font-light text-sm px-2 py-1 min-w-14 hover:brightness-95
+							transition-all" 
+					>
+						Add
+					</button>
+					<iframe name="hidden-iframe" style="display:none;"></iframe>
+				</form>
+				<div id="list">List</div>
+				<div id="testButton" class="cursor-pointer select-none">CLICK</div>
+				<div id="test"></div>
+			</div>
+		</main>
   </body>
 </html>

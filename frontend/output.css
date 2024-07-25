@@ -1,6 +1,6 @@
 /*
 ! tailwindcss v3.4.4 | MIT License | https://tailwindcss.com
-
+*/
 
 /*
 1. Prevent padding and border from affecting element width. (https://github.com/mozdevs/cssremedy/issues/4)
@@ -876,6 +876,11 @@ video {
 
 .w-\[weird-and-invalid\] {
   width: weird-and-invalid;
+}
+
+.w-fit {
+  width: -moz-fit-content;
+  width: fit-content;
 }
 
 .w-full {
@@ -1888,9 +1893,19 @@ video {
   background-color: rgb(255 0 0 / var(--tw-bg-opacity));
 }
 
+.bg-gray-200 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(229 231 235 / var(--tw-bg-opacity));
+}
+
 .bg-gray-300 {
   --tw-bg-opacity: 1;
   background-color: rgb(209 213 219 / var(--tw-bg-opacity));
+}
+
+.bg-red-50 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(254 242 242 / var(--tw-bg-opacity));
 }
 
 .decoration-slice {
@@ -2550,6 +2565,9 @@ video {
   forced-color-adjust: none;
 }
 
+.\[a-zA-Z0-9\:\\\\-\\\\\._\$\] {
+  a-z-a--z0-9: \\-\\. $;
+}
 
 @media (min-width: 640px) {
   .sm\:container {

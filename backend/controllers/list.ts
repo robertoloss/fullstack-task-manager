@@ -17,7 +17,7 @@ export async function getList(req: express.Request, res: express.Response) {
 					names: result.rows,
 					user
 				}
-				res.send(finalResult)
+				res.json(finalResult)
 			} 
 		})
 	}

@@ -1,6 +1,7 @@
 import Router from "./services/Router.js"
 import { LoginPage } from "./components/LoginPage.js"
 
+const logOutButton = document.getElementById('log-out')
 const list = document.getElementById('list')
 const listOfUsers = document.getElementById('list-of-users')
 const form = document.getElementById('add-name-form')
@@ -23,6 +24,20 @@ window.addEventListener('DOMContentLoaded', () => {
 //buttonNewPage.addEventListener('click', () => {
 //	history.pushState(null,null,'/new-page')
 //})
+logOutButton.addEventListener('click', async (e) => {
+	e.preventDefault()
+	const response = await fetch('/auth/logout', {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json'
+		}
+	})
+	if (response.ok) {
+		console.log("logged out successfully")
+	}
+})
+
+
 
 buttonGetUser.addEventListener('click', async () => {
 	try {
@@ -33,7 +48,7 @@ buttonGetUser.addEventListener('click', async () => {
 	}
 })
 
-loginForm.addEventListener('submit', async (event) => {
+loginForm?.addEventListener('submit', async (event) => {
 	event.preventDefault()
 	try {
 		const { email, password } = Object.fromEntries(new FormData(loginForm))
@@ -45,6 +60,8 @@ loginForm.addEventListener('submit', async (event) => {
 		})
 		if (response.ok) {
 			form.reset()
+			getList()
+			getUsers()
 			console.log(`User successfully logged in`)
 		}
 	} catch (error) {
@@ -195,8 +212,6 @@ async function deleteUser(event) {
 	}
 }
 
-getList()
-getUsers()
 
 document.querySelector('iframe').onload = function() {
 	location.reload();
@@ -208,7 +223,7 @@ let show = false;
 
 
 function renderTestDiv() {
-	test.innerHTML = `
+	testDiv.innerHTML = `
 		${!show ? `
 			<div>Hello</div>
 		` : `
@@ -220,6 +235,7 @@ function renderTestDiv() {
 renderTestDiv();
 
 const button = document.getElementById('testButton');
+button.addEventListener('click', ()=> console.log('alskdjfhaskld'))
 
 button.addEventListener('click', ()=>{
 	show = !show;
