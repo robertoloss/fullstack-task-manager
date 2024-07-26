@@ -1,5 +1,7 @@
 //import useTailwind from "../utils/useTailwind.js"
 
+import login from "../actions/auth/login.js"
+
 export class LoginPage extends HTMLElement {
 	constructor() {
 		super()
@@ -12,23 +14,19 @@ export class LoginPage extends HTMLElement {
 	}
 	render() {
 		const loginForm = this.querySelector('#login-form')
+
+		this.querySelectorAll('a.navlink').forEach(a => {
+			a.addEventListener('click', e => {
+				e.preventDefault()
+				const url = a.href
+				console.log("Url from listener: ", url)
+				app.router.go(url)
+			})
+		})
 		loginForm.addEventListener('submit', async (event) => {
 			event.preventDefault()
-			try {
-				const { email, password } = Object.fromEntries(new FormData(loginForm))
-				const response = await fetch('http://localhost:8090/auth/login', {
-					method: 'POST',
-					credentials: 'include',
-					headers: { 'Content-Type': 'application/json' },
-					body: JSON.stringify({ email: email, password: password})
-				})
-				if (response.ok) {
-					app.router.go('/')
-					console.log(`User successfully logged in`)
-				}
-			} catch (error) {
-				console.error("There was an error while trying to login the user: ", error)
-			}
+			const { email, password } = Object.fromEntries(new FormData(loginForm))
+			login(email, password)
 		})
 	}
 }

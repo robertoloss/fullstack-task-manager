@@ -1,17 +1,9 @@
 import { LoginPage } from "../components/LoginPage.js"
 import { MainPage } from "../components/MainPage.js"
+import { SignupPage } from "../components/SignupPage.js"
 
 const Router = {
 	init: () => {
-		document.querySelectorAll('a.navlink').forEach(a => {
-			a.addEventListener('click', e => {
-				e.preventDefault()
-				const url = a.href
-				console.log("Url from listener: ", url)
-				// const url2 = a.getAttribute("href")
-				Router.go(url)
-			})
-		})
 		const initialLocation = location.href
 		const origin = location.origin
 		const path = initialLocation.substring(origin.length)
@@ -19,6 +11,7 @@ const Router = {
 		console.log("path: ", path)
 
 		window.addEventListener('popstate', event => {
+			console.log("popstate")
 			Router.go(event.state.route, false)
 		});
 		
@@ -31,7 +24,11 @@ const Router = {
 	},
 	go: async (route, addToHistory=true) => {
 		console.log(`Going to ${route}`)
-		
+		const origin = location.origin
+		console.log('route - origin: ', route.substring(origin.length).length < route.length)
+		if (route.substring(origin.length).length < route.length)	{
+			route = route.substring(origin.length)
+		}
 		const exceptions = ['/login','/signup']
 		if (!exceptions.includes(route)) {
 			console.log('not an exception')
@@ -46,28 +43,37 @@ const Router = {
 				return
 			}
 			console.log("verification status: ", JSON.stringify(res))
+		} else {
+			console.log("either /login or /signup")
 		}
-		console.log("here")
-		
 		if (addToHistory) {
 			history.pushState({ route },null,route)
-			console.log("added to history")
+			console.log("added to history:", route)
 		}
-		const origin = location.origin
-		switch (route) {
+		console.log("origin: ", origin)
+		console.log("origin + route", origin + route)
+		switch (origin + route) {
 			case origin + '/':
+				console.log("route in first case:", route)
 				console.log("Router: we are at /")
 				document.body.innerHTML = ''
 				const main = new MainPage()
 				document.body.appendChild(main)
 				break
+			case origin + '/signup':
+				console.log("rerouted to /signup")
+				document.body.innerHTML = ''
+				const signup = new SignupPage()
+				document.body.appendChild(signup)
+				break
 			case origin + '/login':
 				console.log("rerouted to /login")
-				//document.querySelector('main').remove()
+				document.body.innerHTML = ''
 				const login = new LoginPage()
 				document.body.appendChild(login)
+				break
 			default:
-				console.log("Router: we are at /")
+				console.log("Router: we are at:", route)
 				document.body.innerHTML = ''
 				const main2 = new MainPage()
 				document.body.appendChild(main2)

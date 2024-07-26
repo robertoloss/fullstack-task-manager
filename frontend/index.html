@@ -8,39 +8,63 @@
     <link rel="stylesheet" href="./output.css">
 		<script type="module" src="index.js" defer></script>
   </head>
+
 	<template id="login-page">
-		<div id="header-bar" class="flex flex-row justify-center w-full gap-x-6">
-			<a href="/" class="navlink cursor-pointer w-fit">
-				Home
-			</a>
-			<a href="/login" class="navlink cursor-pointer w-fit">
-				Login	
-			</a>
-			<a href="/new-page" class="navlink cursor-pointer w-fit">
-				New Page
-			</a>
-		</div>
-		<div class="flex flex-col gap-y-4 items-start mb-10 max-w-[400px] w-full">
-			<h1 class="text-4xl font-bold w-full">
-				Login
-			</h1>
-			<form id="login-form" method="post" action="/auth/login" class="flex flex-col gap-y-2">
-				<input type="text" id="email" name="email" class="border border-black px-2"/>
-				<input type="text" id="password" name="password" class="border border-black px-2"/>
-				<button type="submit"
-					class="rounded-md bg-gray-300 font-light text-sm px-2 py-1 min-w-14 hover:brightness-95
-						transition-all"
-				>
+		<div class="flex flex-col w-screen items-center px-4">
+			<div id="header-bar" class="flex flex-row justify-end w-full gap-x-6">
+				<a href="/signup" class="navlink cursor-pointer w-fit">
+					Signup
+				</a>
+			</div>
+			<div class="flex flex-col gap-y-4 items-start mb-10 max-w-[400px] w-fit">
+				<h1 class="text-4xl font-bold w-full">
 					Login
-				</button>
-			</form>
+				</h1>
+				<form id="login-form" method="post" action="/auth/login" class="flex flex-col gap-y-2">
+					<input type="text" id="email" name="email" class="border border-black px-2"/>
+					<input type="text" id="password" name="password" class="border border-black px-2"/>
+					<button 
+						type="submit"
+						class="rounded-md bg-gray-300 font-light text-sm px-2 py-1 min-w-14 hover:brightness-95
+							transition-all"
+					>
+						Login
+					</button>
+				</form>
+			</div>
+		</div>
+	</template>
+
+	<template id="signup-page">
+		<div class="flex flex-col w-screen items-center px-4">
+			<div id="header-bar" class="flex flex-row justify-end w-full gap-x-6">
+				<a href="/login" class="navlink cursor-pointer w-fit">
+					Login
+				</a>
+			</div>
+			<div class="flex flex-row gap-x-10 w-fit justify-center max-w-[400px]">
+				<div class="flex flex-col gap-y-4 items-start mb-10 w-full">
+					<h1 class="text-4xl font-bold w-full">Sign-Up</h1>
+					<form id="signup-form" method="post" action="/auth/register" class="flex flex-col gap-y-2">
+						<input type="text" id="email" name="email" class="border border-black px-2"/>
+						<input type="text" id="password" name="password" class="border border-black px-2"/>
+						<button type="submit"
+							class="rounded-md bg-gray-300 font-light text-sm px-2 py-1 min-w-14 hover:brightness-95
+								transition-all"
+						>
+							Sign-Up
+						</button>
+					</form>
+				</div>
+				<div id="list-of-users" class=" flex flex-col"></div>
+			</div>
 		</div>
 	</template>
 
 	<template id="main-page">
 		<div class="flex flex-col w-screen items-center px-4">
 			<div id="header-bar" class="flex flex-row justify-between w-full">
-				<div></div>
+				<div class="flex flex-row gap-x-4 w-[120px]"></div>
 				<div class="flex flex-row gap-x-6 w-fit justify-center">
 					<a href="/" class="navlink cursor-pointer w-fit">
 						Home
@@ -48,32 +72,19 @@
 					<a href="/new-page" class="navlink cursor-pointer w-fit">
 						New Page
 					</a>
-					<button id="log-out" 
-						class="rounded-md bg-gray-300 font-light text-sm px-2 py-1 min-w-14 hover:brightness-95 transition-all"
+				</div>
+				<div class="flex flex-row gap-x-4 w-[120px]">
+					<button 
+						id="log-out" 
+						class="flex flex-row items-center justify-center rounded-md bg-gray-300 font-light text-sm px-2 py-1 min-w-14 hover:brightness-95 transition-all"
 					>
 						Logout
 					</button>
+					<div id="display-current-user" class="min-w-[80px]">User</div>
 				</div>
-				<div id="display-current-user" class="min-w-[80px]">User</div>
 			</div>
 			<main>
-				<div class="flex flex-row gap-x-10 w-full justify-center max-w-[400px]">
-					<div class="flex flex-col gap-y-4 items-start mb-10 w-full">
-						<h1 class="text-4xl font-bold w-full">Sign-Up</h1>
-						<form id="signup-form" method="post" action="/auth/register" class="flex flex-col gap-y-2">
-							<input type="text" id="email" name="email" class="border border-black px-2"/>
-							<input type="text" id="password" name="password" class="border border-black px-2"/>
-							<button type="submit"
-								class="rounded-md bg-gray-300 font-light text-sm px-2 py-1 min-w-14 hover:brightness-95
-									transition-all"
-							>
-								Sign-Up
-							</button>
-						</form>
-					</div>
-					<div id="list-of-users" class=" flex flex-col"></div>
-				</div>
-				<div class="flex flex-col max-w-[400px] w-full gap-y-4">
+				<div class="flex flex-col py-10 max-w-[400px] w-full gap-y-4">
 					<h1 id="hello" class="text-4xl font-bold">List of names</h1>
 					<form id="add-name-form" method="post" action="/list" target="hidden-iframe">
 						<input type="text" id="new-name" name="name" class="mb-4 border border-black px-2"/>

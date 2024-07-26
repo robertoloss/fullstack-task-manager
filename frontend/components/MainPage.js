@@ -15,16 +15,14 @@ export class MainPage extends HTMLElement {
 	render() {
 		const logOutButton = this.querySelector('#log-out')
 		const list = this.querySelector('#list')
-		const listOfUsers = this.querySelector('#list-of-users')
 		const form = this.querySelector('#add-name-form')
-		const signupForm = this.querySelector('#signup-form')
 		const displayUser = this.querySelector('#display-current-user')
 
-		getUsers()
 		getList()
 		getUser()
 
 		logOutButton?.addEventListener('click', async (e) => {
+			console.log('logging out...')
 			e.preventDefault()
 			const response = await fetch('/auth/logout', {
 				method: 'POST',
@@ -34,9 +32,9 @@ export class MainPage extends HTMLElement {
 			})
 			if (response.ok) {
 				console.log("logged out successfully")
+				app.router.go('/login')
 			}
 		})
-
 
 		async function getUser() {
 			try {
@@ -49,45 +47,13 @@ export class MainPage extends HTMLElement {
 			}
 		}
 
-
-		signupForm?.addEventListener('submit', async (event) => {
-			event.preventDefault();
-			const { email, password } = Object.fromEntries(new FormData(signupForm))
-			
-			const response = await fetch('http://localhost:8090/auth/register', {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ email: email, password: password })
-			})
-			if (response.ok) {
-				form.reset
-				getUsers()
-			} else {
-				console.error("There was an error while creating the user")
-			}
-		})
-
 		async function getCurrentUser() {
 			const response = await fetch('http://localhost:8090/current-user', {
 				method: 'GET',
 				credentials: 'include'
 			})
-			console.log("Response: ", response)
 			const data = await response.json()
 			if (data) return data.user
-		}
-
-		async function getUsers() {
-			const response = await fetch('http://localhost:8090/users');
-			const users = await response.json();
-			console.log("getUsers = ", users)
-			renderUsers(users)
-		}
-
-		function renderUsers(users) {
-			listOfUsers.innerHTML = users.map(user => `
-				<div class="user-item cursor-pointer" data-id="${user.id}">${user.email}</div>
-			`).join('')
 		}
 
 		async function getList() {
@@ -119,12 +85,6 @@ export class MainPage extends HTMLElement {
 						editName(event);
 				}
 		});
-
-		listOfUsers?.addEventListener('click', (event) => {
-			if (event.target.classList.contains('user-item')) {
-				deleteUser(event)
-			}
-		})
 
 		form?.addEventListener('submit', async (event) => {
 			event.preventDefault();
