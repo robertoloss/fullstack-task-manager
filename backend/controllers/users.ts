@@ -30,6 +30,19 @@ export async function deleteUser(req: express.Request, res: express.Response) {
 }
 
 export async function getCurrentUser(req: express.Request, res: express.Response) {
-	const user = (req as any).user;
-	res.json({user: user})
+	const userId = (req as any).user;
+	try {
+		const result = await db.query(`
+			SELECT email from users
+			WHERE id = $1
+		`, [userId])
+		if (result.rowCount > 0) {
+			const user = result.rows[0]
+			res.json({ user })
+		} else {
+			res.status(400).json({ error: "No user found" })
+		}
+	} catch(error) {
+		console.error(error)	
+	}
 }

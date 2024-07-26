@@ -12,7 +12,7 @@ type Token = {
 }
 
 export function verifyToken(req: express.Request , res: express.Response, next: express.NextFunction) {
-	console.log("verify token!")
+	//console.log("verify token!")
 	const token = req.cookies.token;
 	console.log("req.cookies: ", req.cookies)
 	if (!token) {
@@ -25,8 +25,8 @@ export function verifyToken(req: express.Request , res: express.Response, next: 
 		console.log("verifyToken: try")
 		 const decoded : Token = jwt.verify(token, SECRET) as Token;
 		 if (decoded) {
-			 console.log("JWT OK: ", decoded.email);
-			 (req as any).user = decoded.email;
+			 console.log("JWT OK: ", decoded.id);
+			 (req as any).user = decoded.id;
 			 next();
 		 } else {
 			 res.redirect('/login')

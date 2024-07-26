@@ -53,7 +53,7 @@ export class MainPage extends HTMLElement {
 				credentials: 'include'
 			})
 			const data = await response.json()
-			if (data) return data.user
+			if (data) return data.user.email
 		}
 
 		async function getList() {
@@ -95,6 +95,7 @@ export class MainPage extends HTMLElement {
 			addNameToList(newName);
 			const response = await fetch(form.action, {
 					method: 'POST',
+					credentials: 'include',
 					headers: { "Content-Type": "application/json" },
 					body: JSON.stringify(formObject)
 			});
@@ -130,7 +131,8 @@ export class MainPage extends HTMLElement {
 			const id = event.target.getAttribute('data-id');
 			console.log(`Deleting ${id}`)
 			const response = await fetch(`http://localhost:8090/list/${id}`, {
-					method: 'DELETE'
+				method: 'DELETE',
+				credentials: 'include'
 			});
 			if (response.ok) {
 			} else {
@@ -139,18 +141,17 @@ export class MainPage extends HTMLElement {
 			}
 		}
 
-		async function deleteUser(event) {
-			const id = event.target.getAttribute('data-id')
-			const response = await fetch(`http://localhost:8090/users/${id}`,{
-				method: 'DELETE'
-			})
-			if (response.ok) {
-				getUsers()
-			} else {
-				console.error("Failed to delete user");
-				console.log("response: ", response)
-			}
-		}
+		//async function deleteUser(event) {
+		//	const id = event.target.getAttribute('data-id')
+		//	const response = await fetch(`http://localhost:8090/users/${id}`,{
+		//		method: 'DELETE'
+		//	})
+		//	if (response.ok) {
+		//	} else {
+		//		console.error("Failed to delete user");
+		//		console.log("response: ", response)
+		//	}
+		//}
 
 
 		const iFrame = document.querySelector('iframe');
@@ -215,9 +216,8 @@ export class MainPage extends HTMLElement {
 								const id = nameItem.getAttribute('data-id');
 								const response = await fetch(`http://localhost:8090/list/${id}`, {
 									method: 'PUT', 
-									headers: {
-											'Content-Type': 'application/json'
-									},
+									credentials: 'include',
+									headers: { 'Content-Type': 'application/json' },
 									body: JSON.stringify({ name: newName })
 								});
 								if (!response.ok) {

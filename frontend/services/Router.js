@@ -25,9 +25,13 @@ const Router = {
 	go: async (route, addToHistory=true) => {
 		console.log(`Going to ${route}`)
 		const origin = location.origin
-		console.log('route - origin: ', route.substring(origin.length).length < route.length)
-		if (route.substring(origin.length).length < route.length)	{
+		console.log('route - origin: ', route.substring(origin.length).length - route.length)
+		console.log("route: ", route)
+		console.log("route_substring_etc: ", route.substring(origin.length).length )
+		const sub = route.substring(origin.length).length
+		if (route.length > 0 && sub < route.length && sub > 0)	{
 			route = route.substring(origin.length)
+			console.log("changed route to: ", route)
 		}
 		const exceptions = ['/login','/signup']
 		if (!exceptions.includes(route)) {
