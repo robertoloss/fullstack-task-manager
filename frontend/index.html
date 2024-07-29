@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="./output.css">
 		<script type="module" src="index.js" defer></script>
   </head>
-
 	<template id="login-page">
 		<div class="flex flex-col w-screen items-center px-4">
 			<div id="header-bar" class="flex flex-row justify-end w-full gap-x-6">
@@ -34,7 +33,6 @@
 			</div>
 		</div>
 	</template>
-
 	<template id="signup-page">
 		<div class="flex flex-col w-screen items-center px-4">
 			<div id="header-bar" class="flex flex-row justify-end w-full gap-x-6">
@@ -60,9 +58,8 @@
 			</div>
 		</div>
 	</template>
-
 	<template id="main-page">
-		<div class="flex flex-col w-screen items-center px-4">
+		<div class="flex flex-col w-full items-center">
 			<div id="header-bar" class="flex flex-row justify-between w-full">
 				<div class="flex flex-row gap-x-4 w-[120px]"></div>
 				<div class="flex flex-row gap-x-6 w-fit justify-center">
@@ -76,11 +73,13 @@
 				<div class="flex flex-row gap-x-4 w-[120px]">
 					<button 
 						id="log-out" 
-						class="flex flex-row items-center justify-center rounded-md bg-gray-300 font-light text-sm px-2 py-1 min-w-14 hover:brightness-95 transition-all"
+						class="flex flex-row items-center justify-center 
+							rounded-md bg-gray-300 font-light text-sm px-2 py-1 min-w-14 
+							hover:brightness-95 transition-all"
 					>
 						Logout
 					</button>
-					<div id="display-current-user" class="min-w-[80px]">User</div>
+					<div id="display-current-user" class="">User</div>
 				</div>
 			</div>
 			<main>
@@ -96,15 +95,13 @@
 						</button>
 						<iframe name="hidden-iframe" style="display:none;"></iframe>
 					</form>
-					<div id="list">List</div>
-					<div id="testButton" class="cursor-pointer select-none">CLICK</div>
-					<div id="test"></div>
+					<div id="list" class="flex flex-col gap-y-2">List</div>
+					<!-- <div id="testButton" class="cursor-pointer select-none">CLICK</div>
+					 div id="test"></div> -->
 				</div>
 			</main>
 		</div>
 	</template>
-
-  <body class="flex flex-col items-center py-10 gap-y-10 bg-gray-200">
-		
+  <body class="flex flex-col items-center py-10 gap-y-10 bg-gray-200 w-[calc(100vw-16px)]">
   </body>
 </html>
