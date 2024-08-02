@@ -1,11 +1,11 @@
 {
 	"compilerOptions": {
 		"module": "NodeNext",
-		"moduleResolution": "node",
+		"moduleResolution": "node16",
 		"baseUrl": "backend",
 		"outDir": "dist",
 		"sourceMap": true,
-		"noImplicitAny": true	
+		"noImplicitAny": false
 	},
-	"include": ["backend/**/*.ts"]
+	"include": ["backend/**/*.ts","./index.d.ts"]
 }

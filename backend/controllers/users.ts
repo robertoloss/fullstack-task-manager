@@ -6,7 +6,7 @@ export async function getAllUsers(_req: express.Request, res: express.Response) 
 		const response = await db.query(`
 			SELECT * FROM users
 		`)
-		if (response.rowCount > 0) res.send(response.rows)
+		if (response.rowCount && response.rowCount > 0) res.send(response.rows)
 		else res.sendStatus(400)
 	} catch (error) {
 		console.error(error)
@@ -21,7 +21,7 @@ export async function deleteUser(req: express.Request, res: express.Response) {
 			DELETE FROM users
 			WHERE id = $1
 		`,[id])
-		if (response.rowCount > 0) res.sendStatus(200)
+		if (response.rowCount && response.rowCount > 0) res.sendStatus(200)
 		else res.sendStatus(400)
 	} catch(error) {
 		console.error(error)
@@ -36,7 +36,7 @@ export async function getCurrentUser(req: express.Request, res: express.Response
 			SELECT email from users
 			WHERE id = $1
 		`, [userId])
-		if (result.rowCount > 0) {
+		if (result.rowCount && result.rowCount > 0) {
 			const user = result.rows[0]
 			res.json({ user })
 		} else {

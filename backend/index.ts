@@ -10,6 +10,7 @@ import dotenv from 'dotenv'
 import { verifyToken } from './middleware'
 import { login, register } from './controllers/authentication'
 import { verifyUser } from './controllers/verifyUser'
+import createAuthCode from './controllers/auth-code'
 
 dotenv.config()
 const dbUrl = process.env.DB_URL;
@@ -34,6 +35,7 @@ app.use('/login', (_req, res)=> {
 app.post('/auth/login', login)
 app.post('/auth/register', register)
 app.post('/auth/verify', verifyUser)
+app.post('/auth-code/create', createAuthCode)
 
 app.use('/', router())
 app.use(express.static("frontend"))

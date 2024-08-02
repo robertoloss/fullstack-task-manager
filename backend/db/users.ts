@@ -1,6 +1,5 @@
 import { db } from "..";
 
-
 export async function userWithEmailExists(email: string) 
 	: Promise<{
 		userExists: boolean | 'error',
@@ -16,9 +15,16 @@ export async function userWithEmailExists(email: string)
 			SELECT 1 FROM users 
 			WHERE email = $1
 		`, [email]);
-		return { 
-			userExists: result.rowCount > 0,
-			user: result.rows[0]
+		if (result.rowCount) {
+			return { 
+				userExists: result.rowCount > 0,
+				user: result.rows[0]
+			}
+		}  else {
+			return {
+				userExists: 'error',
+				user: null
+			}
 		}
 	} catch(error) {
 		console.error(error)

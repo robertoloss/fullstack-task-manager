@@ -17,7 +17,7 @@ export async function getList(req: express.Request, res: express.Response) {
 			WHERE user_id = $1
 			ORDER BY date_created DESC
 		`, [userId])
-		if (result.rowCount >0) {
+		if (result.rowCount && result.rowCount >0) {
 			const finalResult = {
 				names: result.rows,
 				userId
