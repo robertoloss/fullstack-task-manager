@@ -12,13 +12,13 @@ export async function register(req: express.Request, res: express.Response) {
 			res.sendStatus(400)
 		}
 		console.log("Credentials: ok", email, password)
-		const { userExists } = await userWithEmailExists(email);
-		console.log("here")
-		if (userExists) {
-			console.log("user exists")
+		const { userExists, user } = await userWithEmailExists(email);
+		if (userExists === true) {
+			console.log("user exists, ", userExists)
+			console.log("the user: ", user)
 			res.sendStatus(400)
 		} else if ((userExists as boolean | 'error') === 'error') {
-			console.log("userExists error!!")
+			console.log("userExists error: ", userExists)
 			res.sendStatus(400)
 		} else {
 			const hash = await hashPassword(password)

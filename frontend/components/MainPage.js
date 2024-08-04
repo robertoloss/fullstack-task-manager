@@ -62,18 +62,23 @@ export class MainPage extends HTMLElement {
 				method: 'GET',
 				credentials: 'include'	
 			});
-			const { names,  } = await response.json()
+			const { names  } = await response.json()
+			list.innerHTML = ''
 			renderList(names)
 		}
 
 		function renderList(names) {
-			list.innerHTML = names.map(name => `
-				<card-component 
-					data-id="${name.id}"
-					data-name="${name.name}"
-				>
-				</card-component>
-			`).join('')
+			if (names.length === 0) {
+				list.innerHTML = '<h1>No names yet</h1>'
+			} else {
+				list.innerHTML = names.map(name => `
+					<card-component 
+						data-id="${name.id}"
+						data-name="${name.name}"
+					>
+					</card-component>
+				`).join('')
+			}
 		}
 
 

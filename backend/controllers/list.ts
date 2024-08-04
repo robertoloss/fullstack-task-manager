@@ -17,14 +17,14 @@ export async function getList(req: express.Request, res: express.Response) {
 			WHERE user_id = $1
 			ORDER BY date_created DESC
 		`, [userId])
-		if (result.rowCount && result.rowCount >0) {
+		if (result.rows) {
 			const finalResult = {
 				names: result.rows,
 				userId
 			}
 			res.json(finalResult)
 		} else {
-			res.status(400).json({ error: 'No user found' })
+			res.status(400).json({ error: 'An error occurred while trying to retrieve names' })
 		}
 	} catch(error) {
 		console.error(error)

@@ -3,6 +3,11 @@ export class Card extends HTMLElement {
 	constructor() {
 		super()
 	}
+	connectedCallback() {
+		this.nameId = this.dataset.id
+		this.nameName = this.dataset.name
+		this.render()
+	}
 
 	render() {
 		console.log("rendering Card")
@@ -23,6 +28,7 @@ export class Card extends HTMLElement {
 				credentials: 'include'
 			});
 			if (response.ok) {
+				this.parentElement["renderList"]
 			} else {
 					console.error('Failed to delete the name');
 					list.innerHTML = savedList
@@ -68,13 +74,7 @@ export class Card extends HTMLElement {
 					nameItem.textContent = currentName;
 			});
 		}
-	}
-
-	connectedCallback() {
-		this.nameId = this.dataset.id
-		this.nameName = this.dataset.name
-		const node = document.createElement('div')
-		node.innerHTML = `<div 
+		this.innerHTML = `<div 
 				class="flex flex-row justify-between w-full group hover:bg-yellow-50
 					border border-blue-950 p-4 bg-slate-200 rounded-lg transition "
 			>
@@ -85,9 +85,8 @@ export class Card extends HTMLElement {
 					Delete
 				</button>
 			</div>`
-		this.appendChild(node)
-		this.render()
 	}
+
 }
 
 customElements.define('card-component', Card)

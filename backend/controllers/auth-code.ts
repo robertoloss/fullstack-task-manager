@@ -2,7 +2,7 @@ import express from 'express'
 import emailjs from '@emailjs/nodejs'
 import { db } from '../index';
 
-export default async function createAuthCode(req: express.Request, res: express.Response) {
+export async function createAuthCode(req: express.Request, res: express.Response) {
 	const  { email }  = req.body 
 
 	const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -44,8 +44,40 @@ export default async function createAuthCode(req: express.Request, res: express.
 				privateKey: process.env.EMAIL_PRIVATE_KEY as string 
 			},
 		);
-
 		console.log('SUCCESS!');
+		res.status(200).json({ message: "Email sent correctly"})
+	} catch(err) {
+		console.error(err)
+		res.sendStatus(500)
+	}
+}
+
+export async function verifyCode(req: express.Request, res: express.Response) {
+	const { email, code } = req.body
+	try {
+		const data = await db.query(`
+				SELECT 1 from auth_codes
+				where email=$1 and code=$2 and is_valid=true 
+		`, [email, code])
+
+		const codeOk = data.rowCount > 0
+
+		if (codeOk) {
+      res.status(200).json({ message: 'Code is valid.' });
+			const invalidation = await db.query(`
+				UPDATE auth_codes
+				SET is_valid=false
+				where email=$1 and code=$2 and is_valid=true
+			`, [email, code])
+			if (invalidation.rowCount > 0) {
+				console.log("Code successfully invalidated")
+			} else {
+				console.log("ERROR: code was not invalidated")
+			}
+    } else {
+      res.status(404).json({ error: 'Code not found or invalid.' });
+    }
+
 	} catch(err) {
 		console.error(err)
 		res.sendStatus(500)

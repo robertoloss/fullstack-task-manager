@@ -18,6 +18,9 @@ const Router = {
 		if (path === '/login') {
 			const login = new LoginPage()
 			document.body.appendChild(login)
+		} else if  (path === '/signup') {
+			const signup = new SignupPage()
+			document.body.appendChild(signup)
 		} else {
 			Router.go(location.href)
 		}
@@ -36,7 +39,7 @@ const Router = {
 		const exceptions = ['/login','/signup']
 		if (!exceptions.includes(route)) {
 			console.log('not an exception')
-			const res = await fetch('http://localhost:8090/auth/verify', {
+			const res = await fetch('/auth/verify', {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
 			})

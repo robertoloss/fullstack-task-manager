@@ -10,7 +10,7 @@ import dotenv from 'dotenv'
 import { verifyToken } from './middleware'
 import { login, register } from './controllers/authentication'
 import { verifyUser } from './controllers/verifyUser'
-import createAuthCode from './controllers/auth-code'
+import { createAuthCode, verifyCode } from './controllers/auth-code'
 
 dotenv.config()
 const dbUrl = process.env.DB_URL;
@@ -27,7 +27,7 @@ app.use(express.urlencoded({
 }))
 
 app.use('/signup', (_req, res) => {
-	res.send('signup')
+	res.sendFile(path.join(process.cwd(), 'frontend', 'index.html'))
 })
 app.use('/login', (_req, res)=> {
 	res.sendFile(path.join(process.cwd(), 'frontend', 'index.html'))
@@ -36,6 +36,7 @@ app.post('/auth/login', login)
 app.post('/auth/register', register)
 app.post('/auth/verify', verifyUser)
 app.post('/auth-code/create', createAuthCode)
+app.post('/auth-code/verify', verifyCode)
 
 app.use('/', router())
 app.use(express.static("frontend"))

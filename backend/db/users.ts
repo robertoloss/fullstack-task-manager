@@ -12,22 +12,25 @@ export async function userWithEmailExists(email: string)
 	}> {
 	try {
 		const result = await db.query(`
-			SELECT 1 FROM users 
+			SELECT * FROM users 
 			WHERE email = $1
 		`, [email]);
-		if (result.rowCount) {
+		console.log("userWithEmailExists: ", result.rows)
+		if (result.rowCount > 0) {
+			console.log("userWithEmailExists: YES")
 			return { 
 				userExists: result.rowCount > 0,
 				user: result.rows[0]
 			}
 		}  else {
+			console.log("userWithEmailExists: NO")
 			return {
-				userExists: 'error',
+				userExists: false,
 				user: null
 			}
 		}
 	} catch(error) {
-		console.error(error)
+		console.error("there was an error (userWithEmailExists): ", error)
 		return {
 			userExists: 'error',
 			user: null
