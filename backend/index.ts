@@ -8,9 +8,10 @@ import router from './router'
 import path from 'path'
 import dotenv from 'dotenv'
 import { verifyToken } from './middleware'
-import { login, register } from './controllers/authentication'
+import { login, register, resetPassword } from './controllers/authentication'
 import { verifyUser } from './controllers/verifyUser'
 import { createAuthCode, verifyCode } from './controllers/auth-code'
+import { checkUser } from './controllers/checkUser'
 
 dotenv.config()
 const dbUrl = process.env.DB_URL;
@@ -35,6 +36,8 @@ app.use('/login', (_req, res)=> {
 app.post('/auth/login', login)
 app.post('/auth/register', register)
 app.post('/auth/verify', verifyUser)
+app.post('/auth/check', checkUser)
+app.put('/auth/reset', resetPassword)
 app.post('/auth-code/create', createAuthCode)
 app.post('/auth-code/verify', verifyCode)
 

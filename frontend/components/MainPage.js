@@ -1,17 +1,38 @@
 
-
 export class MainPage extends HTMLElement {
 	constructor() {
 		super()
 	}
-
 	connectedCallback() {
 		const template = document.getElementById('main-page')
 		const content = template.content.cloneNode(true)
 		this.appendChild(content)
 		this.render()
+		this.addEventListener('update-list', this.getList)
+		this.addEventListener('get-list', this.getList)
 	}
-
+	renderList(names) {
+		if (names.length === 0) {
+			list.innerHTML = '<h1>No names yet</h1>'
+		} else {
+			list.innerHTML = names.map(name => `
+				<card-component 
+					data-id="${name.id}"
+					data-name="${name.name}"
+				>
+				</card-component>
+			`).join('')
+		}
+	}
+	async getList() {
+		const response = await fetch('http://localhost:8090/list', {
+			method: 'GET',
+			credentials: 'include'	
+		});
+		const { names  } = await response.json()
+		list.innerHTML = ''
+		this.renderList(names)
+	}
 	render() {
 		this.style.width= '100%'
 		const logOutButton = this.querySelector('#log-out')
@@ -19,11 +40,10 @@ export class MainPage extends HTMLElement {
 		const form = this.querySelector('#add-name-form')
 		const displayUser = this.querySelector('#display-current-user')
 
-		getList()
+		this.getList()
 		getUser()
 
 		logOutButton?.addEventListener('click', async (e) => {
-			console.log('logging out...')
 			e.preventDefault()
 			const response = await fetch('/auth/logout', {
 				method: 'POST',
@@ -32,7 +52,6 @@ export class MainPage extends HTMLElement {
 				}
 			})
 			if (response.ok) {
-				console.log("logged out successfully")
 				app.router.go('/login')
 			}
 		})
@@ -40,7 +59,6 @@ export class MainPage extends HTMLElement {
 		async function getUser() {
 			try {
 				const user = await getCurrentUser()
-				console.log("")
 				displayUser.innerHTML = ''
 				displayUser.innerHTML = `${user}`	
 			} catch (error) {
@@ -57,37 +75,10 @@ export class MainPage extends HTMLElement {
 			if (data) return data.user.email
 		}
 
-		async function getList() {
-			const response = await fetch('http://localhost:8090/list', {
-				method: 'GET',
-				credentials: 'include'	
-			});
-			const { names  } = await response.json()
-			list.innerHTML = ''
-			renderList(names)
-		}
-
-		function renderList(names) {
-			if (names.length === 0) {
-				list.innerHTML = '<h1>No names yet</h1>'
-			} else {
-				list.innerHTML = names.map(name => `
-					<card-component 
-						data-id="${name.id}"
-						data-name="${name.name}"
-					>
-					</card-component>
-				`).join('')
-			}
-		}
-
-
 		form?.addEventListener('submit', async (event) => {
 			event.preventDefault();
 			const formObject = Object.fromEntries(new FormData(form))
-			console.log("formObject: ", formObject)
 			const { name: newName } = formObject;
-			console.log("name: ", newName)
 			addNameToList(newName);
 			const response = await fetch(form.action, {
 					method: 'POST',
@@ -97,7 +88,7 @@ export class MainPage extends HTMLElement {
 			});
 			if (response.ok) {
 				form.reset();
-				getList();
+				this.getList();
 			} else {
 				console.error('Failed to add name');
 				const firstItem = list.firstElementChild
@@ -106,12 +97,9 @@ export class MainPage extends HTMLElement {
 		});
 
 		function addNameToList(name) {
-			console.log(`Adding name (=${name}) to list...`)
-
 			const card = document.createElement('card-component');
 			card.setAttribute('data-id', name.id);
 			card.setAttribute('data-name', name);
-
 			list.prepend(card);
 		}
 

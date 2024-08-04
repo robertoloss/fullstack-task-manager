@@ -25,7 +25,7 @@ export async function verifyUser(req: express.Request, res: express.Response) {
 			 res.status(200).json({ status: '200' })
 		 } else {
 			 console.log("redirect")
-			 res.redirect('/login')
+			 res.status(401).set('Location', '/login').end();
 		 }
 	 } catch (error) {
 		 res.status(401).json({ error: 'Invalid token' });

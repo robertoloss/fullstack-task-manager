@@ -8,7 +8,6 @@ app.router = Router
 
 
 window?.addEventListener('DOMContentLoaded', () => {
-	console.log("DOMContentLoaded!")
 	app.router.init()
 })
 

@@ -1,36 +1,32 @@
 //import login from "../actions/auth/login.js";
+import sendEmail from "../actions/auth/sendEmail.js"
 
 
 export class SignupPage extends HTMLElement {
 	constructor() {
 		super()
-		this.preState = {
+		this.stateInit = {
 			showCode: false,
 			email: "",
-			password: ""
+			password: "",
+			userAlreadyExists: false
 		}
-		this.state = new Proxy(this.preState,{
+		this.state = new Proxy(this.stateInit,{
 			set: (target, property, value) => {
 				target[property] = value
 				this.render()
+				if (property === "userAlreadyExists" && value === true) {
+					setTimeout(() => {
+						this.state.userAlreadyExists = false
+						this.render()
+					}, 2000)
+				}
 				return true
 			}
 		})
 	}
 	connectedCallback() {
 		this.render()
-	}
-	async sendEmail(email) {
-		console.warn("Sending email!")
-		const response = await fetch('/auth-code/create', {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({
-				email
-			})
-		})
-		console.log(response)
-		return response
 	}
 	render() {
 		this.innerHTML = `
@@ -53,49 +49,47 @@ export class SignupPage extends HTMLElement {
 								Sign-Up
 							</button>
 						</form>
+						${this.state.userAlreadyExists ? `
+							<p class="text-sm text-red-700">A user with this email already exists</p>
+						` : ''}
 					</div>`}
-					${this.state.showCode ? 
-						`
-							<auth-code 
-								data-email=${this.state.email} 
-								data-password=${this.state.password}>
-							</auth-code>
-						` : ''
-						}
+					${this.state.showCode ? `
+						<auth-code 
+							data-email=${this.state.email} 
+							data-password=${this.state.password}>
+						</auth-code> ` : ''
+					}
 					<div id="list-of-users" class=" flex flex-col"></div>
 				</div>
 			</div>
 		`
-		console.log("render")
-		console.log(this.state)
 		const signupForm = this.querySelector('#signup-form')
-		console.log("signup form ", signupForm)
 		
 		signupForm?.addEventListener('submit', async (event) => {
 			event.preventDefault();
-			console.log("Submitted")
 			const { email, password } = Object.fromEntries(new FormData(signupForm))
-			console.log("")
-			if (email && password) {
-				const resSendEmail = await this.sendEmail(email)
-				if (!resSendEmail.ok) {
-					console.error("ERROR while sending email")
-					return
+			const dataCheckUser = await fetch('/auth/check', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json'},
+				body: JSON.stringify({ email: email })
+			})
+			const resCheckUser = await dataCheckUser.json()
+			const userAlreadyExists = resCheckUser.userExists
+			if (!userAlreadyExists) {
+				if (email && password) {
+					const resSendEmail = await sendEmail(email)
+					if (!resSendEmail.ok) {
+						console.error("ERROR while sending email")
+						return
+					}
+					this.state.showCode = true
+					this.state.email = email
+					this.state.password = password
 				}
-				this.state.showCode = true
-				this.state.email = email
-				this.state.password = password
+			} else {
+				console.error("A user with this email already exists")
+				this.state.userAlreadyExists = true
 			}
-			
-			//const response = await fetch('http://localhost:8090/auth/register', {
-			//	method: 'POST',
-			//	headers: { 'Content-Type': 'application/json' },
-			//})
-			//if (response.ok) {
-			//	login(email, password)
-			//} else {
-			//	console.error("There was an error while creating the user")
-			//}
 		})
 	}
 }

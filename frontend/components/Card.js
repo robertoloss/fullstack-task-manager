@@ -9,32 +9,29 @@ export class Card extends HTMLElement {
 		this.render()
 	}
 
+	async deleteName(event) {
+		event.target.closest('card-component').remove();
+		const id = event.target.getAttribute('data-id');
+		const response = await fetch(`http://localhost:8090/list/${id}`, {
+			method: 'DELETE',
+			credentials: 'include'
+		});
+		if (response.ok) {
+		} else {
+			console.error('Failed to delete the name');
+		}
+		const list = document.getElementById('list')
+		list.dispatchEvent(new CustomEvent('update-list', { bubbles: true }));
+	}
 	render() {
-		console.log("rendering Card")
 		this.addEventListener('click', (event) => {
 				if (event.target.classList.contains('delete-button')) {
-						deleteName(event);
+						this.deleteName(event);
 				} else if (event.target.classList.contains('name-item')) {
 						editName(event);
 				}
 		});
-		async function deleteName(event) {
-			const savedList = list.innerHTML
-			event.target.closest('card-component').remove();
-			const id = event.target.getAttribute('data-id');
-			console.log(`Deleting ${id}`)
-			const response = await fetch(`http://localhost:8090/list/${id}`, {
-				method: 'DELETE',
-				credentials: 'include'
-			});
-			if (response.ok) {
-				this.parentElement["renderList"]
-			} else {
-					console.error('Failed to delete the name');
-					list.innerHTML = savedList
-			}
-		}
-		function editName(event) {
+		const editName = (event) => {
 			const nameItem = event.target;
 			const currentName = nameItem.textContent.trim();
 			const inputElement = document.createElement('input');
@@ -61,7 +58,11 @@ export class Card extends HTMLElement {
 									nameItem.textContent = currentName;
 									throw new Error('ERROR: Failed to update name');
 							}
-							getList()
+							this.dispatchEvent(new CustomEvent(
+								'get-list',
+								{ 'bubbles' : true }
+							))
+							//getList()
 						} catch (error) {
 							console.error('Error updating name:', error);
 						}

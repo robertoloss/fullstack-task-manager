@@ -4,7 +4,6 @@ import { db } from '../index';
 
 export async function createAuthCode(req: express.Request, res: express.Response) {
 	const  { email }  = req.body 
-
 	const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 	let code = '';
 	for (let i = 0; i < 6; i++) {

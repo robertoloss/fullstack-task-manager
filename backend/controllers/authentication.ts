@@ -76,6 +76,29 @@ export async function logOut(_req: express.Request, res: express.Response) {
 	res.status(200).json({ message: "Logged out succesfully"})
 }
 
+export async function resetPassword(req: express.Request, res: express.Response) {
+	const { email, password } = req.body
+	console.log("email and password: ", email, password)
+	const hash = await hashPassword(password)
+	try {
+		const data = await db.query(`
+			UPDATE users
+			set password=$2
+			where email=$1
+		`, [email, hash])
+		if (data.rowCount > 0) {
+			res.sendStatus(200)
+		} else {
+			console.log(data.rowCount)
+			console.log("data: ", data)
+			res.sendStatus(500)
+		}
+	} catch(err) {
+		console.error(err)
+		res.sendStatus(500)
+	}
+}
+
 
 
 
