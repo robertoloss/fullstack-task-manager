@@ -29,7 +29,7 @@ export default class AuthCode extends HTMLElement {
 			</div>
 		`
 		const verifyForm = document.querySelector('#verify-form')
-		verifyForm.addEventListener('submit', async (e)=> {
+		verifyForm?.addEventListener('submit', async (e)=> {
 			e.preventDefault()
 			const { code } = Object.fromEntries(new FormData(verifyForm))
 			const resVerifyCode = await fetch('/auth-code/verify', {

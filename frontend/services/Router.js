@@ -44,6 +44,7 @@ const Router = {
 		} 
 		if (addToHistory) {
 			history.pushState({ route },null,route)
+			document.title = "Cool website"
 		}
 		switch (origin + route) {
 			case origin + '/':

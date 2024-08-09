@@ -42,13 +42,13 @@ export class Input extends HTMLElement {
 					autocomplete=${inputType} 
 					class="border border-gray-600 px-2 h-12 font-light rounded-md ${this.state.smallLabel ? 'pt-4':''}"
 				/>
-				${inputType === 'password' ?
-					`<div class="flex flex-row w-full mt-1 justify-end">
-						<a href="/reset-password" class="navlink text-xs">
-							Forget password?
-						</a>
-					</div>`
-				:''}
+				<div class="${inputType === 'password'  ? this.dataset.login ? 'visible' : 'invisible' : 'hidden' }
+					flex flex-row w-full mt-1 justify-end"
+				>
+					<a href="/reset-password" class="navlink text-xs">
+						Forgot password?
+					</a>
+				</div>
 			</div>
 		`
 		console.log("rendered", inputType)
