@@ -63,6 +63,14 @@ export class SignupPage extends HTMLElement {
 				</div>
 			</div>
 		`
+		this.querySelectorAll('a.navlink').forEach(a => {
+			a.addEventListener('click', e => {
+				e.preventDefault()
+				const url = a.href
+				console.log("Url from listener: ", url)
+				app.router.go(url)
+			})
+		})
 		const signupForm = this.querySelector('#signup-form')
 		
 		signupForm?.addEventListener('submit', async (event) => {

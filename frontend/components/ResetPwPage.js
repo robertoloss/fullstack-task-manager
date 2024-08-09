@@ -7,6 +7,7 @@ export default class ResetPwPage extends HTMLElement {
 		super()
 		this.stateInit = {
 			emailEntered: false,
+			noUserExists: false,
 			codeVerified: false,
 			codeInvalid: false,
 			email: ''
@@ -15,6 +16,13 @@ export default class ResetPwPage extends HTMLElement {
 			set: (target, property, value) => {
 				target[property] = value
 				this.render()
+				//console.log(this.state)
+				if (property === 'noUserExists' && value === true) {
+					setTimeout(()=>{
+						this.state.noUserExists = false
+						this.render()
+					}, 3000)
+				}
 				return true
 			}
 		})
@@ -39,8 +47,11 @@ export default class ResetPwPage extends HTMLElement {
 							>
 									Submit
 							</button>
-						</form>` : ''
-					}
+						</form> 
+						${this.state.noUserExists ? `
+							<p class="text-sm text-red-700">No user with this email exists</p>
+						`:''}
+					` : ''}
 					${this.state.emailEntered && !this.state.codeVerified ? `
 						<h1 class="text-xl  w-full">
 							We have sent you a verification code
@@ -115,6 +126,17 @@ export default class ResetPwPage extends HTMLElement {
 		emailForm?.addEventListener('submit', async (e) => {
 			e.preventDefault()
 			const { email } = Object.fromEntries(new FormData(emailForm))
+			const resCheckData = await fetch('/auth/check', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json'},
+				body: JSON.stringify({ email: email})
+			})
+			const resCheck = await resCheckData.json()
+			if (!resCheck.userExists) {
+				console.error("No user with this email exists")
+				this.state.noUserExists = true
+				return
+			}
 			const emailResult = await sendEmail(email)
 			if (!emailResult.ok) {
 				console.error("Something went wrong while trying to send you an email")
@@ -132,7 +154,10 @@ export default class ResetPwPage extends HTMLElement {
 			const resVerify = await fetch(action, {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ code: code })
+				body: JSON.stringify({ 
+					code: code,
+					email: this.state.email
+				})
 			})
 			if (!resVerify.ok) {
 				console.error("Code is not valid")

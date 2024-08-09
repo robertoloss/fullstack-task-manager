@@ -53,6 +53,7 @@ export async function createAuthCode(req: express.Request, res: express.Response
 
 export async function verifyCode(req: express.Request, res: express.Response) {
 	const { email, code } = req.body
+	console.log("verifyCode - email, body: ", email, code)
 	try {
 		const data = await db.query(`
 				SELECT 1 from auth_codes
