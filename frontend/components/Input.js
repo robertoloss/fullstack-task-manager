@@ -25,7 +25,7 @@ export class Input extends HTMLElement {
 		const inputType = this.dataset.type
 		this.innerHTML = ''	
 		this.innerHTML = `
-			<div class="flex flex-col relative h-fit">
+			<div class="flex flex-col relative h-fit w-full">
 				<p 
 					id="${inputType}Label" 
 					class="${`
@@ -40,7 +40,7 @@ export class Input extends HTMLElement {
 					id=${inputType} 
 					name=${inputType} 
 					autocomplete=${inputType} 
-					class="border border-gray-600 px-2 h-12 font-light rounded-md ${this.state.smallLabel ? 'pt-4':''}"
+					class="border border-gray-600 px-2 w-full h-12 font-light rounded-md ${this.state.smallLabel ? 'pt-4':''}"
 				/>
 				<div class="${inputType === 'password'  ? this.dataset.login ? 'visible' : 'invisible' : 'hidden' }
 					flex flex-row w-full mt-1 justify-end"
@@ -51,8 +51,6 @@ export class Input extends HTMLElement {
 				</div>
 			</div>
 		`
-		console.log("rendered", inputType)
-		console.log("state", inputType, this.state)
 
 		setTimeout(()=>{
 			const input = document.getElementById(`${inputType}`)
@@ -61,17 +59,13 @@ export class Input extends HTMLElement {
 			input?.addEventListener('focus', () => {
 				if (!this.state.justFocused) this.state.smallLabel = true
 				this.state.justFocused = true
-				console.log("focus", inputType)
 			})
 			input?.addEventListener('blur', (e)=>{
 				if (e.target.value === "" && this.state.justFocused) {
 					this.state.justFocused = false
 					this.state.smallLabel = false
-					console.log("empty value")
 				} else  {
-					console.log("non-empty value")
 				}
-				console.log('blur', inputType)
 			})
 			label?.addEventListener('click', ()=>{
 				this.state.smallLabel = true
@@ -81,15 +75,11 @@ export class Input extends HTMLElement {
 				}
 				console.log("blur", inputType)
 			})
-			input?.addEventListener('change', ()=> {
-				console.log("chagne")
-			})
 
 			if (this.state.justFocused) {
 				input.focus()
-				console.log("here")
 			} else {
-				input.blur()
+				input?.blur()
 			}
 		}, 0)
 
