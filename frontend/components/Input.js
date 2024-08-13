@@ -6,14 +6,12 @@ export class Input extends HTMLElement {
 		this.stateInit = {
 			smallLabel: false,
 			justFocused: false,
-			justBlurred: false
+			justBlurred: false,
 		}
 		this.state = new Proxy(this.stateInit, {
 			set: (target, property, value) => {
-					target[property] = value;
-					if (property === 'smallLabel') {
-						this.render()
-					}
+				target[property] = value;
+				if (property === 'smallLabel') this.render()
 				return true
 			}
 		})
@@ -33,10 +31,10 @@ export class Input extends HTMLElement {
 						left-2 max-h-0 transition relative
 					`}"
 				>
-					${inputType[0].toUpperCase() + inputType.slice(1)}
+					${inputType[0].toUpperCase() + inputType.slice(1).replace(/_/g, ' ')}
 				</p>
 				<input 
-					type=${inputType} 
+					type=${inputType.includes('password') ? 'password' : inputType} 
 					id=${inputType} 
 					name=${inputType} 
 					autocomplete=${inputType} 
@@ -51,6 +49,13 @@ export class Input extends HTMLElement {
 				</div>
 			</div>
 		`
+		this.querySelectorAll('a.navlink').forEach(a => {
+			a.addEventListener('click', e => {
+				e.preventDefault()
+				const url = a.href
+				app.router.go(url)
+			})
+		})
 
 		setTimeout(()=>{
 			const input = document.getElementById(`${inputType}`)
@@ -68,22 +73,17 @@ export class Input extends HTMLElement {
 				}
 			})
 			label?.addEventListener('click', ()=>{
-				this.state.smallLabel = true
 				if (input) {
-					console.log("input exists", inputType)
 					input.focus()
 				}
-				console.log("blur", inputType)
+				this.state.smallLabel = true
 			})
-
 			if (this.state.justFocused) {
 				input.focus()
 			} else {
 				input?.blur()
 			}
 		}, 0)
-
-
 	}
 }
 

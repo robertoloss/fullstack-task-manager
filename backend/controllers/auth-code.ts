@@ -34,7 +34,7 @@ export async function createAuthCode(req: express.Request, res: express.Response
 			publicKey: process.env.EMAIL_PUBLIC_KEY,
 			validationRequired: false
 		})
-		await emailjs.send(
+		const emailjsResponse = await emailjs.send(
 			process.env.EMAIL_SERVICE_ID as string, 
 			process.env.EMAIL_TEMPLATE_ID as string, 
 			templateParams,

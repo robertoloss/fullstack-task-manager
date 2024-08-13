@@ -11,8 +11,10 @@ export async function checkUser(req: express.Request, res: express.Response) {
 		`, [email])
 		console.log("checkUser - data.rows: ", data.rows)
 		if (data.rowCount > 0) {
+			console.log("user exists")
 			res.status(200).json({ userExists: true})
 		} else {
+			console.log("user doesn't exist")
 			res.status(200).json({ userExists: false})
 		}
 	} catch(err) {
