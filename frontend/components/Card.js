@@ -6,6 +6,7 @@ export class Card extends HTMLElement {
 	connectedCallback() {
 		this.nameId = this.dataset.id
 		this.nameName = this.dataset.name
+		this.content = this.dataset.content
 		this.render()
 	}
 
@@ -75,17 +76,26 @@ export class Card extends HTMLElement {
 					nameItem.textContent = currentName;
 			});
 		}
-		this.innerHTML = `<div 
-				class="flex flex-row justify-between w-full group hover:bg-yellow-50
-					border border-blue-950 p-4 bg-slate-200 rounded-lg transition "
+		this.innerHTML = `
+			<div class="flex flex-col justify-between w-full h-full group hover:bg-yellow-50
+					 p-4 bg-white shadow shadow-gray-700 rounded-lg transition gap-y-6 min-w-[280px]"
 			>
-				<div class="name-item hover:text-blue-600 cursor-pointer" data-id="${this.nameId}">
-					${this.nameName}
+				<div class="flex flex-col gap-y-4 justify-start">
+					<div class="name-item w-full text-wrap hover:text-blue-600 cursor-pointer font-semibold text-lg" 
+						data-id="${this.nameId}"
+					>
+						${this.nameName}
+					</div>
+					<div class="name-item w-full text-wrap hover:text-blue-600 cursor-pointer font-light text-base" 
+						data-id="${this.nameId}">
+						${this.content}
+					</div>
 				</div>
 				<button class="delete-button text-gray-300 cursor-pointer hover:text-red-600" data-id="${this.nameId}">
 					Delete
 				</button>
-			</div>`
+			</div>
+		`
 	}
 
 }

@@ -4,9 +4,6 @@ export class MainPage extends HTMLElement {
 		super()
 	}
 	connectedCallback() {
-		const template = document.getElementById('main-page')
-		const content = template.content.cloneNode(true)
-		this.appendChild(content)
 		this.render()
 		this.addEventListener('update-list', this.getList)
 		this.addEventListener('get-list', this.getList)
@@ -18,7 +15,8 @@ export class MainPage extends HTMLElement {
 			list.innerHTML = names.map(name => `
 				<card-component 
 					data-id="${name.id}"
-					data-name="${name.name}"
+					data-name="${name.title}"
+					data-content="${name.content}"
 				>
 				</card-component>
 			`).join('')
@@ -34,14 +32,81 @@ export class MainPage extends HTMLElement {
 		this.renderList(names)
 	}
 	render() {
+		this.innerHTML = `
+			<div class="page flex flex-col w-full min-h-[100vh] h-fit items-center bg-slate-50">
+				<div id="header-bar" class="flex flex-row justify-between w-full">
+					<div class="flex flex-row gap-x-4 w-[120px]"></div>
+					<div class="flex flex-row gap-x-6 w-fit justify-center">
+						<a href="/" class="navlink cursor-pointer w-fit">
+							Home
+						</a>
+						<a href="/new-page" class="navlink cursor-pointer w-fit">
+							New Page
+						</a>
+					</div>
+					<div class="flex flex-row gap-x-4 w-fit">
+						<div id="display-current-user" class="">User</div>
+						<button 
+							id="log-out" 
+							class="flex flex-row items-center justify-center 
+								rounded-md bg-gray-300 font-light text-sm px-2 py-1 min-w-14 
+								hover:brightness-95 transition-all"
+						>
+							Logout
+						</button>
+					</div>
+				</div>
+				<div class="flex flex-col py-10 w-full gap-y-4 items-center px-4 sm:px-10 lg:px-20">
+					<h1 id="hello" class="text-2xl font-semibold w-fit">My Notes</h1>
+					<form id="add-name-form" method="post" class="flex flex-col gap-y-2" action="/list" target="hidden-iframe">
+						<div class="flex flex-col gap-y-2">
+							<input type="text" id="new-name" name="name" class="border border-black px-2"/>
+							<textarea id="new-content" name="content" class="border border-black px-2"/>
+							</textarea>
+						</div>
+						<button type="submit" 
+							class="rounded-md bg-gray-300 font-light text-sm px-2 py-1 min-w-14 hover:brightness-95
+								transition-all" 
+						>
+							Add
+						</button>
+						<iframe name="hidden-iframe" style="display:none;"></iframe>
+					</form>
+					<button id="add-modal"> Click me </button>
+					<div id="list" class="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-4">
+						<div class="flex flex-row w-full justify-center">
+							<spinner-component></spinner-component>
+						</div>
+					</div>
+				</div>
+			</div>
+		`
 		this.style.width= '100%'
 		const logOutButton = this.querySelector('#log-out')
 		const list = this.querySelector('#list')
 		const form = this.querySelector('#add-name-form')
 		const displayUser = this.querySelector('#display-current-user')
+		const modalButton = this.querySelector('#add-modal')
 
 		this.getList()
 		getUser()
+
+		modalButton.addEventListener('click', ()=>{
+			const modal = document.createElement('dialog')
+			modal.innerHTML = `
+				<button id="closeButton">X</button>
+        <h2>Modal Title</h2>
+        <p>This is a modal content.</p>
+        <button id="closeButton">Close</button>
+			`;
+			document.body.appendChild(modal);
+
+			document.startViewTransition(()=>modal.showModal());
+			const closeButton = modal.querySelector('#closeButton');
+			closeButton.addEventListener('click', () => {
+					modal.close();
+			});
+		})
 
 		logOutButton?.addEventListener('click', async (e) => {
 			e.preventDefault()
@@ -78,8 +143,8 @@ export class MainPage extends HTMLElement {
 		form?.addEventListener('submit', async (event) => {
 			event.preventDefault();
 			const formObject = Object.fromEntries(new FormData(form))
-			const { name: newName } = formObject;
-			addNameToList(newName);
+			const { name: newName, content } = formObject;
+			addNameToList(newName, content);
 			const response = await fetch(form.action, {
 					method: 'POST',
 					credentials: 'include',
@@ -96,10 +161,11 @@ export class MainPage extends HTMLElement {
 			}
 		});
 
-		function addNameToList(name) {
+		function addNameToList(name, content) {
 			const card = document.createElement('card-component');
 			card.setAttribute('data-id', name.id);
 			card.setAttribute('data-name', name);
+			card.setAttribute('data-content', content);
 			list.prepend(card);
 		}
 

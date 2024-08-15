@@ -13,7 +13,7 @@ export async function getList(req: express.Request, res: express.Response) {
 		console.log("User ID: ", userId)
 		const result = await db.query(`
 			SELECT *
-			FROM test
+			FROM notes
 			WHERE user_id = $1
 			ORDER BY date_created DESC
 		`, [userId])
@@ -22,6 +22,7 @@ export async function getList(req: express.Request, res: express.Response) {
 				names: result.rows,
 				userId
 			}
+			console.log(finalResult)
 			res.json(finalResult)
 		} else {
 			res.status(400).json({ error: 'An error occurred while trying to retrieve names' })
@@ -40,7 +41,7 @@ export async function deleteListEntry(req: express.Request, res: express.Respons
 	}
 	try {
 		const delRes = await db.query(`
-		DELETE FROM test
+		DELETE FROM notes
 		WHERE id = $1 and user_id = $2
 	`, [id, userId])
 	if (delRes.rowCount && delRes.rowCount > 0) {
@@ -55,7 +56,7 @@ export async function deleteListEntry(req: express.Request, res: express.Respons
 };
 
 export async function postListEntry(req: express.Request, res: express.Response) {
-	const { name } = req.body;
+	const { name, content } = req.body;
 	const userId = (req as any).user
 	if (!userId) {
 		console.error("User not found")
@@ -63,14 +64,15 @@ export async function postListEntry(req: express.Request, res: express.Response)
 	}
 	console.log("Posting...")
 	console.log("Name: ", name)
+	console.log("Content: ", content)
 	console.log("User ID: ", userId)
 	if (name && name != "") {
 		try {
 			const result = await db.query(`
-				INSERT INTO test (name, user_id)
-				VALUES ($1, $2)
-				RETURNING name
-			`, [name, userId]);
+				INSERT INTO notes (title, content, user_id)
+				VALUES ($1, $2, $3)
+				RETURNING title
+			`, [name, content, userId]);
 			if (result.rows.length > 0) {
 					res.status(201).json(result.rows[0])
 			} else {
@@ -98,8 +100,8 @@ export async function updateListEntry(req: express.Request, res: express.Respons
 	if (name && name != "") {
 		try {
 			const result = await db.query(`
-				UPDATE test
-				SET	name = $1
+				UPDATE notes
+				SET	title = $1
 				where id = $2 and user_id = $3
 			`, [name, id, userId])
 			if (result.rowCount && result.rowCount > 0) {

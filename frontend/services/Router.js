@@ -46,33 +46,38 @@ const Router = {
 			history.pushState({ route },null,route)
 			document.title = "Cool website"
 		}
-		switch (origin + route) {
-			case origin + '/':
-				document.body.innerHTML = ''
-				const main = new MainPage()
-				document.body.appendChild(main)
-				break
-			case origin + '/signup':
-				document.body.innerHTML = ''
-				const signup = new SignupPage()
-				document.body.appendChild(signup)
-				break
-			case origin + '/login':
-				document.body.innerHTML = ''
-				const login = new LoginPage()
-				document.body.appendChild(login)
-				break
-			case origin + '/reset-password':
-				document.body.innerHTML = ''
-				const reset = new ResetPwPage()
-				document.body.appendChild(reset)
-				break
-			default:
-				document.body.innerHTML = ''
-				const main2 = new MainPage()
-				document.body.appendChild(main2)
-				break
+		function switchPage() {
+			switch (origin + route) {
+				case origin + '/':
+					document.body.innerHTML = ''
+					const main = new MainPage()
+					document.body.appendChild(main)
+					break
+				case origin + '/signup':
+					document.body.innerHTML = ''
+					const signup = new SignupPage()
+					document.body.appendChild(signup)
+					break
+				case origin + '/login':
+					document.body.innerHTML = ''
+					const login = new LoginPage()
+					document.body.appendChild(login)
+					break
+				case origin + '/reset-password':
+					document.body.innerHTML = ''
+					const reset = new ResetPwPage()
+					document.body.appendChild(reset)
+					break
+				default:
+					document.body.innerHTML = ''
+					const main2 = new MainPage()
+					document.body.appendChild(main2)
+					break
+			}
 		}
+		if (document.startViewTransition) {
+			document.startViewTransition(()=>switchPage())
+		} else switchPage()
 	}
 }
 
