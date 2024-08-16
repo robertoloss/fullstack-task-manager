@@ -7,6 +7,7 @@ export class MainPage extends HTMLElement {
 		this.render()
 		this.addEventListener('update-list', this.getList)
 		this.addEventListener('get-list', this.getList)
+		document.body.classList.add('bg-slate-50')
 	}
 	renderList(names) {
 		if (names.length === 0) {
@@ -58,21 +59,7 @@ export class MainPage extends HTMLElement {
 				</div>
 				<div class="flex flex-col py-10 w-full gap-y-4 items-center px-4 sm:px-10 lg:px-20">
 					<h1 id="hello" class="text-2xl font-semibold w-fit">My Notes</h1>
-					<form id="add-name-form" method="post" class="flex flex-col gap-y-2" action="/list" target="hidden-iframe">
-						<div class="flex flex-col gap-y-2">
-							<input type="text" id="new-name" name="name" class="border border-black px-2"/>
-							<textarea id="new-content" name="content" class="border border-black px-2"/>
-							</textarea>
-						</div>
-						<button type="submit" 
-							class="rounded-md bg-gray-300 font-light text-sm px-2 py-1 min-w-14 hover:brightness-95
-								transition-all" 
-						>
-							Add
-						</button>
-						<iframe name="hidden-iframe" style="display:none;"></iframe>
-					</form>
-					<button id="add-modal"> Click me </button>
+					<button id="add-modal"> New note </button>
 					<div id="list" class="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-4">
 						<div class="flex flex-row w-full justify-center">
 							<spinner-component></spinner-component>
@@ -84,7 +71,6 @@ export class MainPage extends HTMLElement {
 		this.style.width= '100%'
 		const logOutButton = this.querySelector('#log-out')
 		const list = this.querySelector('#list')
-		const form = this.querySelector('#add-name-form')
 		const displayUser = this.querySelector('#display-current-user')
 		const modalButton = this.querySelector('#add-modal')
 
@@ -93,11 +79,25 @@ export class MainPage extends HTMLElement {
 
 		modalButton.addEventListener('click', ()=>{
 			const modal = document.createElement('dialog')
+			modal.className = 'border border-black rounded-md p-6'
+			modal.id = 'modal'
 			modal.innerHTML = `
 				<button id="closeButton">X</button>
-        <h2>Modal Title</h2>
-        <p>This is a modal content.</p>
-        <button id="closeButton">Close</button>
+        <p>New note</p>
+				<form id="add-name-form" method="post" class="flex flex-col gap-y-2" action="/list" target="hidden-iframe">
+					<div class="flex flex-col gap-y-2">
+						<input type="text" id="new-name" name="name" class="border border-black px-2"/>
+						<textarea id="new-content" name="content" class="border border-black px-2"/>
+						</textarea>
+					</div>
+					<button type="submit" 
+						class="rounded-md bg-gray-300 font-light text-sm px-2 py-1 min-w-14 hover:brightness-95
+							transition-all" 
+					>
+						Add
+					</button>
+					<iframe name="hidden-iframe" style="display:none;"></iframe>
+				</form>
 			`;
 			document.body.appendChild(modal);
 
@@ -105,6 +105,31 @@ export class MainPage extends HTMLElement {
 			const closeButton = modal.querySelector('#closeButton');
 			closeButton.addEventListener('click', () => {
 					modal.close();
+			});
+			const form = modal.querySelector('#add-name-form')
+			form?.addEventListener('submit', async (event) => {
+				event.preventDefault();
+				const modal = document.querySelector('#modal')
+				modal.close()
+				console.log("here")
+				const formObject = Object.fromEntries(new FormData(form))
+				const { name: newName, content } = formObject;
+				addNameToList(newName, content);
+				const response = await fetch('/list', {
+						method: 'POST',
+						credentials: 'include',
+						headers: { "Content-Type": "application/json" },
+						body: JSON.stringify(formObject)
+				});
+				if (response.ok) {
+					console.log("response ok")
+					form.reset();
+					this.getList();
+				} else {
+					console.error('Failed to add name');
+					const firstItem = list.firstElementChild
+					firstItem.remove()
+				}
 			});
 		})
 
@@ -140,26 +165,6 @@ export class MainPage extends HTMLElement {
 			if (data) return data.user.email
 		}
 
-		form?.addEventListener('submit', async (event) => {
-			event.preventDefault();
-			const formObject = Object.fromEntries(new FormData(form))
-			const { name: newName, content } = formObject;
-			addNameToList(newName, content);
-			const response = await fetch(form.action, {
-					method: 'POST',
-					credentials: 'include',
-					headers: { "Content-Type": "application/json" },
-					body: JSON.stringify(formObject)
-			});
-			if (response.ok) {
-				form.reset();
-				this.getList();
-			} else {
-				console.error('Failed to add name');
-				const firstItem = list.firstElementChild
-				firstItem.remove()
-			}
-		});
 
 		function addNameToList(name, content) {
 			const card = document.createElement('card-component');

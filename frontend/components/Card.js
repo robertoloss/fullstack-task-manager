@@ -77,8 +77,9 @@ export class Card extends HTMLElement {
 			});
 		}
 		this.innerHTML = `
-			<div class="flex flex-col justify-between w-full h-full group hover:bg-yellow-50
-					 p-4 bg-white shadow shadow-gray-700 rounded-lg transition gap-y-6 min-w-[280px]"
+			<div class="flex flex-col justify-between w-full group hover:bg-yellow-50
+					 p-4 bg-white shadow shadow-gray-700 rounded-lg transition gap-y-6 min-w-[280px]
+					 h-[280px]"
 			>
 				<div class="flex flex-col gap-y-4 justify-start">
 					<div class="name-item w-full text-wrap hover:text-blue-600 cursor-pointer font-semibold text-lg" 

@@ -5,6 +5,7 @@ export class AuthCard extends HTMLElement {
 	}
 	connectedCallback() {
 		this.render()
+		document.body.classList.add('bg-slate-300')
 	}
 	render() {
 		const { 
