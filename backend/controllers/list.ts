@@ -90,30 +90,27 @@ export async function postListEntry(req: express.Request, res: express.Response)
 }
 
 export async function updateListEntry(req: express.Request, res: express.Response) {
-	const { name } = req.body;
+	const { title, content } = req.body;
 	const id = req.params.id;
 	const userId = (req as any).user
 	if (!userId) {
 		console.error("No user found")
 		return res.status(400).json({ error: "No user found"})
 	}
-	if (name && name != "") {
-		try {
-			const result = await db.query(`
-				UPDATE notes
-				SET	title = $1
-				where id = $2 and user_id = $3
-			`, [name, id, userId])
-			if (result.rowCount && result.rowCount > 0) {
-				res.status(201).send(`Name with ID ${id} updated to ${name}`)
-			} else {
-				res.status(400).send('Failed to update the name')
-			}
-		} catch (error) {
-			console.log(error)
-			res.status(500).send('Server error')
+	try {
+		const result = await db.query(`
+			UPDATE notes SET	
+			title = COALESCE(NULLIF($1,NULL), title),
+			content = COALESCE(NULLIF($4,NULL), content)
+			where id = $2 and user_id = $3
+		`, [title, id, userId, content])
+		if (result.rowCount && result.rowCount > 0) {
+			res.status(201).send(`Name with ID ${id} updated to ${title}`)
+		} else {
+			res.status(400).send('Failed to update the name')
 		}
-	} else {
-		res.status(400).send('Name cannot be empty')
+	} catch (error) {
+		console.log(error)
+		res.status(500).send('Server error')
 	}
 }

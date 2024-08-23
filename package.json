@@ -25,6 +25,9 @@
   },
   "dependencies": {
     "@emailjs/nodejs": "^4.0.4",
+    "@tiptap/core": "^2.6.5",
+    "@tiptap/pm": "^2.6.5",
+    "@tiptap/starter-kit": "^2.6.5",
     "argon2": "^0.40.3",
     "bcrypt": "^5.1.1",
     "body-parser": "^1.20.2",
