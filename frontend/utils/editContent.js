@@ -5,6 +5,7 @@ const editContent = (event) => {
 	const id = contentItem.getAttribute('data-id');
 	const currentName = contentItem.innerHTML.replace(/<br\s*\/?>/gi, '\n').replace(/&nbsp;/g, ' ').trim();
 	event.target.style.overflowY = 'hidden'
+	document.body.style.overflow = 'hidden'
 	
 	let inputElement = document.querySelector(`#content-input${id}`)
 	if (!inputElement) {
@@ -13,8 +14,9 @@ const editContent = (event) => {
 		inputElement.id = 'content-input${id}'
 		//inputElement.rows = '20'
 		inputElement.value = currentName;
-		inputElement.className = 'focus:outline-none bg-transparent w-full h-full scrollable'
-
+		inputElement.style.resize = "none"
+		inputElement.className = 'focus:outline-none bg-gray-50 w-full h-full scrollable'
+//className="bg-gray-50"
 	}
 
 	contentItem.textContent = '';

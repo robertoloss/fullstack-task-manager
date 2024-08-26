@@ -8,6 +8,8 @@ export class MainPage extends HTMLElement {
 		this.render()
 		this.addEventListener('update-list', this.getList)
 		this.addEventListener('get-list', this.getList)
+		this.style.width = ''
+		this.className = 'flex flex-col w-full items-center'
 		document.body.classList.add('bg-slate-50')
 	}
 	renderList(names) {
@@ -37,8 +39,8 @@ export class MainPage extends HTMLElement {
 	}
 	render() {
 		this.innerHTML = `
-			<div id='main-page' class="page flex flex-col w-full min-h-[100vh] h-fit items-center bg-slate-50">
-				<div id="header-bar" class="flex flex-row justify-between w-full">
+			<div id='main-page' class="page flex flex-col w-full max-w-[1200px] min-h-[100vh] h-fit items-center bg-slate-50">
+				<div id="header-bar" class="flex flex-row w-full justify-between ">
 					<div class="flex flex-row gap-x-4 w-[120px]"></div>
 					<div class="flex flex-row gap-x-6 w-fit justify-center">
 						<a href="/" class="navlink cursor-pointer w-fit">
@@ -62,7 +64,7 @@ export class MainPage extends HTMLElement {
 						</button>
 					</div>
 				</div>
-				<div class="flex flex-col py-10 w-full max-w-[1200px] gap-y-4 items-center px-4 sm:px-10 lg:px-20">
+				<div class="flex flex-col py-10 max-w-[1200px] gap-y-4 items-center px-4 sm:px-10 lg:px-20">
 					<h1 id="hello" class="text-2xl font-semibold w-fit">My Notes</h1>
 					<button id="add-modal"> New note </button>
 					<div id="list" class="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-4">
