@@ -2,8 +2,29 @@
 @tailwind components;
 @tailwind utilities;
 
+	/* .scrollable {
+		color: black
+	}
+	.scrollable::-webkit-scrollbar-thumb {
+		background: red
+	} */
+	@supports (scrollbar-color: auto) {
+		.scrollable {
+			scrollbar-color: lightgray transparent;
+			scrollbar-width: thin;
+		}
+	}
 
-
+	/* Otherwise, use `::-webkit-scrollbar-*` pseudo-elements */
+	@supports selector(::-webkit-scrollbar) {
+		.scrollable::-webkit-scrollbar {
+			background: transparent;
+		}
+		.scrollable::-webkit-scrollbar-thumb {
+			background: lightgray;
+			width: 4px;
+		}
+	}
 	@keyframes fade-in {
     from { opacity: 0; }
   }

@@ -14,7 +14,7 @@ export class Card extends HTMLElement {
 
 			const modal = document.createElement('dialog')
 			modal.id = `modal-note-${this.noteId}`
-			modal.className = `border border-black rounded-md p-6 w-full max-w-[600px] h-full max-h-[600px] overflow-hidden`
+			modal.className = `border border-black rounded-md p-6 pl-8 w-full max-w-[600px] h-full max-h-[600px] overflow-hidden`
 			modal.innerHTML = `
 				<div class="flex flex-row justify-end mb-6">
 					<button class="self-end text-sm text-gray-500 font-light hover:text-gray-900 transition-all" 
@@ -28,20 +28,29 @@ export class Card extends HTMLElement {
 						<h1 id="note-title${this.noteId}" class="font-bold text-2xl" data-id="${this.noteId}">
 							${this.noteTitle}
 						</h1>
-						<h1 id="note-content${this.noteId}" class="font-light text-large focus:outline-none h-full" data-id="${this.noteId}">
+						<h1 
+							id="note-content${this.noteId}"
+							data-id="${this.noteId}"
+							class="font-light text-large focus:outline-none overflow-y-auto h-[75%]"
+						>
 							${this.content || '[Insert content here...]'}
 						</h1>
 					</div>
 					<div id="buttons-container"></div>
 				</div>
 			`
+			console.log(`#note-content${this.noteId}`)
 			document.body.appendChild(modal);
+			document.body.style.overflow = 'hidden'
+			const mainPage = document.getElementsByTagName('main-page')
+			if (mainPage.length != 0) mainPage[0].style.marginRight = '16px' 
 
 			const noteTitle = document.querySelector(`#note-title${this.noteId}`);
 			noteTitle.addEventListener('click', (event)=>{
 				editTitle(event)
 			})
 			const noteContent = document.querySelector(`#note-content${this.noteId}`)
+			noteContent.classList.add('scrollable')
 			noteContent.addEventListener('click', (event)=>{
 				editContent(event)
 
@@ -62,7 +71,9 @@ export class Card extends HTMLElement {
 					event.clientX <= rect.left + rect.width;
 				if (!isInDialog) {
 					modal.close();
+					document.body.style.overflow = 'auto'
 					document.body.removeChild(modal)
+					if (mainPage.length != 0) mainPage[0].style.marginRight = '0px'
 				}
 			});
 
@@ -71,7 +82,9 @@ export class Card extends HTMLElement {
 			closeButton.addEventListener('click', () => {
 				console.log("closing modal")
 				modal.close();
+				document.body.style.overflow = 'auto'
 				document.body.removeChild(modal)
+				if (mainPage.length != 0) mainPage[0].style.marginRight = '0px'
 			});
 		})
 		this.render()

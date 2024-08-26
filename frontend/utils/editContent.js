@@ -4,14 +4,17 @@ const editContent = (event) => {
 	const contentItem = event.target;
 	const id = contentItem.getAttribute('data-id');
 	const currentName = contentItem.innerHTML.replace(/<br\s*\/?>/gi, '\n').replace(/&nbsp;/g, ' ').trim();
+	event.target.style.overflowY = 'hidden'
 	
 	let inputElement = document.querySelector(`#content-input${id}`)
 	if (!inputElement) {
 		console.log("creating an input")
 		inputElement = document.createElement('textarea');
 		inputElement.id = 'content-input${id}'
+		//inputElement.rows = '20'
 		inputElement.value = currentName;
-		inputElement.className = 'focus:outline-none bg-transparent w-full h-full'
+		inputElement.className = 'focus:outline-none bg-transparent w-full h-full scrollable'
+
 	}
 
 	contentItem.textContent = '';
@@ -19,6 +22,7 @@ const editContent = (event) => {
 	contentItem.addEventListener('get-list', ()=> console.log("get list"))
 	inputElement.focus();
 	const updateNote = async (e) => {
+		event.target.style.overflowY = 'auto'
 		e.preventDefault();
 		const newContent= inputElement.value.replace(/\n/g, '<br>').replace(/  /g, '&nbsp;&nbsp;');
 		if (newContent !== currentName) {

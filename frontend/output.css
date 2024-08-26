@@ -751,10 +751,6 @@ video {
   clear: none;
 }
 
-.-ml-1 {
-  margin-left: -0.25rem;
-}
-
 .mb-10 {
   margin-bottom: 2.5rem;
 }
@@ -922,6 +918,10 @@ video {
   height: 280px;
 }
 
+.h-\[75\%\] {
+  height: 75%;
+}
+
 .h-fit {
   height: -moz-fit-content;
   height: fit-content;
@@ -953,10 +953,6 @@ video {
 
 .min-h-\[100vh\] {
   min-height: 100vh;
-}
-
-.min-h-\[12px\] {
-  min-height: 12px;
 }
 
 .min-h-\[20px\] {
@@ -1000,10 +996,6 @@ video {
   min-width: 280px;
 }
 
-.min-w-\[8px\] {
-  min-width: 8px;
-}
-
 .max-w-\[1200px\] {
   max-width: 1200px;
 }
@@ -1014,10 +1006,6 @@ video {
 
 .max-w-\[600px\] {
   max-width: 600px;
-}
-
-.max-w-\[8px\] {
-  max-width: 8px;
 }
 
 .flex-shrink {
@@ -1078,24 +1066,6 @@ video {
 
 .transform-none {
   transform: none;
-}
-
-@keyframes blink {
-  0% {
-    opacity: 1;
-  }
-
-  50% {
-    opacity: 0;
-  }
-
-  100% {
-    opacity: 1;
-  }
-}
-
-.animate-blink {
-  animation: blink 1s step-start infinite;
 }
 
 @keyframes spin {
@@ -2079,11 +2049,6 @@ video {
   background-color: rgb(255 0 0 / var(--tw-bg-opacity));
 }
 
-.bg-blue-400 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(96 165 250 / var(--tw-bg-opacity));
-}
-
 .bg-gray-300 {
   --tw-bg-opacity: 1;
   background-color: rgb(209 213 219 / var(--tw-bg-opacity));
@@ -2099,17 +2064,13 @@ video {
   background-color: rgb(248 250 252 / var(--tw-bg-opacity));
 }
 
-.bg-white {
-  --tw-bg-opacity: 1;
-  background-color: rgb(255 255 255 / var(--tw-bg-opacity));
-}
-
 .bg-transparent {
   background-color: transparent;
 }
 
-.bg-none {
-  background-image: none;
+.bg-white {
+  --tw-bg-opacity: 1;
+  background-color: rgb(255 255 255 / var(--tw-bg-opacity));
 }
 
 .decoration-slice {
@@ -2244,11 +2205,6 @@ video {
   padding-right: 1rem;
 }
 
-.px-\[1px\] {
-  padding-left: 1px;
-  padding-right: 1px;
-}
-
 .py-1 {
   padding-top: 0.25rem;
   padding-bottom: 0.25rem;
@@ -2257,6 +2213,10 @@ video {
 .py-10 {
   padding-top: 2.5rem;
   padding-bottom: 2.5rem;
+}
+
+.pl-8 {
+  padding-left: 2rem;
 }
 
 .pt-4 {
@@ -2430,11 +2390,6 @@ video {
 
 .text-\[\#336699\]\/\[\.35\] {
   color: rgb(51 102 153 / .35);
-}
-
-.text-blue-400 {
-  --tw-text-opacity: 1;
-  color: rgb(96 165 250 / var(--tw-text-opacity));
 }
 
 .text-blue-500 {
@@ -2870,6 +2825,33 @@ video {
 
 .\[a-zA-Z0-9\:\\\\-\\\\\._\$\] {
   a-z-a--z0-9: \\-\\. $;
+}
+
+/* .scrollable {
+		color: black
+	}
+	.scrollable::-webkit-scrollbar-thumb {
+		background: red
+	} */
+
+@supports (scrollbar-color: auto) {
+  .scrollable {
+    scrollbar-color: lightgray transparent;
+    scrollbar-width: thin;
+  }
+}
+
+/* Otherwise, use `::-webkit-scrollbar-*` pseudo-elements */
+
+@supports selector(::-webkit-scrollbar) {
+  .scrollable::-webkit-scrollbar {
+    background: transparent;
+  }
+
+  .scrollable::-webkit-scrollbar-thumb {
+    background: lightgray;
+    width: 4px;
+  }
 }
 
 @keyframes fade-in {
