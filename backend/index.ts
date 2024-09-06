@@ -18,8 +18,8 @@ const dbUrl = process.env.DB_URL;
 const port = 8090
 const app = express()
 app.use(cors({
-    origin: 'http://localhost:5174', // Your frontend's origin
-    credentials: true // Allow credentials (cookies, HTTP auth, etc.)
+    origin: 'http://localhost:5174', 
+		credentials: true
 }))
 //app.use(cors({
 //	credentials: true
@@ -46,7 +46,7 @@ app.post('/auth-code/create', createAuthCode)
 app.post('/auth-code/verify', verifyCode)
 
 app.use('/', router())
-app.use(express.static("frontend"))
+app.use(express.static(path.join(process.cwd(), 'frontend', 'dist')));
 
 app.use(verifyToken)
 app.get('*', (_req, res) => {
@@ -56,9 +56,11 @@ app.get('*', (_req, res) => {
 
 const { Pool } = pg
 export const db = new Pool({
-	connectionString: dbUrl 
+	connectionString: dbUrl,
+	max: 20,                 
+  idleTimeoutMillis: 30000, 
+  connectionTimeoutMillis: 2000,
 });
-db.connect()
 
 const server = http.createServer(app)
 server.listen(port, () => {
