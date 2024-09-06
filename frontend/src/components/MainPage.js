@@ -19,14 +19,45 @@ export class MainPage extends HTMLElement {
 		if (names.length === 0) {
 			list.innerHTML = '<h1>No names yet</h1>'
 		} else {
-			list.innerHTML = names.map(name => `
-				<card-component 
-					data-id="${name.id}"
-					data-name="${name.title}"
-					data-content="${name.content}"
-				>
-				</card-component>
-			`).join('')
+			const state = reactive({
+				dndNames: names
+			})
+			html`
+				<ul id="dndNotes" class="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-4">
+					${()=>
+						state.dndNames.map((name) => 
+							html`
+								<card-component 
+									data-id="${name.id}"
+									data-name="${name.title}"
+									data-content="${name.content}"
+								>
+								</card-component>
+							`
+					)}
+				</ul>
+			`(document.getElementById('list'))
+
+			dragAndDrop({
+				parent: document.getElementById("dndNotes"),
+				getValues: ()=>state.dndNames,
+				setValues: (newValues) => {
+					state.dndNames = reactive(newValues)
+				},
+				config: {
+					dragHandle: '.note-handle'
+				}
+			})
+
+
+			//list.innerHTML = names.map(name => `
+			//	<card-component 
+			//		data-id="${name.id}"
+			//		data-name="${name.title}"
+			//		data-content="${name.content}"
+			//	>
+			//	</card-component>
+			//`).join('')
 		}
 	}
 	async getList() {
