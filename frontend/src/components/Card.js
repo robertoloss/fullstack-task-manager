@@ -11,6 +11,7 @@ export class Card extends HTMLElement {
 		this.content = this.dataset.content
 		this.addEventListener('click', (event)=>{
 			if (['delete-button','title'].includes(event.target.id)) return
+			if (['note-handle'].includes(event.target.className)) return
 			const modal = document.createElement('dialog')
 			modal.id = `modal-note-${this.noteId}`
 			modal.className = `border border-black rounded-md p-6 pl-8 w-full max-w-[600px] h-full max-h-[600px] overflow-hidden`
@@ -105,15 +106,20 @@ export class Card extends HTMLElement {
 	}
 	render() {
 		this.innerHTML = `
-			<div class="flex flex-col justify-between w-full group hover:bg-yellow-50 cursor-pointer
-					 p-4 bg-white shadow shadow-gray-700 rounded-lg transition gap-y-6 min-w-[280px]
+			<div class="flex flex-col justify-between w-full group cursor-pointer
+					 p-4 bg-white border-[0.5px] border-gray-900 rounded-lg transition gap-y-6 min-w-[280px]
 					 h-[280px]"
 			>
 				<div class="flex flex-col gap-y-4 justify-start h-full">
-					<div id="title" class="name-item w-full text-wrap hover:text-blue-600 cursor-pointer font-semibold text-lg" 
-						data-id="${this.noteId}"
-					>
-						${this.noteTitle}
+					<div class="flex flex-row w-full justify-between">
+						<div id="title" class="name-item w-full text-wrap hover:text-blue-600 cursor-pointer font-semibold text-lg" 
+							data-id="${this.noteId}"
+						>
+							${this.noteTitle}
+						</div>
+						<div class="note-handle hover:cursor-grab active:cursor-grabbing">
+							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#8f8f8f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-grip-vertical"><circle cx="9" cy="12" r="1"/><circle cx="9" cy="5" r="1"/><circle cx="9" cy="19" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="15" cy="5" r="1"/><circle cx="15" cy="19" r="1"/></svg>
+						</div>
 					</div>
 					<div 
 						id="content"
@@ -123,7 +129,11 @@ export class Card extends HTMLElement {
 						${this.content}
 					</div>
 				</div>
-				<button id="delete-button" class="delete-button text-gray-300 cursor-pointer hover:text-red-600" data-id="${this.noteId}">
+				<button 
+					id="delete-button" 
+					class="delete-button text-gray-300 cursor-pointer hover:text-red-600 text-sm font-light transition-colors" 
+					data-id="${this.noteId}"
+				>
 					Delete
 				</button>
 			</div>

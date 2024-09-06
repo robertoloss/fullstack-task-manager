@@ -22,7 +22,6 @@ export async function getList(req: express.Request, res: express.Response) {
 				names: result.rows,
 				userId
 			}
-			console.log(finalResult)
 			res.json(finalResult)
 		} else {
 			res.status(400).json({ error: 'An error occurred while trying to retrieve names' })
@@ -113,4 +112,33 @@ export async function updateListEntry(req: express.Request, res: express.Respons
 		console.log(error)
 		res.status(500).send('Server error')
 	}
+}
+
+
+export async function updateNotesPosition(req: express.Request, res: express.Response) {
+	const { notes } = req.body;
+  if (!Array.isArray(notes)) {
+    return res.status(400).json({ message: 'Invalid data format' });
+  }
+	console.log(notes.map(note => [note.id, note.position]));
+
+  try {
+			const query = `
+      UPDATE notes
+      SET position = CASE
+        ${notes.map((_, i) => `WHEN id = $${i * 2 + 1} THEN CAST($${i * 2 + 2} AS INTEGER)`).join(' ')}
+      END
+      WHERE id IN (${notes.map((_, i) => `$${i * 2 + 1}`).join(', ')});
+    `;
+
+    const params = notes.flatMap(note => [note.id, Number(note.position)]);
+
+    await db.query(query, params);
+
+    res.status(200).json({ message: 'Notes order updated successfully' });
+
+  } catch (error) {
+    console.error('Error updating notes order:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
 }

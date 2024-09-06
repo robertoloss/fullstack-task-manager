@@ -2,4 +2,90 @@
 @tailwind components;
 @tailwind utilities;
 
+	body, html {
+  overflow-x: hidden;
+}
+	/* .scrollable {
+		color: black
+	}
+	.scrollable::-webkit-scrollbar-thumb {
+		background: red
+	} */
+	@supports (scrollbar-color: auto) {
+		.scrollable {
+			scrollbar-color: lightgray transparent;
+			scrollbar-width: thin;
+		}
+	}
+
+	/* Otherwise, use `::-webkit-scrollbar-*` pseudo-elements */
+	@supports selector(::-webkit-scrollbar) {
+		.scrollable::-webkit-scrollbar {
+			background: transparent;
+		}
+		.scrollable::-webkit-scrollbar-thumb {
+			background: lightgray;
+			width: 4px;
+		}
+	}
+	@keyframes fade-in {
+    from { opacity: 0; }
+  }
+  
+  @keyframes fade-out {
+    to { opacity: 0; }
+  }
+  
+  @keyframes slide-from-right {
+    from { transform: translateX(60px); }
+  }
+  
+  @keyframes slide-to-left {
+    to { transform: translateX(-60px); }
+  }
+	dialog::backdrop {
+    backdrop-filter: blur(8px);
+    background: rgba(0, 0, 0, 0.2);
+	}
+
+	@keyframes blink {
+		0% { opacity: 1; }
+		50% { opacity: 0; }
+		100% { opacity: 1; }
+	}
+
+	.dragging {
+	}
+
+	/* .page {
+		view-transition-name: pages;
+	} */
+  
+  /* ::view-transition-old(pages) {
+    animation: 240ms cubic-bezier(0.4, 0, 1, 1) both fade-out,
+      300ms cubic-bezier(0.4, 0, 0.2, 1) both slide-to-left;
+  }
+  
+  ::view-transition-new(pages) {
+    animation: 360ms cubic-bezier(0, 0, 0.2, 1) 90ms both fade-in,
+      300ms cubic-bezier(0.4, 0, 0.2, 1) both slide-from-right;
+  }
+
+
+	::view-transition-old(my-backdrop) {
+		animation: fade-out 200ms;
+	}
+	::view-transition-new(my-backdrop) {
+		animation: fade-in 200ms;
+	}
+
+	dialog {
+		view-transition-name: dialogTransition;
+	}
+	::view-transition-new(dialogTransition) {
+		animation: 200ms fade-in;
+	}
+	::view-transition-old(dialogTransition) {
+		animation: 200ms fade-out
+	}  */
 

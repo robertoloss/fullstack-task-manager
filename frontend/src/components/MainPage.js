@@ -1,7 +1,7 @@
 import setNavLinks from "../utils/setNavLinks.js"
 //import { z } from "../../node_modules/zod/lib/"
 import { reactive, html } from "@arrow-js/core";
-import { dragAndDrop } from "@formkit/drag-and-drop";
+import { animations, dragAndDrop,swap } from "@formkit/drag-and-drop";
 
 export class MainPage extends HTMLElement {
 	constructor() {
@@ -19,18 +19,80 @@ export class MainPage extends HTMLElement {
 		if (names.length === 0) {
 			list.innerHTML = '<h1>No names yet</h1>'
 		} else {
-			list.innerHTML = names.map(name => `
-				<card-component 
-					data-id="${name.id}"
-					data-name="${name.title}"
-					data-content="${name.content}"
-				>
-				</card-component>
-			`).join('')
+			list.innerHTML = ''
+			const state = reactive({
+				dndNames: names.sort((a,b)=>a.position - b.position)
+			})
+			html`
+				<ul id="dndNotes" class="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-4">
+					${()=>
+						state.dndNames.map((name) => 
+							html`
+								<card-component 
+									data-id="${name.id}"
+									data-name="${name.title}"
+									data-content="${name.content}"
+								>
+								</card-component>
+							`
+					)}
+				</ul>
+			`(document.getElementById('list'))
+
+			dragAndDrop({
+				parent: document.getElementById("dndNotes"),
+				getValues: ()=>state.dndNames,
+				setValues: (newValues) => {
+					this.previousOrder = [...state.dndNames];
+					this.newValues = newValues
+					state.dndNames = reactive(newValues);
+				},
+				config: {
+					dragHandle: '.note-handle',
+					handleEnd: () => {
+						this.saveOrder(this.newValues).catch(() => {
+							state.dndNames = reactive(this.previousOrder);
+							alert('Failed to update the order. Reverting to previous state.');
+						});
+					},
+					plugins: [
+						//animations(),
+						//swap()
+					],
+					draggingClass: 'dragging'
+				}
+			})
 		}
 	}
+	async saveOrder(updatedNotes) {
+		const newNotes = JSON.parse(JSON.stringify(updatedNotes))
+
+		if (!Array.isArray(newNotes)) throw new Error("No array found")
+
+		newNotes.forEach((note, i) => note.position = i+1)
+
+		try {
+			const response = await fetch('http://localhost:8090/update-notes-order', {
+				credentials: 'include',
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({ notes: newNotes })
+			})
+			if (!response.ok) {
+				throw new Error("failed to update the order")
+			} 
+			this.getList()
+			console.log("Order update correctly!")
+
+		} catch(error) {
+			console.error(error)
+			throw error
+		}
+	}
+
 	async getList() {
-		console.log("getList() invoked...")
 		const response = await fetch('http://localhost:8090/list', {
 			method: 'GET',
 			credentials: 'include'	
@@ -43,16 +105,8 @@ export class MainPage extends HTMLElement {
 	render() {
 		this.innerHTML = `
 			<div id='main-page' class="page flex flex-col w-full max-w-[1200px] min-h-[100vh] h-fit items-center bg-zinc-200">
-				<div id="header-bar" class="flex flex-row w-full justify-between ">
-					<div class="flex flex-row gap-x-4 w-[120px]"></div>
-					<div class="flex flex-row gap-x-6 w-fit justify-center">
-						<a href="/" class="navlink cursor-pointer w-fit">
-							Home
-						</a>
-						<a href="/new-page" class="navlink cursor-pointer w-fit">
-							New Page
-						</a>
-					</div>
+				<div id="header-bar" class="flex flex-row w-full justify-between p-4">
+					<div class="flex flex-row gap-x-4 w-[120px] font-bold">QwikNotes</div>
 					<div class="flex flex-row gap-x-4 w-fit">
 						<div id="display-current-user" class="">
 							...
@@ -67,9 +121,13 @@ export class MainPage extends HTMLElement {
 						</button>
 					</div>
 				</div>
-				<div class="flex flex-col py-10 max-w-[1200px] gap-y-4 items-center px-4 sm:px-10 lg:px-20">
-					<h1 id="hello" class="text-2xl font-semibold w-fit">My Notes</h1>
-					<button id="add-modal"> New note </button>
+				<div class="flex flex-col pb-10 max-w-[1200px] gap-y-4 items-center px-4 sm:px-10 lg:px-20">
+					<button 
+						id="add-modal" 
+						class="font-semibold text-sm text-blue-700 hover:text-blue-500 transition-all"
+					> 
+						New Note 
+					</button>
 					<div id="list" class="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-4">
 						<div class="flex flex-row w-full justify-center">
 							<spinner-component></spinner-component>
