@@ -15,7 +15,7 @@ export function verifyToken(req: express.Request , res: express.Response, next: 
 	const token = req.cookies.token;
 	if (!token) {
 		console.log("no token (verify token)")
-		res.redirect('/login')
+		res.redirect('http://localhost:5174/login')
 		return
 	}
 	try {
@@ -26,7 +26,7 @@ export function verifyToken(req: express.Request , res: express.Response, next: 
 			 (req as any).user = decoded.id;
 			 next();
 		 } else {
-			 res.redirect('/login')
+			 res.redirect('http://localhost:5174/login')
 			 console.log("redirect")
 		 }
 	 } catch (error) {

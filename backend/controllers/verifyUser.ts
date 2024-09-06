@@ -14,7 +14,7 @@ export async function verifyUser(req: express.Request, res: express.Response) {
 	//console.log("req.cookies (verifyUser): ", req.cookies)
 	if (!token) {
 		console.log("no token (verify user)")
-		return res.status(401).json({ redirect: 'login' })
+		return res.status(401).json({ redirect: 'http://localhost:5174/login' })
 	}
 	try {
 		console.log("verifyToken: try")
@@ -25,7 +25,7 @@ export async function verifyUser(req: express.Request, res: express.Response) {
 			 res.status(200).json({ status: '200' })
 		 } else {
 			 console.log("redirect")
-			 res.status(401).set('Location', '/login').end();
+			 res.status(401).set('Location', 'http://localhost:5174/login').end();
 		 }
 	 } catch (error) {
 		 res.status(401).json({ error: 'Invalid token' });
