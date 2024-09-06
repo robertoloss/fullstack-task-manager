@@ -11,7 +11,6 @@ export class Card extends HTMLElement {
 		this.content = this.dataset.content
 		this.addEventListener('click', (event)=>{
 			if (['delete-button','title'].includes(event.target.id)) return
-
 			const modal = document.createElement('dialog')
 			modal.id = `modal-note-${this.noteId}`
 			modal.className = `border border-black rounded-md p-6 pl-8 w-full max-w-[600px] h-full max-h-[600px] overflow-hidden`

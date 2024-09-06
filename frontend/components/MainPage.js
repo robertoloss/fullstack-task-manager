@@ -1,4 +1,5 @@
 import setNavLinks from "../utils/setNavLinks.js"
+//import { z } from "../../node_modules/zod/lib/"
 
 export class MainPage extends HTMLElement {
 	constructor() {
@@ -38,6 +39,7 @@ export class MainPage extends HTMLElement {
 		this.renderList(app.store.notes)
 	}
 	render() {
+		console.log(this.zComment)
 		this.innerHTML = `
 			<div id='main-page' class="page flex flex-col w-full max-w-[1200px] min-h-[100vh] h-fit items-center bg-slate-50">
 				<div id="header-bar" class="flex flex-row w-full justify-between ">

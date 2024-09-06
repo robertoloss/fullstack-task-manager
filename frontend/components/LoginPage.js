@@ -81,7 +81,6 @@ export class LoginPage extends HTMLElement {
 			}
 			const error = await login(email, password)
 			if (error) {
-				console.log("draug")
 				this.hideSpinnerInButton('login-button')
 				this.displayErrorMessage(`Wrong email or password`)
 				console.error(error)
