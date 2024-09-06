@@ -25,6 +25,7 @@
   },
   "dependencies": {
     "@emailjs/nodejs": "^4.0.4",
+    "@formkit/drag-and-drop": "^0.1.6",
     "@tiptap/core": "^2.6.5",
     "@tiptap/pm": "^2.6.5",
     "@tiptap/starter-kit": "^2.6.5",

@@ -1,5 +1,7 @@
 import setNavLinks from "../utils/setNavLinks.js"
 //import { z } from "../../node_modules/zod/lib/"
+import { reactive, html } from "@arrow-js/core";
+import { dragAndDrop } from "@formkit/drag-and-drop";
 
 export class MainPage extends HTMLElement {
 	constructor() {
@@ -11,7 +13,7 @@ export class MainPage extends HTMLElement {
 		this.addEventListener('get-list', this.getList)
 		this.style.width = ''
 		this.className = 'flex flex-col w-full items-center'
-		document.body.classList.add('bg-slate-50')
+		document.body.classList.add('bg-zinc-200')
 	}
 	renderList(names) {
 		if (names.length === 0) {
@@ -39,9 +41,8 @@ export class MainPage extends HTMLElement {
 		this.renderList(app.store.notes)
 	}
 	render() {
-		console.log(this.zComment)
 		this.innerHTML = `
-			<div id='main-page' class="page flex flex-col w-full max-w-[1200px] min-h-[100vh] h-fit items-center bg-slate-50">
+			<div id='main-page' class="page flex flex-col w-full max-w-[1200px] min-h-[100vh] h-fit items-center bg-zinc-200">
 				<div id="header-bar" class="flex flex-row w-full justify-between ">
 					<div class="flex flex-row gap-x-4 w-[120px]"></div>
 					<div class="flex flex-row gap-x-6 w-fit justify-center">

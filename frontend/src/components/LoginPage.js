@@ -8,6 +8,7 @@ export class LoginPage extends HTMLElement {
 		this.error = false
 	}
 	connectedCallback() {
+		document.body.classList.add('bg-slate-300')
 		this.render()
 	}
 	displayErrorMessage(message) {
