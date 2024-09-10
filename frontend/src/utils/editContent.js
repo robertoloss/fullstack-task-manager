@@ -32,7 +32,7 @@ const editContent = (event) => {
 			contentItem.innerHTML = newContent;
 			console.log("inputElement.value.: ", inputElement.value)
 			try {
-				const response = await fetch(`http://localhost:8090/list/${id}`, {
+				const response = await fetch(`https://localhost:8090/list/${id}`, {
 					method: 'PUT', 
 					credentials: 'include',
 					headers: { 'Content-Type': 'application/json' },

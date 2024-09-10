@@ -54,7 +54,10 @@
 		100% { opacity: 1; }
 	}
 
-	.dragging {
+	.dragging > :first-child {
+		/* border: 2px solid #1d4ed8 !important;  */
+		background-color: #fffee3 ;
+		border-radius: 10px;
 	}
 
 	/* .page {

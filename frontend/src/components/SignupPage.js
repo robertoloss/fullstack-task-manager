@@ -115,7 +115,7 @@ export class SignupPage extends HTMLElement {
 				else this.displayErrorMessage("Please provide both an email and a password")
 				return
 			}
-			const dataCheckUser = await fetch('http://localhost:8090/auth/check', {
+			const dataCheckUser = await fetch('https://localhost:8090/auth/check', {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json'},
 				body: JSON.stringify({ email: email })
@@ -147,7 +147,7 @@ export class SignupPage extends HTMLElement {
 			e.preventDefault()
 			this.showSpinnerInButton('verify-button')
 			const { code } = Object.fromEntries(new FormData(verifyForm))
-			const resVerifyCode = await fetch('http://localhost:8090/auth-code/verify', {
+			const resVerifyCode = await fetch('https://localhost:8090/auth-code/verify', {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify({
@@ -161,7 +161,7 @@ export class SignupPage extends HTMLElement {
 				console.error("Code is not correct")
 				return
 			}
-			const response = await fetch('http://localhost:8090/auth/register', {
+			const response = await fetch('https://localhost:8090/auth/register', {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify({

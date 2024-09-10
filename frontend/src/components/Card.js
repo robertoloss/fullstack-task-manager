@@ -93,7 +93,7 @@ export class Card extends HTMLElement {
 	async deleteName(event) {
 		event.target.closest('card-component').remove();
 		const id = event.target.getAttribute('data-id');
-		const response = await fetch(`http://localhost:8090/list/${id}`, {
+		const response = await fetch(`https://localhost:8090/list/${id}`, {
 			method: 'DELETE',
 			credentials: 'include'
 		});

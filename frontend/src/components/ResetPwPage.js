@@ -89,7 +89,7 @@ export default class ResetPwPage extends HTMLElement {
 						<h1 class="text-base font-medium mb-8 w-fit self-center">
 							We have sent you a verification code
 						</h1>
-						<form id="verify-code" method="post" action="http://localhost:8090/auth-code/verify" class="flex flex-col gap-y-2 w-full">
+						<form id="verify-code" method="post" action="https://localhost:8090/auth-code/verify" class="flex flex-col gap-y-2 w-full">
 							<input-component data-type="code"></input-component>
 							<div id="error-message" class="min-h-[20px]"></div>
 							<button 
@@ -106,7 +106,7 @@ export default class ResetPwPage extends HTMLElement {
 						<h1 class="text-base font-medium mb-8 w-fit self-center">
 							Reset your password here
 						</h1>
-						<form id="reset-pw-form" method="post" action="http://localhost:8090/auth/reset" class="flex flex-col gap-y-2 w-full">
+						<form id="reset-pw-form" method="post" action="https://localhost:8090/auth/reset" class="flex flex-col gap-y-2 w-full">
 						<input-component data-type="new_password"></input-component>
 						<input-component data-type="repeat_password"></input-component>
 						<div id="error-message" class="min-h-[20px]"></div>
@@ -173,7 +173,7 @@ export default class ResetPwPage extends HTMLElement {
 			if (this.error) return
 			this.showSpinnerInButton('send-email-button')
 			const { email } = Object.fromEntries(new FormData(emailForm))
-			const resCheckData = await fetch('http://localhost:8090/auth/check', {
+			const resCheckData = await fetch('https://localhost:8090/auth/check', {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json'},
 				body: JSON.stringify({ email: email})

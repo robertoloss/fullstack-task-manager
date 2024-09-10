@@ -27,7 +27,7 @@ const editTitle = (event) => {
 			nameItem.textContent = newName;
 			try {
 				const id = nameItem.getAttribute('data-id');
-				const response = await fetch(`http://localhost:8090/list/${id}`, {
+				const response = await fetch(`https://localhost:8090/list/${id}`, {
 					method: 'PUT', 
 					credentials: 'include',
 					headers: { 'Content-Type': 'application/json' },

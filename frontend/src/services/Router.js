@@ -30,12 +30,13 @@ const Router = {
 		if (route.length > 0 && sub < route.length && sub > 0)	{
 			route = route.substring(origin.length)
 		}
-		const exceptions = ['/login','/signup', '/reset-password']
+		const exceptions = ['/login','/signup','/reset-password']
 		if (!exceptions.includes(route)) {
-			const res = await fetch('http://localhost:8090/auth/verify', {
+			const res = await fetch('https://localhost:8090/auth/verify', {
+				mode: 'cors',
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
-				credentials: 'include'
+				credentials: 'include',
 			})
 			const data = await res.json()
 			if (data.redirect) {
