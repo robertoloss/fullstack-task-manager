@@ -1,7 +1,6 @@
 import express from 'express'
 import http from 'http'
 import cookieParser from 'cookie-parser'
-//import compression from 'compression'
 import cors from 'cors'
 import pg from 'pg'
 import router from './router'
@@ -12,19 +11,21 @@ import { login, register, resetPassword } from './controllers/authentication'
 import { verifyUser } from './controllers/verifyUser'
 import { createAuthCode, verifyCode } from './controllers/auth-code'
 import { checkUser } from './controllers/checkUser'
+import fs from 'fs'
+import https from 'https'
+
+const sslOptions = {
+  key: fs.readFileSync(path.join(__dirname, 'server.key')),
+  cert: fs.readFileSync(path.join(__dirname, 'server.cert')),
+};
 
 dotenv.config()
 const dbUrl = process.env.DB_URL;
-const port = 8090
 const app = express()
 app.use(cors({
-    origin: 'http://localhost:5174', 
+    origin: 'https://localhost:5174', 
 		credentials: true
 }))
-//app.use(cors({
-//	credentials: true
-//}))
-//app.use(compression())
 app.use(cookieParser())
 app.use(express.json())
 app.use(express.urlencoded({
@@ -62,11 +63,17 @@ export const db = new Pool({
   connectionTimeoutMillis: 2000,
 });
 
-const server = http.createServer(app)
-server.listen(port, () => {
-	console.log("Server running on http://localhost:8090/")
-})
+https.createServer(sslOptions, app).listen(8090, () => {
+  console.log('HTTPS Server running on port 8090');
+});
 
+
+http.createServer((req, res) => {
+  res.writeHead(301, { 'Location': `https://${req.headers.host}${req.url}` });
+  res.end();
+}).listen(80, () => {
+  console.log('HTTP server listening on port 80 and redirecting to HTTPS');
+});
 
 
 

@@ -1,7 +1,8 @@
-import express from 'express'
+import express, { CookieOptions } from 'express'
 import { userWithEmailExists } from '../db/users';
 import { generateToken, hashPassword, verifyPassword } from '../helpers';
 import { db } from '..';
+
 
 
 export async function register(req: express.Request, res: express.Response) {
@@ -38,7 +39,12 @@ export async function register(req: express.Request, res: express.Response) {
 		console.error(error)
 	}
 }
-
+const cookieOptions: CookieOptions = {
+	httpOnly: true,
+	secure: true, 
+	sameSite: 'none',
+	path: '/',
+}
 export async function login(req: express.Request, res: express.Response) {
 	try {
 		const { email, password } = req.body;
@@ -53,14 +59,14 @@ export async function login(req: express.Request, res: express.Response) {
 		if (result.rowCount && result.rowCount > 0) {
 			const storedHash = result.rows[0].password;
 			console.log(storedHash)
-			console.log("verify: ", await verifyPassword(password, storedHash))
+			console.log("verifying password: ", await verifyPassword(password, storedHash))
 			if (await verifyPassword(password, storedHash)) {
 					const token = generateToken(user)
 					res.cookie('token', token, {
-						httpOnly: true,
-						secure: false, // true, // Use true if using HTTPS
-						maxAge: 3600000 // 1 hour
+						...cookieOptions,
+						maxAge: 3600000,
 					});
+				console.log("Headers when creating cookie: ", res.getHeaders());
 				res.sendStatus(200);
 				console.log("verified!")
 			} else res.sendStatus(403)
@@ -72,7 +78,9 @@ export async function login(req: express.Request, res: express.Response) {
 }
 
 export async function logOut(_req: express.Request, res: express.Response) {
-	res.clearCookie('token')
+	console.log("logOut controller")
+	res.clearCookie('token', cookieOptions)
+	console.log("Headers after clearing cookie: ", res.getHeaders());
 	res.status(200).json({ message: "Logged out succesfully"})
 }
 

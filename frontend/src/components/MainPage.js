@@ -1,6 +1,7 @@
 import setNavLinks from "../utils/setNavLinks.js"
 import { reactive, html } from "@arrow-js/core";
-import { animations, dragAndDrop,swap } from "@formkit/drag-and-drop";
+import { dragAndDrop } from "@formkit/drag-and-drop";
+import { openModal } from "./MainPage/openModal.js";
 
 export class MainPage extends HTMLElement {
 	constructor() {
@@ -16,8 +17,10 @@ export class MainPage extends HTMLElement {
 	}
 	renderList(names) {
 		if (names.length === 0) {
-			list.innerHTML = '<h1>No names yet</h1>'
+			console.log("list in renderList: ", list)
+			list.innerHTML = '<h1>No notes yet</h1>'
 		} else {
+			console.log("list in renderList: ", list)
 			list.innerHTML = ''
 			const state = reactive({
 				dndNames: names.sort((a,b)=>a.position - b.position)
@@ -94,7 +97,7 @@ export class MainPage extends HTMLElement {
 		}
 	}
 
-	async getList() {
+	 getList = async ()=> {
 		const response = await fetch('https://localhost:8090/list', {
 			method: 'GET',
 			credentials: 'include'	
@@ -103,170 +106,6 @@ export class MainPage extends HTMLElement {
 		list.innerHTML = ''
 		app.store.notes = names
 		this.renderList(app.store.notes)
-	}
-
-	openModal = () => {
-		console.log("open modal")
-		const modal = document.createElement('dialog')
-		modal.className = `border border-black rounded-md p-6 w-full max-w-[600px] h-full max-h-[600px]`
-		modal.id = 'modal'
-		modal.innerHTML = `
-			<div class="h-full flex flex-col gap-y-4">
-				<div class="flex flex-row justify-end">
-					<button class="self-end text-sm text-gray-500 font-light hover:text-gray-900 transition-all" 
-						id="closeButton"
-					>
-						close
-					</button>
-				</div>
-				<div class="flex flex-col gap-y-4 h-full">
-					<form 
-						id="add-name-form" 
-						method="post" 
-						class="flex flex-col gap-y-2 justify-between h-full"
-						action="https://localhost:8090/list"
-						target="hidden-iframe"
-					>
-						<div class="flex flex-col h-full gap-y-2">
-							<input 
-								type="text" 
-								id="new-name" 
-								name="name" 
-								class="rounded-md focus:outline-none font-bold text-2xl px-2"
-							/>
-							<textarea 
-								id="new-content" 
-								name="content" 
-								class="rounded-md px-2 h-full focus:outline-none resize-none font-light text-large
-									focus:border-gray-200"
-							></textarea>
-						</div>
-						<button id="new-note-button" type="submit"
-							class="flex flex-col justify-center items-center rounded-md bg-gray-300 font-light 
-								h-10 text-base px-2 py-1 min-w-14 hover:brightness-95 transition-all"
-						>
-							Save
-						</button>
-						<iframe name="hidden-iframe" style="display:none;"></iframe>
-					</form>
-				</div>
-			</div>
-		`
-		document.body.appendChild(modal);
-
-		//
-		const observer = new MutationObserver((mutations, obs) => {
-        const form = modal.querySelector('#add-name-form');
-        if (form) {
-            obs.disconnect(); // Stop observing
-            this.setupFormListener(form, modal);
-        }
-    });
-
-    observer.observe(document.body, {
-        childList: true,
-        subtree: true
-    });
-		//
-
-		setTimeout(() => {
-			const newName = document.querySelector('#new-name');
-			newName.focus();
-		}, 10);
-
-		modal.addEventListener('keydown', (event) => {
-			if (event.key === 'Escape') {
-				event.preventDefault(); 
-				modal.close();
-				modal.remove();
-			}
-		})
-
-		modal.addEventListener('click', (event) => {
-			const rect = modal.getBoundingClientRect();
-			const isInDialog =
-				rect.top <= event.clientY &&
-				event.clientY <= rect.top + rect.height &&
-				rect.left <= event.clientX &&
-				event.clientX <= rect.left + rect.width;
-			if (!isInDialog) {
-				modal.close();
-				modal.remove()
-			}
-		});
-
-		document.startViewTransition(()=>modal.showModal());
-		const closeButton = modal.querySelector('#closeButton');
-		closeButton.addEventListener('click', () => {
-				modal.close();
-				modal.remove()
-		});
-
-		const form = modal.querySelector('#add-name-form')
-		console.log(form)
-		
-		//form.addEventListener('submit', async (event) => {
-		//	console.log('ok')	
-		//	event.preventDefault();
-		//	const formObject = Object.fromEntries(new FormData(form))
-		//	const { name: newName, content } = formObject;
-		//	this.addNoteToList(newName, content);
-		//	const response = await fetch('https://localhost:8090/list', {
-		//			method: 'POST',
-		//			credentials: 'include',
-		//			headers: { "Content-Type": "application/json" },
-		//			body: JSON.stringify(formObject)
-		//	});
-		//	if (response.ok) {
-		//		console.log("response ok")
-		//		form.reset();
-		//		this.getList();
-		//		const modal = document.querySelector('#modal')
-		//		modal.close()
-		//		modal.remove()
-		//	} else {
-		//		console.error('Failed to add name');
-		//		const firstItem = list.firstElementChild
-		//		firstItem.remove()
-		//		const modal = document.querySelector('#modal')
-		//		modal.close()
-		//		modal.remove()
-		//	}
-		//});
-	}
-
-	setupFormListener = (form, modal) => {
-    console.log('Setting up form listener');
-    form.addEventListener('submit', async (event) => {
-        console.log('Form submitted');
-        event.preventDefault();
-        const formObject = Object.fromEntries(new FormData(form));
-        const { name: newName, content } = formObject;
-        this.addNoteToList(newName, content);
-        try {
-            const response = await fetch('https://localhost:8090/list', {
-                method: 'POST',
-                credentials: 'include',
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(formObject)
-            });
-            if (response.ok) {
-                console.log("response ok");
-                form.reset();
-                await this.getList();
-                modal.close();
-                modal.remove();
-            } else {
-                throw new Error('Failed to add name');
-            }
-        } catch (error) {
-            console.error('Error:', error);
-            const firstItem = list.firstElementChild;
-            if (firstItem) firstItem.remove();
-            modal.close();
-            modal.remove();
-        }
-    });
 	}
 
 	addNoteToList = (name, content) => {
@@ -331,10 +170,10 @@ export class MainPage extends HTMLElement {
 		}
 		getUser()
 
-		modalButton.addEventListener('click', this.openModal)
+		modalButton.addEventListener('click', ()=>openModal(this.addNoteToList, this.getList))
 		document.addEventListener('keydown', (event) => {
 			if (event.ctrlKey && event.key === 'n') {
-				this.openModal()
+				openModal(this.addNoteToList, this.getList)
 			}
 		});
 		logOutButton?.addEventListener('click', async (e) => {

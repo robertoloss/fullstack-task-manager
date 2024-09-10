@@ -1,0 +1,41 @@
+
+<div class="h-full flex flex-col gap-y-4">
+	<div class="flex flex-row justify-end">
+		<button class="self-end text-sm text-gray-500 font-light hover:text-gray-900 transition-all" 
+			id="closeButton"
+		>
+			close
+		</button>
+	</div>
+	<div class="flex flex-col gap-y-4 h-full">
+		<form 
+			id="add-name-form" 
+			method="post" 
+			class="flex flex-col gap-y-2 justify-between h-full"
+			action="https://localhost:8090/list"
+			target="hidden-iframe"
+		>
+			<div class="flex flex-col h-full gap-y-2">
+				<input 
+					type="text" 
+					id="new-name" 
+					name="name" 
+					class="rounded-md focus:outline-none font-bold text-2xl px-2"
+				/>
+				<textarea 
+					id="new-content" 
+					name="content" 
+					class="rounded-md px-2 h-full focus:outline-none resize-none font-light text-large
+						focus:border-gray-200"
+				></textarea>
+			</div>
+			<button id="new-note-button" type="submit"
+				class="flex flex-col justify-center items-center rounded-md bg-gray-300 font-light 
+					h-10 text-base px-2 py-1 min-w-14 hover:brightness-95 transition-all"
+			>
+				Save
+			</button>
+			<iframe name="hidden-iframe" style="display:none;"></iframe>
+		</form>
+	</div>
+</div>

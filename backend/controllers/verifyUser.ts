@@ -9,12 +9,13 @@ type Token = {
 	exp: number
 }
 export async function verifyUser(req: express.Request, res: express.Response) {
+	console.log("VerifyUser Req headers: ", req.headers)
 	console.log("verify user")
 	const token = req.cookies.token;
-	//console.log("req.cookies (verifyUser): ", req.cookies)
+	console.log("req.cookies (verifyUser): ", req.cookies)
 	if (!token) {
 		console.log("no token (verify user)")
-		return res.status(401).json({ redirect: 'http://localhost:5174/login' })
+		return res.status(401).json({ redirect: 'https://localhost:5174/login' })
 	}
 	try {
 		console.log("verifyToken: try")
@@ -25,7 +26,7 @@ export async function verifyUser(req: express.Request, res: express.Response) {
 			 res.status(200).json({ status: '200' })
 		 } else {
 			 console.log("redirect")
-			 res.status(401).set('Location', 'http://localhost:5174/login').end();
+			 res.status(401).set('Location', 'https://localhost:5174/login').end();
 		 }
 	 } catch (error) {
 		 res.status(401).json({ error: 'Invalid token' });

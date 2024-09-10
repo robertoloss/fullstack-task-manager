@@ -1,3 +1,6 @@
-
+./frontend/localhost.crt
+./frontend/localhost.key
+./backend/server.key
+./backend/server.cert
 
 .env
