@@ -1,5 +1,6 @@
 import editTitle from "../utils/editTitle.js"
 import editContent from "../utils/editContent.js"
+import { document } from "postcss"
 
 export class Card extends HTMLElement {
 	constructor() {
@@ -12,7 +13,7 @@ export class Card extends HTMLElement {
 		this.addEventListener('click', (event)=>{
 			if (['delete-button','title'].includes(event.target.id)) return
 			if (['note-handle'].includes(event.target.className)) return
-			const modal = document.createElement('dialog')
+			const modal = document.body.createElement('dialog')
 			modal.id = `modal-note-${this.noteId}`
 			modal.className = `border border-black rounded-md p-6 pl-8 w-full max-w-[600px] h-full max-h-[600px] overflow-hidden`
 			modal.innerHTML = `
@@ -39,10 +40,9 @@ export class Card extends HTMLElement {
 					<div id="buttons-container"></div>
 				</div>
 			`
-			console.log(`#note-content${this.noteId}`)
 			document.body.appendChild(modal);
 			document.body.style.overflow = 'hidden'
-			const mainPage = document.getElementsByTagName('main-page')
+			const mainPage = document.body.getElementsById('main-page')
 			if (mainPage.length != 0) mainPage[0].style.marginRight = '16px' 
 
 			const noteTitle = document.querySelector(`#note-title${this.noteId}`);
@@ -57,7 +57,6 @@ export class Card extends HTMLElement {
 			})
 
 			modal.addEventListener('keydown', (event) => {
-				console.log("preventing closure")
 				if (event.key === 'Escape') {
 					event.preventDefault(); 
 				}
