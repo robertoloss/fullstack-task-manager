@@ -2,17 +2,14 @@ import modalHtml from './modal.html?raw'
 
 export function	openModal(addNoteToList, getList) {
 	const mainPage = document.getElementById('main-page');
-	console.log("modal")
 
 	const modal = document.createElement('dialog')
 	modal.className = `border border-black rounded-md p-6 w-full max-w-[600px] h-full max-h-[600px]`
 	modal.id = 'modal'
 	modal.innerHTML =  modalHtml
 	document.body.appendChild(modal);
-	console.log(mainPage)
 	setTimeout(() => {
 		mainPage.style.marginRight = '0px'
-		console.log("done")
 	},5000)
 
 
@@ -24,7 +21,6 @@ export function	openModal(addNoteToList, getList) {
 	modal.addEventListener('keydown', (event) => {
 		if (event.key === 'Escape') {
 			event.preventDefault(); 
-			modal.close();
 			modal.remove();
 		}
 	})
@@ -37,7 +33,7 @@ export function	openModal(addNoteToList, getList) {
 			rect.left <= event.clientX &&
 			event.clientX <= rect.left + rect.width;
 		if (!isInDialog) {
-			modal.close();
+			modal.close()
 			modal.remove()
 		}
 	});
@@ -45,7 +41,6 @@ export function	openModal(addNoteToList, getList) {
 	document.startViewTransition(()=>modal.showModal());
 	const closeButton = modal.querySelector('#closeButton');
 	closeButton.addEventListener('click', () => {
-			modal.close();
 			modal.remove()
 	});
 

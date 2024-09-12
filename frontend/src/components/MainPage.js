@@ -89,7 +89,6 @@ export class MainPage extends HTMLElement {
 				throw new Error("failed to update the order")
 			} 
 			this.getList()
-			console.log("Order update correctly!")
 
 		} catch(error) {
 			console.error(error)
