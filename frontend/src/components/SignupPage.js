@@ -29,14 +29,11 @@ export class SignupPage extends HTMLElement {
 	displayErrorMessage(message) {
 		this.state.error = true
 		const errorDiv = document.querySelector('#error-message')
+		errorDiv.innerHTML = null
 		const errorP = document.createElement('p')
 		errorP.className = 'text-sm text-red-700'
 		errorP.innerText = message 
 		errorDiv.appendChild(errorP)
-		setTimeout(() => {
-			errorDiv.removeChild(errorP)
-			this.state.error = false
-		},[2000])
 	}
 	showSpinnerInButton(buttonId) {
 		const button = document.querySelector(`#${buttonId}`)
@@ -105,7 +102,6 @@ export class SignupPage extends HTMLElement {
 		
 		signupForm?.addEventListener('submit', async (event) => {
 			event.preventDefault();
-			if (this.state.error) return
 			this.showSpinnerInButton('sign-up-button')
 			const { email, password } = Object.fromEntries(new FormData(signupForm))
 			if (!email || !password) {

@@ -14,14 +14,11 @@ export class LoginPage extends HTMLElement {
 	displayErrorMessage(message) {
 		this.error = true
 		const errorDiv = document.querySelector('#error-message')
+		errorDiv.innerHTML = null
 		const errorP = document.createElement('p')
 		errorP.className = 'text-sm text-red-700'
 		errorP.innerText = message 
 		errorDiv.appendChild(errorP)
-		setTimeout(() => {
-			errorDiv.removeChild(errorP)
-			this.error = false
-		},[2000])
 	}
 	showSpinnerInButton(buttonId) {
 		const button = document.querySelector(`#${buttonId}`)
@@ -70,7 +67,6 @@ export class LoginPage extends HTMLElement {
 
 		loginForm?.addEventListener('submit', async (event) => {
 			event.preventDefault()
-			if (this.error) return
 			this.showSpinnerInButton('login-button')
 			const { email, password } = Object.fromEntries(new FormData(loginForm))
 			if (!email || !password) {
