@@ -2,7 +2,6 @@ import setNavLinks from "../utils/setNavLinks.js"
 import { reactive, html } from "@arrow-js/core";
 import { dragAndDrop } from "@formkit/drag-and-drop";
 import { openModal } from "./MainPage/openModal.js";
-import mainPage from "./MainPage/main-page.html?raw"
 
 export class MainPage extends HTMLElement {
 	constructor() {
