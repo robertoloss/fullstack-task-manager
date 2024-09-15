@@ -1,7 +1,7 @@
 import setNavLinks from "../utils/setNavLinks.js"
-import { reactive, html } from "@arrow-js/core";
-import { dragAndDrop } from "@formkit/drag-and-drop";
 import { openModal } from "./MainPage/openModal.js";
+import { renderList } from "./MainPage/renderList.js";
+import { saveOrder } from "./MainPage/saveOrder.js";
 
 export class MainPage extends HTMLElement {
 	constructor() {
@@ -16,86 +16,12 @@ export class MainPage extends HTMLElement {
 		document.body.classList.add('bg-zinc-200')
 		document.body.classList.add('overflow-hidden')
 	}
-	renderList(names) {
-		if (names.length === 0) {
-			list.innerHTML = '<h1>No notes yet</h1>'
-		} else {
-			list.innerHTML = ''
-			const state = reactive({
-				dndNames: names.sort((a,b)=>a.position - b.position)
-			})
-			html`
-				<ul 
-					id="dndNotes" 
-					class="w-full grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-4 h-fit"
-				>
-					${()=>
-						state.dndNames.map((name) => 
-							html`
-								<card-component 
-									data-id="${name.id}"
-									data-name="${name.title}"
-									data-content="${name.content}"
-								>
-								</card-component>
-							`
-					)}
-				</ul>
-			`(document.getElementById('list'))
 
-			dragAndDrop({
-				parent: document.getElementById("dndNotes"),
-				getValues: ()=>state.dndNames,
-				setValues: (newValues) => {
-					this.previousOrder = [...state.dndNames];
-					this.newValues = newValues
-					state.dndNames = reactive(newValues);
-				},
-				config: {
-					dragHandle: '.note-handle',
-					handleEnd: () => {
-						this.saveOrder(this.newValues).catch(() => {
-							state.dndNames = reactive(this.previousOrder);
-							alert('Failed to update the order. Reverting to previous state.');
-						});
-					},
-					plugins: [
-						//animations(),
-						//swap()
-					],
-					dropZoneClass: 'dragging'
-				}
-			})
-		}
-	}
-	async saveOrder(updatedNotes) {
-		const newNotes = JSON.parse(JSON.stringify(updatedNotes))
+	renderList = renderList
 
-		if (!Array.isArray(newNotes)) throw new Error("No array found")
+	saveOrder = saveOrder
 
-		newNotes.forEach((note, i) => note.position = i+1)
-
-		try {
-			const response = await fetch('https://localhost:8090/update-notes-order', {
-				credentials: 'include',
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify({ notes: newNotes })
-			})
-			if (!response.ok) {
-				throw new Error("failed to update the order")
-			} 
-			this.getList()
-
-		} catch(error) {
-			console.error(error)
-			throw error
-		}
-	}
-
-	 getList = async ()=> {
+	getList = async ()=> {
 		const response = await fetch('https://localhost:8090/list', {
 			method: 'GET',
 			credentials: 'include'	
@@ -157,9 +83,9 @@ export class MainPage extends HTMLElement {
 			</div>
 		`
 		setNavLinks(this)
+
 		this.style.width= '100%'
 		const logOutButton = this.querySelector('#log-out')
-		const list = this.querySelector('#list')
 		const displayUser = this.querySelector('#display-current-user')
 		const modalButton = this.querySelector('#add-modal')
 
@@ -173,6 +99,7 @@ export class MainPage extends HTMLElement {
 		modalButton.addEventListener('click', ()=> {
 			openModal(this.addNoteToList, this.getList)
 		})
+
 		document.addEventListener('keydown', (event) => {
 			if (event.ctrlKey && event.key === 'n') {
 				openModal(this.addNoteToList, this.getList)
@@ -190,6 +117,8 @@ export class MainPage extends HTMLElement {
 				credentials: 'include',
 				mode: 'cors'
 			})
+			app.store.notes = null
+			app.store.user = null
 			console.log("response: ", response)
 			console.log("response headers: ", response.headers)
 			if (response.ok) {
