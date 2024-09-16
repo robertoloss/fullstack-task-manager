@@ -39,13 +39,18 @@ export class MainPage extends HTMLElement {
 		card.setAttribute('data-content', content);
 		const dndNotes = document.querySelector('#dndNotes')
 		dndNotes.prepend(card)
-		//list.prepend(card);
 	}
 
 	render = () => {
 		this.innerHTML = `
-			<div id='main-page' class="page flex flex-col w-full min-h-[100vh] h-fit items-center bg-zinc-200 ">
-				<div id="header-bar" class="fixed bg-zinc-200 flex flex-row w-full justify-between p-4 h-[64px]">
+			<div 
+				id='main-page' 
+				class="page pattern flex flex-col w-full min-h-[100vh] h-fit items-center bg-zinc-200 "
+			>
+				<div 
+					id="header-bar" 
+					class="fixed bg-transparent flex flex-row w-full justify-between p-4 h-[64px]  shadow"
+				>
 					<div class="flex flex-row gap-x-4 w-[120px] font-bold">QwikNotes</div>
 					<div class="flex flex-row gap-x-4 w-fit">
 						<div id="display-current-user" class="flex flex-row justify-center items-center font-light text-sm">
@@ -97,12 +102,18 @@ export class MainPage extends HTMLElement {
 		getUser()
 
 		modalButton.addEventListener('click', ()=> {
+			app.modalIsOpen = true
 			openModal(this.addNoteToList, this.getList)
 		})
 
 		document.addEventListener('keydown', (event) => {
 			if (event.ctrlKey && event.key === 'n') {
+				if (app.modalIsOpen) {
+					console.log("modal is open: ", app.modalIsOpen)
+					return
+				}
 				openModal(this.addNoteToList, this.getList)
+				app.modalIsOpen = true
 			}
 		});
 

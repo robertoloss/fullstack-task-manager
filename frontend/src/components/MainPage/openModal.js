@@ -10,7 +10,7 @@ export function	openModal(addNoteToList, getList) {
 	document.body.appendChild(modal);
 	setTimeout(() => {
 		mainPage.style.marginRight = '0px'
-	},5000)
+	},0)
 
 
 	setTimeout(() => {
@@ -22,6 +22,7 @@ export function	openModal(addNoteToList, getList) {
 		if (event.key === 'Escape') {
 			event.preventDefault(); 
 			modal.remove();
+			app.modalIsOpen = false
 		}
 	})
 
@@ -35,13 +36,15 @@ export function	openModal(addNoteToList, getList) {
 		if (!isInDialog) {
 			modal.close()
 			modal.remove()
+			app.modalIsOpen = false
 		}
 	});
 
 	document.startViewTransition(()=>modal.showModal());
 	const closeButton = modal.querySelector('#closeButton');
 	closeButton.addEventListener('click', () => {
-			modal.remove()
+		modal.remove()
+		app.modalIsOpen = false
 	});
 
 	const form = document.getElementById('add-name-form')
@@ -68,6 +71,7 @@ export function	openModal(addNoteToList, getList) {
 			getList();
 			const modal = document.querySelector('#modal')
 			modal.close()
+			app.modalIsOpen = false
 			modal.remove()
 		} else {
 			console.error('Failed to add name');
@@ -75,6 +79,7 @@ export function	openModal(addNoteToList, getList) {
 			firstItem.remove()
 			const modal = document.querySelector('#modal')
 			modal.close()
+			app.modalIsOpen = false
 			modal.remove()
 		}
 	});

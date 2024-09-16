@@ -42,7 +42,9 @@ export class Card extends HTMLElement {
 			document.body.appendChild(modal);
 			document.body.style.overflow = 'hidden'
 			const mainPage = document.getElementById('main-page')
-			if (mainPage) mainPage.style.marginRight = '16px' 
+			setTimeout(() => {
+				mainPage.style.marginRight = '0px'
+			},0)
 
 			const noteTitle = document.querySelector(`#note-title${this.noteId}`);
 			noteTitle.addEventListener('click', (event)=>{

@@ -9,7 +9,7 @@ window.app = {}
 app.router = Router
 app.store = Store
 
-window?.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', () => {
 	app.router.init()
 })
 

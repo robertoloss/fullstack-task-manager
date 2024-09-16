@@ -1,5 +1,4 @@
 //import useTailwind from "../utils/useTailwind.js"
-
 import login from "../actions/auth/login.js"
 
 export class LoginPage extends HTMLElement {
@@ -8,6 +7,7 @@ export class LoginPage extends HTMLElement {
 		this.error = false
 	}
 	connectedCallback() {
+		document.body.classList.remove('bg-zinc-200')
 		document.body.classList.add('bg-slate-300')
 		this.render()
 	}

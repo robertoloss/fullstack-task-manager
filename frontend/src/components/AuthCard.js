@@ -18,7 +18,7 @@ export class AuthCard extends HTMLElement {
 		const children = document.querySelector('#auth-card-children')
 
 		this.innerHTML = `
-			<div class="page flex flex-col w-screen h-screen items-center justify-between p-6">
+			<div class="page pattern flex flex-col w-screen h-screen items-center justify-between p-6">
 				<div id="header-bar" class="flex flex-row justify-end w-full gap-x-6">
 					<a href="${gotolink}" class="navlink" cursor-pointer w-fit">
 						${gotolabel}
