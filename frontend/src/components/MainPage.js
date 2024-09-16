@@ -49,7 +49,7 @@ export class MainPage extends HTMLElement {
 			>
 				<div 
 					id="header-bar" 
-					class="fixed bg-transparent flex flex-row w-full justify-between p-4 h-[64px]  shadow"
+					class="fixed bg-zinc-200 flex flex-row w-full justify-between p-4 h-[64px] shadow"
 				>
 					<div class="flex flex-row gap-x-4 w-[120px] font-bold">QwikNotes</div>
 					<div class="flex flex-row gap-x-4 w-fit">

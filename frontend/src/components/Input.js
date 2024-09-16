@@ -11,7 +11,18 @@ export class Input extends HTMLElement {
 		this.state = new Proxy(this.stateInit, {
 			set: (target, property, value) => {
 				target[property] = value;
-				if (property === 'smallLabel') this.render()
+				if (property === 'smallLabel') {
+					const input = document.getElementById(`${this.dataset.type}`);
+					const label = document.getElementById(`${this.dataset.type}Label`);
+					if (this.state.smallLabel) {
+						label.classList.remove('top-[15px]', 'text-sm', 'text-slate-400');
+						label.classList.add('top-[5px]', 'text-xs', 'text-blue-700');
+						input.classList.add('pt-4')
+					} else {
+						label.classList.remove('top-[5px]', 'text-xs', 'text-blue-700');
+						label.classList.add('top-[15px]', 'text-sm', 'text-slate-400');
+					}
+				}
 				return true
 			}
 		})
@@ -26,10 +37,7 @@ export class Input extends HTMLElement {
 			<div class="flex flex-col relative h-fit w-full">
 				<p 
 					id="${inputType}Label" 
-					class="${`
-						${this.state.smallLabel ? 'top-[5px] text-xs text-blue-700' : 'top-[15px] text-sm text-slate-400'} 
-						left-2 max-h-0 transition relative
-					`}"
+					class="top-[15px] text-sm text-slate-400 left-2 max-h-0 relative transition-all"
 				>
 					${inputType[0].toUpperCase() + inputType.slice(1).replace(/_/g, ' ')}
 				</p>
