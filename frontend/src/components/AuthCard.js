@@ -19,10 +19,17 @@ export class AuthCard extends HTMLElement {
 
 		this.innerHTML = `
 			<div class="page pattern flex flex-col w-screen h-screen items-center justify-between p-6">
-				<div id="header-bar" class="flex flex-row justify-end w-full gap-x-6">
-					<a href="${gotolink}" class="navlink" cursor-pointer w-fit">
-						${gotolabel}
-					</a>
+				<div class="flex flex-col w-full">
+					<div id="header-bar" class="flex flex-row justify-end w-full gap-x-6">
+						<a 
+							href="${gotolink}" 
+							class="navlink cursor-pointer w-fit px-2 py-1 rounded-lg bg-gray-200 hover:bg-gray-100 
+								 min-w-[80px] text-center transition-all shadow active:scale-95 font-normal text-sm"
+						>
+							${gotolabel}
+						</a>
+					</div>
+					<h1 class="text-3xl mt-4 font-semibold self-center">Welcome to QwikNotes</h1>
 				</div>
 				<div class="flex flex-col gap-y-10 w-full items-center">
 					<div 

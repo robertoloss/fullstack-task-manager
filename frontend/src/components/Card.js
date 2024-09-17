@@ -1,5 +1,6 @@
 import editTitle from "../utils/editTitle.js"
 import editContent from "../utils/editContent.js"
+import { openDeleteModal } from "./MainPage/openDeleteModal.js"
 
 export class Card extends HTMLElement {
 	constructor() {
@@ -17,7 +18,7 @@ export class Card extends HTMLElement {
 			modal.className = `border border-black rounded-md p-6 pl-8 w-full max-w-[600px] h-full max-h-[600px] overflow-hidden`
 			modal.innerHTML = `
 				<div class="flex flex-row justify-end mb-6">
-					<button class="self-end text-sm text-gray-500 font-light hover:text-gray-900 transition-all" 
+					<button class="self-end text-sm text-gray-500 font-light hover:text-blue-700 transition-all" 
 						id="closeButton"
 					>
 						close
@@ -130,16 +131,16 @@ export class Card extends HTMLElement {
 				</div>
 				<button 
 					id="delete-button" 
-					class="delete-button text-gray-300 cursor-pointer hover:text-red-600 text-sm font-light transition-colors" 
+					class="delete-button text-gray-300 w-fit self-center cursor-pointer hover:text-red-600 text-sm font-light transition-colors" 
 					data-id="${this.noteId}"
 				>
-					Delete
+					delete
 				</button>
 			</div>
 		`
 		this.addEventListener('click', (event) => {
 				if (event.target.classList.contains('delete-button')) {
-					this.deleteName(event);
+					openDeleteModal(()=>this.deleteName(event))
 				} else if (event.target.classList.contains('name-item')) {
 					editTitle(event);
 				}

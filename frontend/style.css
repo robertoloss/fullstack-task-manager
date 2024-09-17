@@ -1,10 +1,9 @@
 @tailwind base;
 @tailwind components;
-@tailwind utilities;
-
-	body, html {
+body, html {
   overflow-x: hidden;
 }
+@tailwind utilities;
 	/* .scrollable {
 		color: black
 	}
@@ -18,7 +17,6 @@
 		}
 	}
 
-	/* Otherwise, use `::-webkit-scrollbar-*` pseudo-elements */
 	@supports selector(::-webkit-scrollbar) {
 		.scrollable::-webkit-scrollbar {
 			background: transparent;

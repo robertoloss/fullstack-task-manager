@@ -41,7 +41,7 @@ export class LoginPage extends HTMLElement {
 			<auth-card
 				data-goToLabel="Signup"
 				data-goToLink="/signup"
-				data-cardTitle="Please enter your email and password"
+				data-cardTitle="Login here"
 				data-buttonLabel="Login"
 			>
 				<div id='auth-card-children' class="flex flex-col gap-y-2">

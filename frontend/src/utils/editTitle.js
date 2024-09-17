@@ -12,7 +12,7 @@ const editTitle = (event) => {
 		inputElement.type = 'text';
 		inputElement.id = 'title-input'
 		inputElement.value = currentName;
-		inputElement.className = 'focus:outline-none bg-transparent'
+		inputElement.className = 'focus:outline-none bg-gray-50 w-full'
 	}
 
 	nameItem.textContent = '';

@@ -51,9 +51,15 @@ export class MainPage extends HTMLElement {
 					id="header-bar" 
 					class="fixed bg-zinc-200 flex flex-row w-full justify-between p-4 h-[64px] shadow"
 				>
-					<div class="flex flex-row gap-x-4 w-[120px] font-bold">QwikNotes</div>
+					<div class="flex flex-row items-center gap-x-4 w-[120px] font-bold">
+						QwikNotes
+					</div>
 					<div class="flex flex-row gap-x-4 w-fit">
-						<div id="display-current-user" class="flex flex-row justify-center items-center font-light text-sm">
+						<div 
+							id="display-current-user" 
+							class="flex flex-row justify-start sm:justify-center w-full items-center font-light text-sm sm:w-fit sm:max-w-[200px]
+								max-w-[80px] text-ellipsis overflow-hidden"
+						>
 							...
 						</div>
 						<button 
@@ -145,6 +151,7 @@ export class MainPage extends HTMLElement {
 				}
 				displayUser.innerHTML = ''
 				displayUser.innerHTML = `${app.store.user}`	
+				displayUser.classList.add('sm:w-fit','sm:max-w-[200px]','max-w-[80px]', 'text-ellipsis', 'overflow-hidden')
 			} catch (error) {
 				console.error(error)
 			}

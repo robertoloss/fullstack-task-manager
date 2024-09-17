@@ -1,6 +1,5 @@
 
 const editContent = (event) => {
-	console.log("edit content")
 	const contentItem = event.target;
 	const id = contentItem.getAttribute('data-id');
 	const currentName = contentItem.innerHTML.replace(/<br\s*\/?>/gi, '\n').replace(/&nbsp;/g, ' ').trim();
@@ -9,19 +8,15 @@ const editContent = (event) => {
 	
 	let inputElement = document.querySelector(`#content-input${id}`)
 	if (!inputElement) {
-		console.log("creating an input")
 		inputElement = document.createElement('textarea');
 		inputElement.id = 'content-input${id}'
-		//inputElement.rows = '20'
 		inputElement.value = currentName;
 		inputElement.style.resize = "none"
 		inputElement.className = 'focus:outline-none bg-gray-50 w-full h-full scrollable'
-//className="bg-gray-50"
 	}
 
 	contentItem.textContent = '';
 	contentItem.appendChild(inputElement);
-	contentItem.addEventListener('get-list', ()=> console.log("get list"))
 	inputElement.focus();
 	const updateNote = async (e) => {
 		event.target.style.overflowY = 'auto'
@@ -30,7 +25,6 @@ const editContent = (event) => {
 		if (newContent !== currentName) {
 			contentItem.innerHTML = ''
 			contentItem.innerHTML = newContent;
-			console.log("inputElement.value.: ", inputElement.value)
 			try {
 				const response = await fetch(`https://localhost:8090/list/${id}`, {
 					method: 'PUT', 
@@ -62,7 +56,6 @@ const editContent = (event) => {
 		} 
 	}) 
 	inputElement?.addEventListener('keydown', (e) => { 
-		console.log(e.key)
     if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
         e.preventDefault();
         const cursorPos = inputElement.selectionStart;
