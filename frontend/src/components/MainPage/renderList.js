@@ -2,7 +2,7 @@ import { reactive, html } from "@arrow-js/core";
 import { dragAndDrop } from "@formkit/drag-and-drop";
 
 
-export function renderList(names) {
+export function renderList(names, toggle) {
 		if (names.length === 0) {
 			list.innerHTML = '<h1>No notes yet</h1>'
 		} else {
@@ -13,7 +13,10 @@ export function renderList(names) {
 			html`
 				<ul 
 					id="dndNotes" 
-					class="w-full grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-4 h-fit"
+					class="${!toggle
+										? "w-full grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-4 h-fit"
+										: "w-full grid grid-cols-1 gap-4 h-fit" 
+					}"
 				>
 					${()=>
 						state.dndNames.map((name) => 
@@ -44,6 +47,7 @@ export function renderList(names) {
 							state.dndNames = reactive(this.previousOrder);
 							alert('Failed to update the order. Reverting to previous state.');
 						});
+						console.log(toggle)
 					},
 					plugins: [
 						//animations(),

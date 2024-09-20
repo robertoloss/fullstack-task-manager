@@ -107,8 +107,8 @@ export class Card extends HTMLElement {
 	render() {
 		this.innerHTML = `
 			<div class="flex flex-col justify-between w-full group cursor-pointer
-					 p-4 bg-white border-[0.5px] border-gray-900 rounded-lg transition gap-y-6 min-w-[280px]
-					 h-[280px]"
+					 p-4 bg-white border-[0.5px] border-gray-900 rounded-lg gap-y-6 min-w-[280px]
+					 h-[280px] transition-all"
 			>
 				<div class="flex flex-col gap-y-4 justify-start h-full">
 					<div class="flex flex-row w-full justify-between">

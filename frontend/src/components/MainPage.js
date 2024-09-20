@@ -16,10 +16,15 @@ export class MainPage extends HTMLElement {
 				target[property] = value
 				if (property === 'toggle') {
 					const toggle = document.getElementById('toggle')
+					const list = document.getElementById('dndNotes')
 					if (this.state.toggle) {
 						toggle.classList.add('translate-x-[26px]')
+						list.classList.remove('grid-cols-[repeat(auto-fit,minmax(280px,1fr))]')
+						list.classList.add('grid-cols-1')
 					} else {
 						toggle.classList.remove('translate-x-[26px]')
+						list.classList.remove('grid-cols-1')
+						list.classList.add('grid-cols-[repeat(auto-fit,minmax(280px,1fr))]')
 					}
 				}
 				return true
@@ -46,7 +51,7 @@ export class MainPage extends HTMLElement {
 		const { names  } = await response.json()
 		list.innerHTML = ''
 		app.store.notes = names
-		this.renderList(app.store.notes)
+		this.renderList(app.store.notes, this.state.toggle)
 	}
 
 	addNoteToList = (name, content) => {
@@ -62,7 +67,7 @@ export class MainPage extends HTMLElement {
 		this.innerHTML = `
 			<div 
 				id='main-page' 
-				class="page pattern flex flex-col w-full min-h-[100vh] h-fit items-center bg-zinc-200 "
+				class="page pattern flex flex-col w-full min-h-[100vh] h-fit items-center bg-zinc-200"
 			>
 				<div 
 					id="header-bar" 
@@ -89,7 +94,7 @@ export class MainPage extends HTMLElement {
 						</button>
 					</div>
 				</div>
-				<div class="w-full max-h-[calc(100vh-64px)] mt-[64px] flex flex-col items-center overflow-auto">
+				<div class="w-full max-h-[calc(100vh-64px)] mt-[64px] flex flex-col items-center overflow-y-scroll">
 					<div 
 						id="grid-list-toggle"
 						class="flex flex-row justify-start p-[4px] items-center w-[56px] rounded-full h-[28px] 
@@ -97,7 +102,7 @@ export class MainPage extends HTMLElement {
 					>
 						<div 
 							id='toggle'
-							class="rounded-full transition-all w-[20px] h-[20px] bg-zinc-400"
+							class="rounded-full transition-all duration-300 w-[20px] h-[20px] bg-zinc-400"
 						>
 						</div>
 					</div>
@@ -111,7 +116,7 @@ export class MainPage extends HTMLElement {
 						</button>
 						<div 
 							id="list" 
-							class="w-full grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-4 pb-10"
+							class="transition-all w-full grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-4 pb-10"
 						>
 							<div class="flex flex-row w-full justify-center">
 								<spinner-component></spinner-component>
@@ -136,7 +141,7 @@ export class MainPage extends HTMLElement {
 		if (!app.store.notes) { 
 			this.getList()
 		} else {
-			this.renderList(app.store.notes)
+			this.renderList(app.store.notes, this.state.toggle)
 		}
 		getUser()
 
