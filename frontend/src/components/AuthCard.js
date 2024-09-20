@@ -29,7 +29,9 @@ export class AuthCard extends HTMLElement {
 							${gotolabel}
 						</a>
 					</div>
-					<h1 class="text-3xl mt-4 font-semibold self-center">Welcome to QwikNotes</h1>
+					<h1 class="text-4xl mt-4 font-semibold self-center">
+						QwikNotes
+					</h1>
 				</div>
 				<div class="flex flex-col gap-y-10 w-full items-center">
 					<div 

@@ -8,6 +8,23 @@ export class MainPage extends HTMLElement {
 		super()
 	}
 	connectedCallback() {
+		this.stateInit = {
+			toggle: false
+		}
+		this.state = new Proxy(this.stateInit, {
+			set: (target, property, value) => {
+				target[property] = value
+				if (property === 'toggle') {
+					const toggle = document.getElementById('toggle')
+					if (this.state.toggle) {
+						toggle.classList.add('translate-x-[26px]')
+					} else {
+						toggle.classList.remove('translate-x-[26px]')
+					}
+				}
+				return true
+			}
+		})
 		this.render()
 		this.addEventListener('update-list', this.getList)
 		this.addEventListener('get-list', this.getList)
@@ -73,7 +90,18 @@ export class MainPage extends HTMLElement {
 					</div>
 				</div>
 				<div class="w-full max-h-[calc(100vh-64px)] mt-[64px] flex flex-col items-center overflow-auto">
-					<div class="flex flex-col pb-10  pt-[40px] w-full h-full max-w-[1200px] gap-y-4 items-center px-4 sm:px-10 lg:px-20">
+					<div 
+						id="grid-list-toggle"
+						class="flex flex-row justify-start p-[4px] items-center w-[56px] rounded-full h-[28px] 
+							bg-white mt-4 border border-zinc-300 cursor-pointer"
+					>
+						<div 
+							id='toggle'
+							class="rounded-full transition-all w-[20px] h-[20px] bg-zinc-400"
+						>
+						</div>
+					</div>
+					<div class="flex flex-col pb-10  pt-[16px] w-full h-full max-w-[1200px] gap-y-4 items-center px-4 sm:px-10 lg:px-20">
 						<button 
 							id="add-modal" 
 							class="fixed bottom-[32px] right-[40px] w-[64px] h-[64px] bg-blue-700 rounded-full 
@@ -99,6 +127,11 @@ export class MainPage extends HTMLElement {
 		const logOutButton = this.querySelector('#log-out')
 		const displayUser = this.querySelector('#display-current-user')
 		const modalButton = this.querySelector('#add-modal')
+		const toggle = this.querySelector('#grid-list-toggle')
+
+		toggle.addEventListener('click', ()=>{
+			this.state.toggle = !this.state.toggle
+		})
 
 		if (!app.store.notes) { 
 			this.getList()
