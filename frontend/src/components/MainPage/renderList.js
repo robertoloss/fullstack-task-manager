@@ -3,7 +3,6 @@ import { dragAndDrop } from "@formkit/drag-and-drop";
 
 
 export function renderList(names, toggle) {
-	console.log("renderList - toggle: ", toggle)
 		if (names.length === 0) {
 			list.innerHTML = '<h1>No notes yet</h1>'
 		} else {
@@ -16,12 +15,11 @@ export function renderList(names, toggle) {
 					id="dndNotes" 
 					class="${!toggle
 										? "w-full grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-4 h-fit"
-										: "w-full max-w-[800px] grid grid-cols-1 gap-4 h-fit" 
+										: "w-full max-w-[800px] grid grid-cols-1 gap-2 h-fit" 
 					}"
 				>
 					${()=>
 							state.dndNames.map((name) => {
-								console.log("toggle in dnd render: ", toggle)
 								return html`
 									<card-component 
 										data-id="${name.id}"

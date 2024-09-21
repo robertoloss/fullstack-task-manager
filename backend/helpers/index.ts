@@ -1,6 +1,8 @@
 import * as argon2 from 'argon2';
 import jwt from 'jsonwebtoken'
+import dotenv from 'dotenv'
 
+dotenv.config()
 
 export async function hashPassword(password: string) {
 	try {
@@ -19,7 +21,8 @@ export async function verifyPassword(input: string, stored: string) {
 	}
 }
 
-const SECRET = 'temp-secret-to-be-replaced'
+const SECRET = process.env.JWT_SECRET
+
 type User = {
 	id: string,
 	email: string,

@@ -1,7 +1,9 @@
 import express from 'express';
 import jwt from 'jsonwebtoken';
+import dotenv from 'dotenv'
 
-export const SECRET = 'temp-secret-to-be-replaced'
+dotenv.config()
+export const SECRET = process.env.JWT_SECRET 
 
 type Token = {
 	id: string,

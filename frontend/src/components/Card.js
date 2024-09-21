@@ -8,35 +8,10 @@ export class Card extends HTMLElement {
 		super()
 	}
 	connectedCallback() {
-		//this.stateInit = { 
-		//	toggleOn: false 
-		//}
-		//this.state = new Proxy(this.stateInit, {
-		//	set: (target, property, value) => {
-		//		target[property] = value
-		//		if (property === 'toggleOn') {
-		//			const card = this.querySelector(`#card-${this.noteId}`)
-		//			const content = this.querySelector(`#content`)
-		//			if (value) {
-		//				card.classList.add('h-[80px]')
-		//				content.classList.add('hidden')
-		//				content.classList.remove('block')
-		//			} else {
-		//				card.classList.remove('h-[80px]')
-		//				content.classList.remove('hidden')
-		//				content.classList.add('block')
-		//			}
-		//		}
-		//		return true
-		//	}
-		//})
 		this.noteId = this.dataset.id
 		this.noteTitle = this.dataset.name
 		this.content = this.dataset.content
 		this.toggleOn = JSON.parse(this.dataset.toggleon)
-		//document.addEventListener('grid-list-toggle', (event) => {
-		//	this.state.toggleOn = event.detail.toggleOn
-		//})
 		this.addEventListener('click', (event)=>{
 			if (['delete-button','title', 'delete-button-2'].includes(event.target.id)) return
 			if (['note-handle'].includes(event.target.className)) return
@@ -99,8 +74,8 @@ export class Card extends HTMLElement {
 					event.clientX <= rect.left + rect.width;
 				if (!isInDialog) {
 					modal.close();
+					modal.remove()
 					document.body.style.overflow = 'auto'
-					document.body.removeChild(modal)
 					if (mainPage.length != 0) mainPage.style.marginRight = '0px'
 				}
 			});
@@ -133,16 +108,19 @@ export class Card extends HTMLElement {
 	}
 	
 	render() {
-		console.log("toggleOn in card: ", this.toggleOn)
+		//console.log("toggleOn in card: ", this.toggleOn)
 		this.innerHTML = `
 			<div 
 				id='card-${this.noteId}'
-				class="flex flex-col justify-between w-full group cursor-pointer p-4 bg-white border-[0.5px]
+				class="flex flex-col justify-between  
+							w-full group cursor-pointer p-4 bg-white border-[0.5px]
 							border-gray-900 rounded-lg gap-y-6 min-w-[280px] ${this.toggleOn ? 'h-[80px]' : 'h-[280px]'} transition-all"
 			>
-				<div class="flex flex-col gap-y-4 justify-start h-full">
+				<div class="flex flex-col gap-y-4 justify-start h-full ${this.toggleOn ? 'justify-center' : ''}">
 					<div class="flex flex-row w-full justify-between">
-						<div id="title" class="name-item w-full text-wrap hover:text-blue-600 cursor-pointer font-semibold text-lg" 
+						<div 
+							id="title" 
+							class="${this.toggleOn ? 'w-fit' : 'w-full'} name-item text-wrap hover:text-blue-600 cursor-pointer font-semibold text-lg" 
 							data-id="${this.noteId}"
 						>
 							${this.noteTitle}

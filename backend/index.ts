@@ -21,9 +21,11 @@ const sslOptions = {
 
 dotenv.config()
 const dbUrl = process.env.DB_URL;
+const baseUrl = process.env.BASE_URL;
+console.log("base url: ", baseUrl)
 const app = express()
 app.use(cors({
-    origin: 'https://localhost:5174', 
+    origin: baseUrl, 
 		credentials: true
 }))
 app.use(cookieParser())
