@@ -1,17 +1,44 @@
 import editTitle from "../utils/editTitle.js"
 import editContent from "../utils/editContent.js"
 import { openDeleteModal } from "./MainPage/openDeleteModal.js"
+import svgHandle from "./svg-handle.html?raw"
 
 export class Card extends HTMLElement {
 	constructor() {
 		super()
 	}
 	connectedCallback() {
+		//this.stateInit = { 
+		//	toggleOn: false 
+		//}
+		//this.state = new Proxy(this.stateInit, {
+		//	set: (target, property, value) => {
+		//		target[property] = value
+		//		if (property === 'toggleOn') {
+		//			const card = this.querySelector(`#card-${this.noteId}`)
+		//			const content = this.querySelector(`#content`)
+		//			if (value) {
+		//				card.classList.add('h-[80px]')
+		//				content.classList.add('hidden')
+		//				content.classList.remove('block')
+		//			} else {
+		//				card.classList.remove('h-[80px]')
+		//				content.classList.remove('hidden')
+		//				content.classList.add('block')
+		//			}
+		//		}
+		//		return true
+		//	}
+		//})
 		this.noteId = this.dataset.id
 		this.noteTitle = this.dataset.name
 		this.content = this.dataset.content
+		this.toggleOn = JSON.parse(this.dataset.toggleon)
+		//document.addEventListener('grid-list-toggle', (event) => {
+		//	this.state.toggleOn = event.detail.toggleOn
+		//})
 		this.addEventListener('click', (event)=>{
-			if (['delete-button','title'].includes(event.target.id)) return
+			if (['delete-button','title', 'delete-button-2'].includes(event.target.id)) return
 			if (['note-handle'].includes(event.target.className)) return
 			const modal = document.createElement('dialog')
 			modal.id = `modal-note-${this.noteId}`
@@ -104,11 +131,14 @@ export class Card extends HTMLElement {
 		const list = document.getElementById('list')
 		list.dispatchEvent(new CustomEvent('update-list', { bubbles: true }));
 	}
+	
 	render() {
+		console.log("toggleOn in card: ", this.toggleOn)
 		this.innerHTML = `
-			<div class="flex flex-col justify-between w-full group cursor-pointer
-					 p-4 bg-white border-[0.5px] border-gray-900 rounded-lg gap-y-6 min-w-[280px]
-					 h-[280px] transition-all"
+			<div 
+				id='card-${this.noteId}'
+				class="flex flex-col justify-between w-full group cursor-pointer p-4 bg-white border-[0.5px]
+							border-gray-900 rounded-lg gap-y-6 min-w-[280px] ${this.toggleOn ? 'h-[80px]' : 'h-[280px]'} transition-all"
 			>
 				<div class="flex flex-col gap-y-4 justify-start h-full">
 					<div class="flex flex-row w-full justify-between">
@@ -117,13 +147,26 @@ export class Card extends HTMLElement {
 						>
 							${this.noteTitle}
 						</div>
-						<div class="note-handle hover:cursor-grab active:cursor-grabbing">
-							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#8f8f8f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="hover:cursor-grab active:cursor-grabbing lucide lucide-grip-vertical"><circle cx="9" cy="12" r="1"/><circle cx="9" cy="5" r="1"/><circle cx="9" cy="19" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="15" cy="5" r="1"/><circle cx="15" cy="19" r="1"/></svg>
+						<div class="flex flex-row gap-x-4 ">
+							<button 
+								id="delete-button-2" 
+								class="delete-button text-gray-300 w-fit self-center place-self-center cursor-pointer hover:text-red-600 text-sm 
+									font-light transition-colors ${this.toggleOn ? '' : 'hidden'}" 
+								data-id="${this.noteId}"
+							>
+								delete
+							</button>
+							<div 
+								id="svg-handle"
+								class="note-handle hover:cursor-grab active:cursor-grabbing ${this.toggleOn ? 'self-center' : ''}"
+							>
+								${svgHandle}
+							</div>
 						</div>
 					</div>
 					<div 
 						id="content"
-						class="w-full text-wrap  cursor-pointer font-light text-base line-clamp-6" 
+						class="w-full text-wrap  cursor-pointer font-light text-base line-clamp-6 ${this.toggleOn ? 'hidden' : 'block'}" 
 						data-id="${this.noteId}"
 					>
 						${this.content}
@@ -131,7 +174,8 @@ export class Card extends HTMLElement {
 				</div>
 				<button 
 					id="delete-button" 
-					class="delete-button text-gray-300 w-fit self-center cursor-pointer hover:text-red-600 text-sm font-light transition-colors" 
+					class="delete-button text-gray-300 w-fit self-center cursor-pointer hover:text-red-600 text-sm font-light transition-colors
+						${this.toggleOn ? 'hidden' : ''}" 
 					data-id="${this.noteId}"
 				>
 					delete
@@ -139,7 +183,7 @@ export class Card extends HTMLElement {
 			</div>
 		`
 		this.addEventListener('click', (event) => {
-				if (event.target.classList.contains('delete-button')) {
+				if (event.target.classList.contains('delete-button') || event.target.classList.contains('delete-button-2')) {
 					openDeleteModal(()=>this.deleteName(event))
 				} else if (event.target.classList.contains('name-item')) {
 					editTitle(event);

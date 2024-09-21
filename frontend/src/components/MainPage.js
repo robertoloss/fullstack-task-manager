@@ -21,17 +21,28 @@ export class MainPage extends HTMLElement {
 						toggle.classList.add('translate-x-[26px]')
 						list.classList.remove('grid-cols-[repeat(auto-fit,minmax(280px,1fr))]')
 						list.classList.add('grid-cols-1')
+						list.classList.add('max-w-[800px]')
 					} else {
 						toggle.classList.remove('translate-x-[26px]')
 						list.classList.remove('grid-cols-1')
+						list.classList.remove('max-w-[800px]')
 						list.classList.add('grid-cols-[repeat(auto-fit,minmax(280px,1fr))]')
 					}
+					const customEvent = new CustomEvent('grid-list-toggle', {
+						detail: {
+							toggleOn: this.state.toggle
+						}
+					})
+					document.dispatchEvent(customEvent)
 				}
 				return true
 			}
 		})
 		this.render()
 		this.addEventListener('update-list', this.getList)
+		document.addEventListener('grid-list-toggle', () => {
+			this.renderList(app.store.notes, this.state.toggle)
+		})
 		this.addEventListener('get-list', this.getList)
 		this.style.width = ''
 		this.className = 'flex flex-col w-full items-center'	
@@ -116,7 +127,7 @@ export class MainPage extends HTMLElement {
 						</button>
 						<div 
 							id="list" 
-							class="transition-all w-full grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-4 pb-10"
+							class="transition-all w-full flex flex-col items-center gap-4 pb-10"
 						>
 							<div class="flex flex-row w-full justify-center">
 								<spinner-component></spinner-component>
