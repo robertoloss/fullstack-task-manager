@@ -5,7 +5,8 @@
 		"baseUrl": "backend",
 		"outDir": "dist",
 		"sourceMap": true,
-		"noImplicitAny": false
+		"noImplicitAny": false,
+		"types": ["node"]
 	},
 	"include": ["backend/**/*.ts","./index.d.ts"]
 }
