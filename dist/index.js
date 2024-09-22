@@ -19,10 +19,6 @@ const auth_code_1 = require("./controllers/auth-code");
 const checkUser_1 = require("./controllers/checkUser");
 const fs_1 = __importDefault(require("fs"));
 const https_1 = __importDefault(require("https"));
-const sslOptions = {
-    key: fs_1.default.readFileSync(path_1.default.join(__dirname, 'server.key')),
-    cert: fs_1.default.readFileSync(path_1.default.join(__dirname, 'server.cert')),
-};
 dotenv_1.default.config();
 const dbUrl = process.env.DB_URL;
 const baseUrl = process.env.BASE_URL;
@@ -65,13 +61,24 @@ exports.db = new Pool({
     idleTimeoutMillis: 30000,
     connectionTimeoutMillis: 2000,
 });
-https_1.default.createServer(sslOptions, app).listen(8090, () => {
-    console.log('HTTPS Server running on port 8090');
-});
-http_1.default.createServer((req, res) => {
-    res.writeHead(301, { 'Location': `https://${req.headers.host}${req.url}` });
-    res.end();
-}).listen(80, () => {
-    console.log('HTTP server listening on port 80 and redirecting to HTTPS');
-});
+if (!production) {
+    const sslOptions = {
+        key: fs_1.default.readFileSync(path_1.default.join(__dirname, 'server.key')),
+        cert: fs_1.default.readFileSync(path_1.default.join(__dirname, 'server.cert')),
+    };
+    https_1.default.createServer(sslOptions, app).listen(8090, () => {
+        console.log('HTTPS Server running on port 8090');
+    });
+    http_1.default.createServer((req, res) => {
+        res.writeHead(301, { 'Location': `https://${req.headers.host}${req.url}` });
+        res.end();
+    }).listen(80, () => {
+        console.log('HTTP server listening on port 80 and redirecting to HTTPS');
+    });
+}
+else {
+    app.listen(process.env.PORT || 3000, () => {
+        console.log(`Server running in production mode on port ${process.env.PORT || 3000}`);
+    });
+}
 //# sourceMappingURL=index.js.map
