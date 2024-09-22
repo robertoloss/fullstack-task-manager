@@ -1,4 +1,5 @@
 import express from 'express'
+import dotenv from 'dotenv'
 import jwt from 'jsonwebtoken';
 import { SECRET } from '../middleware';
 
@@ -8,6 +9,10 @@ type Token = {
 	iat: number,
 	exp: number
 }
+
+dotenv.config() 
+const baseURL = process.env.BASE_URL
+
 export async function verifyUser(req: express.Request, res: express.Response) {
 	console.log("VerifyUser Req headers: ", req.headers)
 	console.log("verify user")
@@ -15,7 +20,7 @@ export async function verifyUser(req: express.Request, res: express.Response) {
 	console.log("req.cookies (verifyUser): ", req.cookies)
 	if (!token) {
 		console.log("no token (verify user)")
-		return res.status(401).json({ redirect: 'https://localhost:5174/login' })
+		return res.status(401).json({ redirect: `${baseURL}/login` })
 	}
 	try {
 		console.log("verifyToken: try")
@@ -26,7 +31,7 @@ export async function verifyUser(req: express.Request, res: express.Response) {
 			 res.status(200).json({ status: '200' })
 		 } else {
 			 console.log("redirect")
-			 res.status(401).set('Location', 'https://localhost:5174/login').end();
+			 res.status(401).set('Location', `${baseURL}/login`).end();
 		 }
 	 } catch (error) {
 		 res.status(401).json({ error: 'Invalid token' });

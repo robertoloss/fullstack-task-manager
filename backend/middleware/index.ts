@@ -4,6 +4,7 @@ import dotenv from 'dotenv'
 
 dotenv.config()
 export const SECRET = process.env.JWT_SECRET 
+const baseURL = process.env.BASE_URL
 
 type Token = {
 	id: string,
@@ -17,7 +18,7 @@ export function verifyToken(req: express.Request , res: express.Response, next: 
 	const token = req.cookies.token;
 	if (!token) {
 		console.log("no token (verify token)")
-		res.redirect('https://localhost:5174/login')
+		res.redirect(`${baseURL}/login`)
 		return
 	}
 	try {
@@ -28,7 +29,7 @@ export function verifyToken(req: express.Request , res: express.Response, next: 
 			 (req as any).user = decoded.id;
 			 next();
 		 } else {
-			 res.redirect('https://localhost:5174/login')
+			 res.redirect(`${baseURL}/login`)
 			 console.log("redirect")
 		 }
 	 } catch (error) {

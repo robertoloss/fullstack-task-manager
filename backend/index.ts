@@ -20,6 +20,7 @@ const sslOptions = {
 };
 
 dotenv.config()
+
 const dbUrl = process.env.DB_URL;
 const baseUrl = process.env.BASE_URL;
 console.log("base url: ", baseUrl)
