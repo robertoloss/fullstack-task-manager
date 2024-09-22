@@ -1,8 +1,9 @@
+import { serverURL } from "../server"
 
 
 export default async function login(email, password) {
 	try {
-		const response = await fetch('https://localhost:8090/auth/login', {
+		const response = await fetch(`${serverURL}/auth/login`, {
 			method: 'POST',
 			credentials: 'include',
 			headers: { 

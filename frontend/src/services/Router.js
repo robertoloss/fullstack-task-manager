@@ -1,3 +1,4 @@
+import { serverURL } from "../actions/server.js"
 import { LoginPage } from "../components/LoginPage.js"
 import { MainPage } from "../components/MainPage.js"
 import ResetPwPage from "../components/ResetPwPage.js"
@@ -32,7 +33,8 @@ const Router = {
 		}
 		const exceptions = ['/login','/signup','/reset-password']
 		if (!exceptions.includes(route)) {
-			const res = await fetch('https://localhost:8090/auth/verify', {
+			console.log(serverURL)
+			const res = await fetch(`${serverURL}/auth/verify`, {
 				mode: 'cors',
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },

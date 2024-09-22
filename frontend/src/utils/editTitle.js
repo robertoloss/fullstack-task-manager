@@ -1,3 +1,4 @@
+import { serverURL } from "../actions/server";
 
 
 const editTitle = (event) => {
@@ -27,7 +28,7 @@ const editTitle = (event) => {
 			nameItem.textContent = newName;
 			try {
 				const id = nameItem.getAttribute('data-id');
-				const response = await fetch(`https://localhost:8090/list/${id}`, {
+				const response = await fetch(`${serverURL}/list/${id}`, {
 					method: 'PUT', 
 					credentials: 'include',
 					headers: { 'Content-Type': 'application/json' },

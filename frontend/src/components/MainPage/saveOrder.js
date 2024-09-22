@@ -1,3 +1,4 @@
+import { serverURL } from "../../actions/server"
 
 
 export async function saveOrder(updatedNotes) {
@@ -8,7 +9,7 @@ export async function saveOrder(updatedNotes) {
 	newNotes.forEach((note, i) => note.position = i+1)
 
 	try {
-		const response = await fetch('https://localhost:8090/update-notes-order', {
+		const response = await fetch(`${serverURL}/update-notes-order`, {
 			credentials: 'include',
 			method: 'POST',
 			headers: {

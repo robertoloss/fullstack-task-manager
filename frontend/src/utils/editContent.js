@@ -1,3 +1,4 @@
+import { serverURL } from "../actions/server";
 
 const editContent = (event) => {
 	const contentItem = event.target;
@@ -26,7 +27,7 @@ const editContent = (event) => {
 			contentItem.innerHTML = ''
 			contentItem.innerHTML = newContent;
 			try {
-				const response = await fetch(`https://localhost:8090/list/${id}`, {
+				const response = await fetch(`${serverURL}/list/${id}`, {
 					method: 'PUT', 
 					credentials: 'include',
 					headers: { 'Content-Type': 'application/json' },

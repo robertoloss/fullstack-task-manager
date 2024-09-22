@@ -1,5 +1,6 @@
 import modalHtml from './modal.html?raw'
 import createModal from '../../utils/createModal'
+import { serverURL } from '../../actions/server';
 
 export function	openModal(addNoteToList, getList) {
 	const modal = createModal({
@@ -24,7 +25,7 @@ export function	openModal(addNoteToList, getList) {
 		const formObject = Object.fromEntries(new FormData(form))
 		const { name: newName, content } = formObject;
 		addNoteToList(newName, content);
-		const response = await fetch('https://localhost:8090/list', {
+		const response = await fetch(`${serverURL}/list`, {
 				method: 'POST',
 				credentials: 'include',
 				headers: { "Content-Type": "application/json" },

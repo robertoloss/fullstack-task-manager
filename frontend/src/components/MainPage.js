@@ -1,3 +1,4 @@
+import { serverURL } from "../actions/server.js";
 import setNavLinks from "../utils/setNavLinks.js"
 import mainPageHTML from './MainPage/main-page.html?raw'
 import { openModal } from "./MainPage/openModal.js";
@@ -56,7 +57,7 @@ export class MainPage extends HTMLElement {
 	saveOrder = saveOrder
 
 	getList = async ()=> {
-		const response = await fetch('https://localhost:8090/list', {
+		const response = await fetch(`${serverURL}/list`, {
 			method: 'GET',
 			credentials: 'include'	
 		});
@@ -136,7 +137,7 @@ export class MainPage extends HTMLElement {
 		logOutButton?.addEventListener('click', async (e) => {
 			e.preventDefault()
 			console.log("logging out...")
-			const response = await fetch('https://localhost:8090/auth/logout', {
+			const response = await fetch(`${serverURL}/auth/logout`, {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
@@ -168,7 +169,7 @@ export class MainPage extends HTMLElement {
 		}
 
 		async function getCurrentUser() {
-			const response = await fetch('https://localhost:8090/current-user', {
+			const response = await fetch(`${serverURL}/current-user`, {
 				method: 'GET',
 				credentials: 'include'
 			})
