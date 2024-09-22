@@ -3,16 +3,18 @@ import { dragAndDrop } from "@formkit/drag-and-drop";
 
 
 export function renderList(names, toggle) {
-	console.log("renderList -- names: ", names)
-	console.log(!names || names.length === 0)
-	console.log(list)
-	
+	const list = document.getElementById('list')	
+
 	const noNotes = document.getElementById('no-notes') 
-	if (names.length > 0 && noNotes) {
-		noNotes.remove()
+	if (names.length > 0) {
+		const eventNotes =  new CustomEvent('there-are-notes')
+		document.dispatchEvent(eventNotes)
+		if (noNotes) {
+			noNotes.remove()
+		}
 	}
 
-	list.innerHTML = ''
+	if (list) list.innerHTML = ''
 	const state = reactive({
 		dndNames: names.sort((a,b)=>a.position - b.position)
 	})
@@ -41,19 +43,13 @@ export function renderList(names, toggle) {
 	`(document.getElementById('list'))
 
 	if (!names || names.length === 0) {
+		const eventNoNotes = new CustomEvent('there-are-no-notes')
+		document.dispatchEvent(eventNoNotes)
 		const id = document.createElement('id')
 		id.id = 'no-notes'
 		id.className = "text-lg font-light max-w-[320px] text-center bg-gray-50/60 rounded-lg border-black border mt-10 p-10 h-fit"
 		id.innerHTML = "No notes to show. <br>Create a new note by pressing '+' or via the shortcut 'CTRL+n'."
 		list.prepend(id)
-		//list.prepend = `
-		//	<h1 
-		//		id='no-notes'
-		//		class="text-lg font-light max-w-[320px] text-center bg-gray-50/60 rounded-lg border-black border mt-10 p-10 h-fit"
-		//	>
-		//		No notes to show. <br>Create a new note by pressing '+' or via the shortcut 'CTRL+n'.
-		//	</h1>
-		//`
 	} else {
 		dragAndDrop({
 			parent: document.getElementById("dndNotes"),

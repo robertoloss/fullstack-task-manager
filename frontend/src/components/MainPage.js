@@ -118,17 +118,15 @@ export class MainPage extends HTMLElement {
 						</button>
 					</div>
 				</div>
-				<div class="w-full max-h-[calc(100vh-64px)] mt-[64px] flex flex-col items-center overflow-y-scroll">
-					<div class="flex w-fit px-4 py-5 flex-row justify-between">
-						<div class="font-light text-gray-600 text-sm text-center">
-							Create a new note by pressing the '+' button below or using the shortcut 'CTRL+n'
-						</div>
-					</div>
+				<div 
+					id="main-container"
+					class="w-full h-full max-h-[calc(100vh-64px)] mt-[64px] flex flex-col items-center overflow-y-scroll"
+				>
 					<div class="flex flex-col pb-10  w-full h-full max-w-[1200px] gap-y-4 items-center px-4 sm:px-10 lg:px-20">
 						<button 
 							id="add-modal" 
 							class="fixed bottom-[32px] right-[40px] w-[64px] h-[64px] bg-blue-700 rounded-full 
-								 font-light text-center text-3xl text-white hover:bg-blue-500 transition-all"
+								 font-light text-center text-4xl text-white hover:bg-blue-500 transition-all"
 						> 
 							+
 						</button>
@@ -151,6 +149,27 @@ export class MainPage extends HTMLElement {
 		const displayUser = this.querySelector('#display-current-user')
 		const modalButton = this.querySelector('#add-modal')
 		const toggle = this.querySelector('#grid-list-toggle')
+		const mainContainer = this.querySelector('#main-container')
+		console.log('main container', mainContainer)
+
+		document.addEventListener('there-are-notes', ()=>{
+			const info = document.getElementById('info-h1');
+			if (!info) {
+				const infoH1 = document.createElement('h1')
+				infoH1.id = 'info-h1'
+				infoH1.classList = 'px-4 py-5 text-sm text-gray-600 text-center font-light'
+				infoH1.innerHTML = `
+					To create a new note press the + button below or use the shortcut 'CTRL+n'
+				`
+				mainContainer.prepend(infoH1)
+			}
+		})
+
+		document.addEventListener('there-are-no-notes', ()=>{
+			const info = document.getElementById('info-h1');
+			info?.remove()
+		})
+
 
 		toggle.addEventListener('click', ()=>{
 			this.state.toggle = !this.state.toggle
