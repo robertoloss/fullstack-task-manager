@@ -4,9 +4,11 @@
 		"moduleResolution": "node16",
 		"baseUrl": "backend",
 		"outDir": "dist",
+		"rootDir": "./backend",
 		"sourceMap": true,
 		"noImplicitAny": false,
 		"types": ["node"]
 	},
-	"include": ["backend/**/*.ts","./index.d.ts"]
+	"include": ["backend/**/*.ts","./index.d.ts"],
+  "exclude": ["node_modules"]
 }
