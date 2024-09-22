@@ -23,6 +23,8 @@ dotenv.config()
 
 const dbUrl = process.env.DB_URL;
 const baseUrl = process.env.BASE_URL;
+const production = process.env.NODE_ENV === 'production'
+
 console.log("base url: ", baseUrl)
 const app = express()
 app.use(cors({
