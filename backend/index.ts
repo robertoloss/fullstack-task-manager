@@ -14,10 +14,6 @@ import { checkUser } from './controllers/checkUser'
 import fs from 'fs'
 import https from 'https'
 
-const sslOptions = {
-  key: fs.readFileSync(path.join(__dirname, 'server.key')),
-  cert: fs.readFileSync(path.join(__dirname, 'server.cert')),
-};
 
 dotenv.config()
 
@@ -68,17 +64,27 @@ export const db = new Pool({
   connectionTimeoutMillis: 2000,
 });
 
-https.createServer(sslOptions, app).listen(8090, () => {
-  console.log('HTTPS Server running on port 8090');
-});
+if (!production) {
+	const sslOptions = {
+		key: fs.readFileSync(path.join(__dirname, 'server.key')),
+		cert: fs.readFileSync(path.join(__dirname, 'server.cert')),
+	};
+	https.createServer(sslOptions, app).listen(8090, () => {
+		console.log('HTTPS Server running on port 8090');
+	});
 
 
-http.createServer((req, res) => {
-  res.writeHead(301, { 'Location': `https://${req.headers.host}${req.url}` });
-  res.end();
-}).listen(80, () => {
-  console.log('HTTP server listening on port 80 and redirecting to HTTPS');
-});
+	http.createServer((req, res) => {
+		res.writeHead(301, { 'Location': `https://${req.headers.host}${req.url}` });
+		res.end();
+	}).listen(80, () => {
+		console.log('HTTP server listening on port 80 and redirecting to HTTPS');
+	});
+} else {
+	app.listen(process.env.PORT || 3000, () => {
+		console.log(`Server running in production mode on port ${process.env.PORT || 3000}`);
+	});
+}
 
 
 
