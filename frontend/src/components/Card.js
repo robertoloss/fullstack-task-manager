@@ -11,7 +11,7 @@ export class Card extends HTMLElement {
 		this.noteId = this.dataset.id
 		this.noteTitle = this.dataset.name
 		this.content = this.dataset.content
-		this.toggleOn = JSON.parse(this.dataset.toggleon)
+		this.toggleOn = this.dataset.toggleon ? JSON.parse(this.dataset.toggleon) : false
 		this.addEventListener('click', (event)=>{
 			if (['delete-button','title', 'delete-button-2'].includes(event.target.id)) return
 			if (['note-handle'].includes(event.target.className)) return
@@ -112,9 +112,9 @@ export class Card extends HTMLElement {
 		this.innerHTML = `
 			<div 
 				id='card-${this.noteId}'
-				class="flex flex-col justify-between  
-							w-full group cursor-pointer p-4 bg-white border-[0.5px]
-							border-gray-900 rounded-lg gap-y-6 min-w-[280px] ${this.toggleOn ? 'h-[80px]' : 'h-[280px]'} transition-all"
+				class="flex flex-col justify-between w-full group cursor-pointer p-4 bg-white border-[0.5px]
+					border-gray-900 rounded-lg gap-y-6 min-w-[280px] ${this.toggleOn ? '' : 'max-w-[520px]'} 
+					${this.toggleOn ? 'h-[80px]' : 'h-[280px]'} transition-all"
 			>
 				<div class="flex flex-col gap-y-4 justify-start h-full ${this.toggleOn ? 'justify-center' : ''}">
 					<div class="flex flex-row w-full justify-between">

@@ -84,14 +84,27 @@ export class MainPage extends HTMLElement {
 					id="header-bar" 
 					class="fixed bg-zinc-200 flex flex-row w-full justify-between p-4 h-[64px] shadow"
 				>
-					<div class="flex flex-row items-center gap-x-4 w-[120px] font-bold">
+					<div class="flex flex-row items-center gap-x-4 font-bold w-full">
 						QwikNotes
 					</div>
-					<div class="flex flex-row gap-x-4 w-fit">
+					<div class="flex flex-row items-center justify-center h-full w-full">
+						<div 
+							id="grid-list-toggle"
+							class="flex flex-row justify-start p-[4px] items-center w-[56px] rounded-full h-[28px] 
+								bg-white border border-zinc-300 cursor-pointer"
+						>
+							<div 
+								id='toggle'
+								class="rounded-full transition-all duration-300 w-[20px] h-[20px] bg-zinc-400"
+							>
+							</div>
+						</div>
+					</div>
+					<div class="flex flex-row gap-x-4 w-full justify-end">
 						<div 
 							id="display-current-user" 
-							class="flex flex-row justify-start sm:justify-center w-full items-center font-light text-sm sm:w-fit sm:max-w-[200px]
-								max-w-[80px] text-ellipsis overflow-hidden"
+							class="hidden sm:block flex-row justify-start sm:justify-center w-full items-center font-light 
+								text-sm sm:w-fit sm:max-w-[200px] max-w-[80px] text-ellipsis overflow-hidden"
 						>
 							...
 						</div>
@@ -106,18 +119,12 @@ export class MainPage extends HTMLElement {
 					</div>
 				</div>
 				<div class="w-full max-h-[calc(100vh-64px)] mt-[64px] flex flex-col items-center overflow-y-scroll">
-					<div 
-						id="grid-list-toggle"
-						class="flex flex-row justify-start p-[4px] items-center w-[56px] rounded-full h-[28px] 
-							bg-white mt-4 border border-zinc-300 cursor-pointer"
-					>
-						<div 
-							id='toggle'
-							class="rounded-full transition-all duration-300 w-[20px] h-[20px] bg-zinc-400"
-						>
+					<div class="flex w-fit px-4 py-5 flex-row justify-between">
+						<div class="font-light text-gray-600 text-sm text-center">
+							Create a new note by pressing the '+' button below or using the shortcut 'CTRL+n'
 						</div>
 					</div>
-					<div class="flex flex-col pb-10  pt-[16px] w-full h-full max-w-[1200px] gap-y-4 items-center px-4 sm:px-10 lg:px-20">
+					<div class="flex flex-col pb-10  w-full h-full max-w-[1200px] gap-y-4 items-center px-4 sm:px-10 lg:px-20">
 						<button 
 							id="add-modal" 
 							class="fixed bottom-[32px] right-[40px] w-[64px] h-[64px] bg-blue-700 rounded-full 
