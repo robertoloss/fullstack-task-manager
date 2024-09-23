@@ -9,6 +9,9 @@ const Router = {
 		const initialLocation = location.href
 		const origin = location.origin
 		const path = initialLocation.substring(origin.length)
+		console.log("initialLocation: ", initialLocation)
+		console.log("origin: ", origin)
+		console.log("path: ", path)
 
 		window.addEventListener('popstate', event => {
 			console.log("popstate")
