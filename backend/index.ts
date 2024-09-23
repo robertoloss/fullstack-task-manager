@@ -32,13 +32,13 @@ app.use(express.json())
 app.use(express.urlencoded({
 	extended: true
 }))
-app.use(express.static(path.join(process.cwd(), 'frontend', 'dist')));
-app.use('/signup', (_req, res) => {
-	res.sendFile(path.join(process.cwd(), 'frontend', 'dist', 'index.html'))
-})
-app.use('/login', (_req, res)=> {
-	res.sendFile(path.join(process.cwd(), 'frontend', 'dist', 'index.html'))
-}) 
+//app.use(express.static(path.join(process.cwd(), 'frontend', 'dist')));
+//app.use('/signup', (_req, res) => {
+//	res.sendFile(path.join(process.cwd(), 'frontend', 'dist', 'index.html'))
+//})
+//app.use('/login', (_req, res)=> {
+//	res.sendFile(path.join(process.cwd(), 'frontend', 'dist', 'index.html'))
+//}) 
 app.post('/auth/login', login)
 app.post('/auth/register', register)
 app.post('/auth/verify', verifyUser)
@@ -48,12 +48,12 @@ app.post('/auth-code/create', createAuthCode)
 app.post('/auth-code/verify', verifyCode)
 
 app.use('/', router())
-app.use(express.static(path.join(process.cwd(), 'frontend', 'dist')));
+//app.use(express.static(path.join(process.cwd(), 'frontend', 'dist')));
 
 app.use(verifyToken)
-app.get('*', (_req, res) => {
-	res.sendFile(path.join(process.cwd(), 'frontend', 'dist', 'index.html'))
-});
+//app.get('*', (_req, res) => {
+//	res.sendFile(path.join(process.cwd(), 'frontend', 'dist', 'index.html'))
+//});
 
 
 const { Pool } = pg
