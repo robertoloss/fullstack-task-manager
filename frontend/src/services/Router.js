@@ -30,10 +30,12 @@ const Router = {
 	},
 	go: async (route, addToHistory=true) => {
 		const origin = location.origin
+		console.log("go - origin: ", origin)
 		const sub = route.substring(origin.length).length
 		if (route.length > 0 && sub < route.length && sub > 0)	{
 			route = route.substring(origin.length)
 		}
+		console.log("go - route:", route)
 		const exceptions = ['/login','/signup','/reset-password']
 		if (!exceptions.includes(route)) {
 			console.log("server: ", serverURL)
@@ -66,6 +68,7 @@ const Router = {
 					document.body.appendChild(signup)
 					break
 				case origin + '/login':
+					console.log("switch origin + route: ", origin + route)
 					document.body.innerHTML = ''
 					const login = new LoginPage()
 					document.body.appendChild(login)
