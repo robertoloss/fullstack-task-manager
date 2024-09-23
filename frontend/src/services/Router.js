@@ -33,7 +33,7 @@ const Router = {
 		}
 		const exceptions = ['/login','/signup','/reset-password']
 		if (!exceptions.includes(route)) {
-			console.log(serverURL)
+			console.log("server: ", serverURL)
 			const res = await fetch(`${serverURL}/auth/verify`, {
 				mode: 'cors',
 				method: 'POST',
