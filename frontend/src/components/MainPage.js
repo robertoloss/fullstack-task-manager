@@ -1,5 +1,6 @@
 import { serverURL } from "../actions/server.js";
 import setNavLinks from "../utils/setNavLinks.js"
+import { Card } from "./Card.js";
 import mainPageHTML from './MainPage/main-page.html?raw'
 import { openModal } from "./MainPage/openModal.js";
 import { renderList } from "./MainPage/renderList.js";
@@ -67,11 +68,14 @@ export class MainPage extends HTMLElement {
 		this.renderList(app.store.notes, this.state.toggle)
 	}
 
-	addNoteToList = (name, content) => {
-		const card = document.createElement('card-component');
+	addNoteToList = (name, content, toggleState) => {
+		const card = new Card(true, name) //document.createElement('card-component');
 		card.setAttribute('data-id', name.id);
 		card.setAttribute('data-name', name);
 		card.setAttribute('data-content', content);
+		card.setAttribute('toggleOn', toggleState)
+		card.render()
+		console.log("new card ", card)
 		const dndNotes = document.querySelector('#dndNotes')
 		dndNotes.prepend(card)
 	}
@@ -120,7 +124,7 @@ export class MainPage extends HTMLElement {
 
 		modalButton.addEventListener('click', ()=> {
 			app.modalIsOpen = true
-			openModal(this.addNoteToList, this.getList)
+			openModal(this.addNoteToList, this.getList, this.state.toggle)
 		})
 
 		document.addEventListener('keydown', (event) => {
@@ -129,7 +133,7 @@ export class MainPage extends HTMLElement {
 					console.log("modal is open: ", app.modalIsOpen)
 					return
 				}
-				openModal(this.addNoteToList, this.getList)
+				openModal(this.addNoteToList, this.getList, this.state.toggle)
 				app.modalIsOpen = true
 			}
 		});

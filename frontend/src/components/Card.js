@@ -5,14 +5,20 @@ import svgHandle from "./svg-handle.html?raw"
 import { serverURL } from "../actions/server.js"
 
 export class Card extends HTMLElement {
-	constructor() {
+	constructor(toggleOnValue, noteTitle) {
 		super()
+		if (toggleOnValue) {
+			this.toggleOn = toggleOnValue
+		}
+		if (noteTitle) {
+			this.noteTitle = noteTitle
+		}
 	}
 	connectedCallback() {
 		this.noteId = this.dataset.id
-		this.noteTitle = this.dataset.name
+		this.noteTitle = this.noteTitle ?? this.dataset.name
 		this.content = this.dataset.content
-		this.toggleOn = this.dataset.toggleon ? JSON.parse(this.dataset.toggleon) : false
+		this.toggleOn = this.toggleOn ?? this.dataset.toggleon ? JSON.parse(this.dataset.toggleon) : false
 		this.addEventListener('click', (event)=>{
 			if (['delete-button','title', 'delete-button-2'].includes(event.target.id)) return
 			if (['note-handle'].includes(event.target.className)) return
@@ -109,7 +115,6 @@ export class Card extends HTMLElement {
 	}
 	
 	render() {
-		//console.log("toggleOn in card: ", this.toggleOn)
 		this.innerHTML = `
 			<div 
 				id='card-${this.noteId}'

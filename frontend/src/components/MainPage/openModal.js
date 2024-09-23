@@ -2,7 +2,7 @@ import modalHtml from './modal.html?raw'
 import createModal from '../../utils/createModal'
 import { serverURL } from '../../actions/server';
 
-export function	openModal(addNoteToList, getList) {
+export function	openModal(addNoteToList, getList, toggleState) {
 	const modal = createModal({
 		maxWidth: 'max-w-[600px]',
 		Height: 'h-full max-h-[600px]',
@@ -24,7 +24,7 @@ export function	openModal(addNoteToList, getList) {
 		event.preventDefault();
 		const formObject = Object.fromEntries(new FormData(form))
 		const { name: newName, content } = formObject;
-		addNoteToList(newName, content);
+		addNoteToList(newName, content, toggleState);
 		const response = await fetch(`${serverURL}/list`, {
 				method: 'POST',
 				credentials: 'include',
