@@ -12,6 +12,7 @@ export class MainPage extends HTMLElement {
 		super()
 	}
 	connectedCallback() {
+		this.id = 'main-main-page'
 		this.stateInit = {
 			toggle: false
 		}

@@ -20,7 +20,8 @@ export async function saveOrder(updatedNotes) {
 		if (!response.ok) {
 			throw new Error("failed to update the order")
 		} 
-		this.getList()
+		const mainPage = document.getElementById('main-main-page')
+		mainPage.getList()
 
 	} catch(error) {
 		console.error(error)

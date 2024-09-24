@@ -1,5 +1,5 @@
 import { reactive, html } from "@arrow-js/core";
-import { animations, dragAndDrop } from "@formkit/drag-and-drop";
+import { dragAndDrop, handleEnd } from "@formkit/drag-and-drop";
 
 
 export function renderList(names, toggle) {
@@ -51,31 +51,32 @@ export function renderList(names, toggle) {
 		id.innerHTML = "No notes to show. <br>Create a new note by pressing '+' or via the shortcut 'CTRL+n'."
 		list.prepend(id)
 	} else {
+		const mainPage = document.getElementById('main-main-page')
+		console.log(mainPage)
 		dragAndDrop({
 			parent: document.getElementById("dndNotes"),
 			getValues: ()=>state.dndNames,
 			setValues: (newValues) => {
-				this.previousOrder = [...state.dndNames];
-				this.newValues = newValues
+				mainPage.previousOrder = [...state.dndNames];
+				mainPage.newValues = newValues
 				state.dndNames = reactive(newValues);
 			},
 			config: {
 				dragHandle: '.note-handle',
-				handleEnd: () => {
-					this.saveOrder(this.newValues).catch(() => {
-						state.dndNames = reactive(this.previousOrder);
+				handleEnd: (data) => {
+					state.dndNames = reactive([...mainPage.newValues]);
+					mainPage.saveOrder(mainPage.newValues).catch(() => {
+						state.dndNames = reactive(mainPage.previousOrder);
 						alert('Failed to update the order. Reverting to previous state.');
 					});
-					console.log(toggle)
+					const draggingElements = document.querySelectorAll('.dragging');
+					draggingElements.forEach(el => el.classList.remove('dragging'));
+					handleEnd(data)
 				},
 				plugins: toggle ? [ 
-					//animations(),
-					//swap()
 				] : [
-					//animations(),
-					//swap()
 				],
-				dropZoneClass: 'dragging'
+				dropZoneClass: 'dragging',
 			}
 		})
 	} 
