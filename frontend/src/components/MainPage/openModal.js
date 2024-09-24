@@ -24,7 +24,16 @@ export function	openModal(addNoteToList, getList, toggleState) {
 		event.preventDefault();
 		const formObject = Object.fromEntries(new FormData(form))
 		const { name: newName, content } = formObject;
+		//debugger
+		console.log(JSON.stringify({
+			newName, content, toggleState
+		}))
 		addNoteToList(newName, content, toggleState);
+		form.reset();
+		const modal = document.querySelector('#modal')
+		modal?.close()
+		app.modalIsOpen = false
+		modal?.remove()
 		const response = await fetch(`${serverURL}/list`, {
 				method: 'POST',
 				credentials: 'include',
@@ -32,20 +41,12 @@ export function	openModal(addNoteToList, getList, toggleState) {
 				body: JSON.stringify(formObject)
 		});
 		if (response.ok) {
-			form.reset();
 			getList();
-			const modal = document.querySelector('#modal')
-			modal?.close()
-			app.modalIsOpen = false
-			modal?.remove()
 		} else {
 			console.error('Failed to add name');
 			const firstItem = list.firstElementChild
 			firstItem.remove()
-			const modal = document.querySelector('#modal')
-			modal?.close()
-			app.modalIsOpen = false
-			modal?.remove()
+			alert('An error occurred while saving your note')
 		}
 	});
 }

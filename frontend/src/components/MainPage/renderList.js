@@ -1,5 +1,5 @@
 import { reactive, html } from "@arrow-js/core";
-import { dragAndDrop } from "@formkit/drag-and-drop";
+import { animations, dragAndDrop } from "@formkit/drag-and-drop";
 
 
 export function renderList(names, toggle) {
@@ -68,7 +68,10 @@ export function renderList(names, toggle) {
 					});
 					console.log(toggle)
 				},
-				plugins: [
+				plugins: toggle ? [ 
+					//animations(),
+					//swap()
+				] : [
 					//animations(),
 					//swap()
 				],

@@ -8,7 +8,7 @@ export class Card extends HTMLElement {
 	constructor(toggleOnValue, noteTitle) {
 		super()
 		if (toggleOnValue) {
-			this.toggleOn = toggleOnValue
+			this.toggleOn = JSON.stringify(toggleOnValue)
 		}
 		if (noteTitle) {
 			this.noteTitle = noteTitle
@@ -18,7 +18,7 @@ export class Card extends HTMLElement {
 		this.noteId = this.dataset.id
 		this.noteTitle = this.noteTitle ?? this.dataset.name
 		this.content = this.dataset.content
-		this.toggleOn = this.toggleOn ?? this.dataset.toggleon ? JSON.parse(this.dataset.toggleon) : false
+		this.toggleOn = this.toggleOn ?? this.dataset.toggleon === "true" ? true : false
 		this.addEventListener('click', (event)=>{
 			if (['delete-button','title', 'delete-button-2'].includes(event.target.id)) return
 			if (['note-handle'].includes(event.target.className)) return

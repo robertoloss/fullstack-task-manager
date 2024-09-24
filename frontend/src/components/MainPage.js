@@ -5,6 +5,7 @@ import mainPageHTML from './MainPage/main-page.html?raw'
 import { openModal } from "./MainPage/openModal.js";
 import { renderList } from "./MainPage/renderList.js";
 import { saveOrder } from "./MainPage/saveOrder.js";
+import { Spinner } from "./Spinner.js";
 
 export class MainPage extends HTMLElement {
 	constructor() {
@@ -69,13 +70,10 @@ export class MainPage extends HTMLElement {
 	}
 
 	addNoteToList = (name, content, toggleState) => {
-		const card = new Card(true, name) //document.createElement('card-component');
+		const card = new Card(toggleState, name)
 		card.setAttribute('data-id', name.id);
 		card.setAttribute('data-name', name);
 		card.setAttribute('data-content', content);
-		card.setAttribute('toggleOn', toggleState)
-		card.render()
-		console.log("new card ", card)
 		const dndNotes = document.querySelector('#dndNotes')
 		dndNotes.prepend(card)
 	}
@@ -90,7 +88,6 @@ export class MainPage extends HTMLElement {
 		const modalButton = this.querySelector('#add-modal')
 		const toggle = this.querySelector('#grid-list-toggle')
 		const mainContainer = this.querySelector('#main-container')
-		console.log('main container', mainContainer)
 
 		document.addEventListener('there-are-notes', ()=>{
 			const info = document.getElementById('info-h1');
@@ -130,7 +127,6 @@ export class MainPage extends HTMLElement {
 		document.addEventListener('keydown', (event) => {
 			if (event.ctrlKey && event.key === 'n') {
 				if (app.modalIsOpen) {
-					console.log("modal is open: ", app.modalIsOpen)
 					return
 				}
 				openModal(this.addNoteToList, this.getList, this.state.toggle)
@@ -140,6 +136,9 @@ export class MainPage extends HTMLElement {
 
 		logOutButton?.addEventListener('click', async (e) => {
 			e.preventDefault()
+			logOutButton.innerHTML = ''
+			const spinner = new Spinner('size-4')
+			logOutButton.appendChild(spinner)
 			console.log("logging out...")
 			const response = await fetch(`${serverURL}/auth/logout`, {
 				method: 'POST',
