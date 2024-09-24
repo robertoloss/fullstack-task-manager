@@ -24,7 +24,8 @@ export class Card extends HTMLElement {
 			if (['note-handle'].includes(event.target.className)) return
 			const modal = document.createElement('dialog')
 			modal.id = `modal-note-${this.noteId}`
-			modal.className = `border border-black rounded-md p-6 pl-8 w-full max-w-[600px] h-full max-h-[600px] overflow-hidden`
+			modal.className = `border border-black rounded-md p-6 pl-8  
+				max-w-[calc(100vw-32px)] sm:max-w-[600px] w-full h-full max-h-[600px] overflow-hidden self-center place-self-center `
 			modal.innerHTML = `
 				<div class="flex flex-row justify-end mb-6">
 					<button class="self-end text-sm text-gray-500 font-light hover:text-blue-700 transition-all" 
