@@ -15,6 +15,7 @@ export class Card extends HTMLElement {
 		}
 	}
 	connectedCallback() {
+		this.deleteButtonIsActive = true
 		this.noteId = this.dataset.id
 		this.noteTitle = this.noteTitle ?? this.dataset.name
 		this.content = this.dataset.content
@@ -98,9 +99,28 @@ export class Card extends HTMLElement {
 			});
 		})
 		this.render()
+		const deactivateHandle = () => {
+			const handle = this.querySelector('#svg-handle')
+			handle.className = 'opacity-50'
+			handle.style.cursor = '';
+		}
+		const deactivateDelete = () => {
+			const deleteButton = this.querySelector('#delete-button')
+			deleteButton.className = 'opacity-50 text-gray-300 w-fit self-center text-sm font-light'
+			this.deleteButtonIsActive = false
+		}
+		const events = ['start-saving-order', 'adding-note', 'deleting-note']
+		for (let event of events) {
+			document.addEventListener(event, ()=>{
+				deactivateHandle()
+				deactivateDelete()
+			})
+		}
 	}
 
 	async deleteName(event) {
+		const deleteEvent = new CustomEvent('deleting-note')
+		document.dispatchEvent(deleteEvent)
 		event.target.closest('card-component').remove();
 		const id = event.target.getAttribute('data-id');
 		const response = await fetch(`${serverURL}/list/${id}`, {
@@ -169,7 +189,7 @@ export class Card extends HTMLElement {
 		`
 		this.addEventListener('click', (event) => {
 				if (event.target.classList.contains('delete-button') || event.target.classList.contains('delete-button-2')) {
-					openDeleteModal(()=>this.deleteName(event))
+					if (this.deleteButtonIsActive) openDeleteModal(()=>this.deleteName(event))
 				} else if (event.target.classList.contains('name-item')) {
 					editTitle(event);
 				}

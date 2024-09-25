@@ -53,6 +53,22 @@ export class MainPage extends HTMLElement {
 		this.className = 'flex flex-col w-full items-center'	
 		document.body.classList.add('bg-zinc-200')
 		document.body.classList.add('overflow-hidden')
+		const events = ['start-saving-order', 'adding-note', 'deleting-note']
+		for (let event of events) {
+			document.addEventListener(event, ()=>{
+				const mainContainer = this.querySelector('#info-h1')
+				const saving = document.createElement('h1')
+				saving.className = 'text-blue-600'
+				saving.innerHTML = 'saving...'
+				saving.id = 'saving'
+				mainContainer.appendChild(saving)
+			})
+		}
+		document.addEventListener('list-rendered', ()=>{
+			const mainContainer = this.querySelector('#info-h1')
+			const saving = this.querySelector('#saving')
+			if (saving && mainContainer) mainContainer.removeChild(saving)
+		})
 	}
 
 	renderList = renderList
@@ -71,6 +87,8 @@ export class MainPage extends HTMLElement {
 	}
 
 	addNoteToList = (name, content, toggleState) => {
+		const addEvent = new CustomEvent('adding-note')
+		document.dispatchEvent(addEvent)
 		const card = new Card(toggleState, name)
 		card.setAttribute('data-id', name.id);
 		card.setAttribute('data-name', name);
@@ -95,7 +113,7 @@ export class MainPage extends HTMLElement {
 			if (!info) {
 				const infoH1 = document.createElement('h1')
 				infoH1.id = 'info-h1'
-				infoH1.classList = 'px-4 py-5 text-sm text-gray-600 text-center font-light'
+				infoH1.classList = 'px-4 py-5 h-[88px] text-sm text-gray-600 text-center font-light'
 				infoH1.innerHTML = `
 					To create a new note press the + button below or use the shortcut 'CTRL+n'
 				`

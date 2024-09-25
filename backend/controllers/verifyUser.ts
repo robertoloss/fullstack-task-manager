@@ -20,8 +20,9 @@ export async function verifyUser(req: express.Request, res: express.Response) {
 	console.log("req.cookies (verifyUser): ", req.cookies)
 	if (!token) {
 		console.log("no token (verify user)")
+		console.log(`redirecting to: ${baseURL}/login`, )
 		return res.status(401).json({ redirect: `${baseURL}/login` })
-		return
+		//return
 	}
 	try {
 		console.log("verifyToken: try")

@@ -41,6 +41,7 @@ const Router = {
 			})
 			const data = await res.json()
 			if (data.redirect) {
+				console.log("redirecting to: ", data.redirect)
 				window.location.href = data.redirect
 				return
 			}
