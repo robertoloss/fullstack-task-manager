@@ -56,6 +56,7 @@ export class MainPage extends HTMLElement {
 		const events = ['start-saving-order', 'adding-note', 'deleting-note']
 		for (let event of events) {
 			document.addEventListener(event, ()=>{
+				console.log("saving", event)
 				const mainContainer = this.querySelector('#info-h1')
 				const saving = document.createElement('h1')
 				saving.className = 'text-blue-600'
@@ -113,7 +114,7 @@ export class MainPage extends HTMLElement {
 			if (!info) {
 				const infoH1 = document.createElement('h1')
 				infoH1.id = 'info-h1'
-				infoH1.classList = 'px-4 py-5 h-[88px] text-sm text-gray-600 text-center font-light'
+				infoH1.classList = 'px-4 py-5 min-h-[96px] text-sm text-gray-600 text-center font-light'
 				infoH1.innerHTML = `
 					To create a new note press the + button below or use the shortcut 'CTRL+n'
 				`

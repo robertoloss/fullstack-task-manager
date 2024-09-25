@@ -1,6 +1,5 @@
 import { reactive, html } from "@arrow-js/core";
 import { dragAndDrop, handleEnd } from "@formkit/drag-and-drop";
-import { custom } from "zod";
 
 
 export function renderList(names, toggle) {
@@ -67,18 +66,20 @@ export function renderList(names, toggle) {
 			config: {
 				dragHandle: '.note-handle',
 				handleEnd: (data) => {
-					state.dndNames = reactive([...mainPage.newValues]);
-					const starEvent = new CustomEvent('start-saving-order')
-					document.dispatchEvent(starEvent)
-					mainPage.saveOrder(mainPage.newValues).catch(() => {
-						state.dndNames = reactive(mainPage.previousOrder);
-						alert('Failed to update the order. Reverting to previous state.');
-					});
-					const endEvent = new CustomEvent('end-saving-order')
-					document.dispatchEvent(endEvent)
-					const draggingElements = document.querySelectorAll('.dragging');
-					draggingElements.forEach(el => el.classList.remove('dragging'));
-					handleEnd(data)
+					const first = typeof data.e.target.className === 'string' ? data.e.target.className.slice(0,4) : 'not a string'
+					if (first != 'card') {
+						const startEvent = new CustomEvent('start-saving-order')
+						document.dispatchEvent(startEvent)
+						mainPage.saveOrder(mainPage.newValues).catch(() => {
+							state.dndNames = reactive(mainPage.previousOrder);
+							alert('Failed to update the order. Reverting to previous state.');
+						});
+						const endEvent = new CustomEvent('end-saving-order')
+						document.dispatchEvent(endEvent)
+						const draggingElements = document.querySelectorAll('.dragging');
+						draggingElements.forEach(el => el.classList.remove('dragging'));
+						handleEnd(data)
+					}
 				},
 				plugins: toggle ? [ 
 					//

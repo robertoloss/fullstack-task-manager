@@ -21,6 +21,7 @@ export class Card extends HTMLElement {
 		this.content = this.dataset.content
 		this.toggleOn = this.toggleOn ?? this.dataset.toggleon === "true" ? true : false
 		this.addEventListener('click', (event)=>{
+			event.stopPropagation()
 			if (['delete-button','title', 'delete-button-2'].includes(event.target.id)) return
 			if (['note-handle'].includes(event.target.className)) return
 			const modal = document.createElement('dialog')
@@ -98,6 +99,7 @@ export class Card extends HTMLElement {
 				if (mainPage.length != 0) mainPage.style.marginRight = '0px'
 			});
 		})
+
 		this.render()
 		const deactivateHandle = () => {
 			const handle = this.querySelector('#svg-handle')
@@ -106,8 +108,15 @@ export class Card extends HTMLElement {
 		}
 		const deactivateDelete = () => {
 			const deleteButton = this.querySelector('#delete-button')
-			deleteButton.className = 'opacity-50 text-gray-300 w-fit self-center text-sm font-light'
-			this.deleteButtonIsActive = false
+			const deleteButton2 = this.querySelector('#delete-button-2')
+			if (deleteButton && !this.toggleOn) {
+				deleteButton.className = 'opacity-50 text-gray-300 w-fit self-center text-sm font-light'
+				this.deleteButtonIsActive = false
+			}
+			if (deleteButton2 && this.toggleOn) {
+				deleteButton2.className = 'opacity-50 text-gray-300 w-fit self-center text-sm font-light'
+				this.deleteButtonIsActive = false
+			}
 		}
 		const events = ['start-saving-order', 'adding-note', 'deleting-note']
 		for (let event of events) {
@@ -139,23 +148,24 @@ export class Card extends HTMLElement {
 		this.innerHTML = `
 			<div 
 				id='card-${this.noteId}'
-				class="flex flex-col justify-between w-full group cursor-pointer p-4 bg-white border-[0.5px]
+				class="card flex flex-col justify-between w-full group cursor-pointer p-4 bg-white border-[0.5px]
 					border-gray-900 rounded-lg gap-y-6 min-w-[280px] ${this.toggleOn ? '' : 'max-w-[520px]'} 
 					${this.toggleOn ? 'h-[80px]' : 'h-[280px]'} transition-all"
 			>
-				<div class="flex flex-col gap-y-4 justify-start h-full ${this.toggleOn ? 'justify-center' : ''}">
-					<div class="flex flex-row w-full justify-between">
+				<div class="card flex flex-col gap-y-4 justify-start h-full ${this.toggleOn ? 'justify-center' : ''}">
+					<div class="card flex flex-row w-full justify-between">
 						<div 
 							id="title" 
-							class="${this.toggleOn ? 'w-fit' : 'w-full'} name-item text-wrap hover:text-blue-600 cursor-pointer font-semibold text-lg" 
+							class="card ${this.toggleOn ? 'w-fit' : 'w-full'} flex flex-col justify-center name-item text-wrap 
+								hover:text-blue-600 cursor-pointer font-semibold text-lg" 
 							data-id="${this.noteId}"
 						>
 							${this.noteTitle}
 						</div>
-						<div class="flex flex-row gap-x-4 ">
+						<div class="card flex flex-row gap-x-4 h-10 items-center">
 							<button 
 								id="delete-button-2" 
-								class="delete-button text-gray-300 w-fit self-center place-self-center cursor-pointer hover:text-red-600 text-sm 
+								class="card delete-button text-gray-300 w-fit self-center place-self-center cursor-pointer hover:text-red-600 text-sm 
 									font-light transition-colors ${this.toggleOn ? '' : 'hidden'}" 
 								data-id="${this.noteId}"
 							>
@@ -171,7 +181,7 @@ export class Card extends HTMLElement {
 					</div>
 					<div 
 						id="content"
-						class="w-full text-wrap  cursor-pointer font-light text-base line-clamp-6 ${this.toggleOn ? 'hidden' : 'block'}" 
+						class="card w-full text-wrap  cursor-pointer font-light text-base line-clamp-6 ${this.toggleOn ? 'hidden' : 'block'}" 
 						data-id="${this.noteId}"
 					>
 						${this.content}
@@ -179,7 +189,7 @@ export class Card extends HTMLElement {
 				</div>
 				<button 
 					id="delete-button" 
-					class="delete-button text-gray-300 w-fit self-center cursor-pointer hover:text-red-600 text-sm font-light transition-colors
+					class="card delete-button text-gray-300 w-fit self-center cursor-pointer hover:text-red-600 text-sm font-light transition-colors
 						${this.toggleOn ? 'hidden' : ''}" 
 					data-id="${this.noteId}"
 				>
@@ -187,6 +197,7 @@ export class Card extends HTMLElement {
 				</button>
 			</div>
 		`
+		console.log(this)
 		this.addEventListener('click', (event) => {
 				if (event.target.classList.contains('delete-button') || event.target.classList.contains('delete-button-2')) {
 					if (this.deleteButtonIsActive) openDeleteModal(()=>this.deleteName(event))

@@ -4,10 +4,8 @@ export class Spinner extends HTMLElement {
 	constructor(size) {
 		super()
 		this.size = size
-		console.log("this.size: ", this.size)
 	}
 	connectedCallback() {
-		console.log("ccallback: this.size: ", this.size)
 		const node = document.createElement('div')
 		node.innerHTML = `
 			<div 
@@ -20,7 +18,6 @@ export class Spinner extends HTMLElement {
 		this.appendChild(node)
 		setTimeout(()=>{
 			const spinner = document.getElementById('inner-spinner')
-			console.log(spinner)
 			if (this.size) {
 				spinner.classList.remove('size-6')
 				spinner.classList.add(`${this.size}`)
