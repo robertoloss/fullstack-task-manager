@@ -151,7 +151,7 @@ export class Card extends HTMLElement {
 		this.innerHTML = `
 			<div 
 				id='card-${this.noteId}'
-				class="touch-none card flex flex-col justify-between w-full group cursor-pointer p-4 bg-white border-[0.5px]
+				class=" card flex flex-col justify-between w-full group cursor-pointer p-4 bg-white border-[0.5px]
 					border-gray-900 rounded-lg gap-y-6 min-w-[280px] ${this.toggleOn ? '' : 'max-w-[520px]'} 
 					${this.toggleOn ? 'h-[80px]' : 'h-[280px]'} transition-all"
 			>
@@ -176,7 +176,7 @@ export class Card extends HTMLElement {
 							</button>
 							<div 
 								id="svg-handle"
-								class="note-handle touch-none hover:cursor-grab active:cursor-grabbing ${this.toggleOn ? 'self-center' : ''}"
+								class="note-handle  hover:cursor-grab active:cursor-grabbing ${this.toggleOn ? 'self-center' : ''}"
 							>
 								${svgHandle}
 							</div>
