@@ -21,9 +21,12 @@ export class Card extends HTMLElement {
 		this.content = this.dataset.content
 		this.toggleOn = this.toggleOn ?? this.dataset.toggleon === "true" ? true : false
 		this.addEventListener('click', (event)=>{
+			const isCard = event.target.className.toString().slice(0,4) === 'card' 
+			console.log("isCard: ", isCard)
 			event.stopPropagation()
 			if (['delete-button','title', 'delete-button-2'].includes(event.target.id)) return
 			if (['note-handle'].includes(event.target.className)) return
+			if (!isCard) return
 			const modal = document.createElement('dialog')
 			modal.id = `modal-note-${this.noteId}`
 			modal.className = `border border-black rounded-md p-6 pl-8  
@@ -103,18 +106,18 @@ export class Card extends HTMLElement {
 		this.render()
 		const deactivateHandle = () => {
 			const handle = this.querySelector('#svg-handle')
-			handle.className = 'opacity-50'
+			handle.className = 'opacity-20'
 			handle.style.cursor = '';
 		}
 		const deactivateDelete = () => {
 			const deleteButton = this.querySelector('#delete-button')
 			const deleteButton2 = this.querySelector('#delete-button-2')
 			if (deleteButton && !this.toggleOn) {
-				deleteButton.className = 'opacity-50 text-gray-300 w-fit self-center text-sm font-light'
+				deleteButton.className = 'opacity-20 text-gray-300 w-fit self-center text-sm font-light'
 				this.deleteButtonIsActive = false
 			}
 			if (deleteButton2 && this.toggleOn) {
-				deleteButton2.className = 'opacity-50 text-gray-300 w-fit self-center text-sm font-light'
+				deleteButton2.className = 'opacity-20 text-gray-300 w-fit self-center text-sm font-light'
 				this.deleteButtonIsActive = false
 			}
 		}
@@ -148,7 +151,7 @@ export class Card extends HTMLElement {
 		this.innerHTML = `
 			<div 
 				id='card-${this.noteId}'
-				class="card flex flex-col justify-between w-full group cursor-pointer p-4 bg-white border-[0.5px]
+				class="touch-none card flex flex-col justify-between w-full group cursor-pointer p-4 bg-white border-[0.5px]
 					border-gray-900 rounded-lg gap-y-6 min-w-[280px] ${this.toggleOn ? '' : 'max-w-[520px]'} 
 					${this.toggleOn ? 'h-[80px]' : 'h-[280px]'} transition-all"
 			>
@@ -173,7 +176,7 @@ export class Card extends HTMLElement {
 							</button>
 							<div 
 								id="svg-handle"
-								class="note-handle hover:cursor-grab active:cursor-grabbing ${this.toggleOn ? 'self-center' : ''}"
+								class="note-handle touch-none hover:cursor-grab active:cursor-grabbing ${this.toggleOn ? 'self-center' : ''}"
 							>
 								${svgHandle}
 							</div>
@@ -197,7 +200,6 @@ export class Card extends HTMLElement {
 				</button>
 			</div>
 		`
-		console.log(this)
 		this.addEventListener('click', (event) => {
 				if (event.target.classList.contains('delete-button') || event.target.classList.contains('delete-button-2')) {
 					if (this.deleteButtonIsActive) openDeleteModal(()=>this.deleteName(event))

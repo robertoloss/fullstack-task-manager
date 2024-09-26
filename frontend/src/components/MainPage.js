@@ -65,6 +65,7 @@ export class MainPage extends HTMLElement {
 				mainContainer.appendChild(saving)
 			})
 		}
+		this.addEventListener('touchstart', ()=>true)
 		document.addEventListener('list-rendered', ()=>{
 			const mainContainer = this.querySelector('#info-h1')
 			const saving = this.querySelector('#saving')
@@ -133,7 +134,7 @@ export class MainPage extends HTMLElement {
 		})
 
 		if (!app.store.notes) { 
-			this.getList()
+		  this.getList()
 		} else {
 			this.renderList(app.store.notes, this.state.toggle)
 		}

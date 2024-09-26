@@ -13,11 +13,13 @@ export function renderList(names, toggle) {
 			noNotes.remove()
 		}
 	}
-
 	if (list) list.innerHTML = ''
+	
 	const state = reactive({
-		dndNames: names.sort((a,b)=>a.position - b.position)
-	})
+		dndNames: Array.isArray(names) && names.length > 0 ? names.sort((a,b) => a.position - b.position) : []
+	});
+
+
 	html`
 		<ul 
 			id="dndNotes" 
@@ -26,19 +28,31 @@ export function renderList(names, toggle) {
 								: "w-full max-w-[800px] grid grid-cols-1 gap-2 h-fit" 
 			}"
 		>
-			${()=>
-					state.dndNames.map((name) => {
-						return html`
-							<card-component 
-								data-id="${name.id}"
-								data-name="${name.title}"
-								data-content="${name.content}"
-								data-toggleon="${JSON.stringify(toggle)}"
-							>
-							</card-component>
-						`
-					}
-			)}
+			${() => 
+      state.dndNames && state.dndNames.length > 0 
+        ? state.dndNames.map((name) => {
+            return html`
+              <card-component 
+                data-id="${name.id}"
+                data-name="${name.title}"
+                data-content="${name.content}"
+                data-toggleon="${JSON.stringify(toggle)}"
+              >
+              </card-component>
+            `;
+          })
+        : names.map((name) => {
+            return html`
+              <card-component 
+                data-id="${name.id}"
+                data-name="${name.title}"
+                data-content="${name.content}"
+                data-toggleon="${JSON.stringify(toggle)}"
+              >
+              </card-component>
+            `;
+          })
+    }
 		</ul>
 	`(document.getElementById('list'))
 
@@ -55,6 +69,8 @@ export function renderList(names, toggle) {
 		list.prepend(id)
 	} else {
 		const mainPage = document.getElementById('main-main-page')
+		const dndNotes = document.getElementById('dndNotes');
+		if (dndNotes && state.dndNames.length > 0) {
 		dragAndDrop({
 			parent: document.getElementById("dndNotes"),
 			getValues: ()=>state.dndNames,
@@ -66,13 +82,17 @@ export function renderList(names, toggle) {
 			config: {
 				dragHandle: '.note-handle',
 				handleEnd: (data) => {
+					console.log("handle end - state.dndNames: ", state.dndNames)
+					if (!state.dndNames?.length) return
+					console.log(data.e)
 					const first = typeof data.e.target.className === 'string' ? data.e.target.className.slice(0,4) : 'not a string'
 					if (first != 'card') {
 						const startEvent = new CustomEvent('start-saving-order')
 						document.dispatchEvent(startEvent)
 						mainPage.saveOrder(mainPage.newValues).catch(() => {
 							state.dndNames = reactive(mainPage.previousOrder);
-							alert('Failed to update the order. Reverting to previous state.');
+							console.error("There was a problem... reverting to previousOrder")
+							mainPage.getList()
 						});
 						const endEvent = new CustomEvent('end-saving-order')
 						document.dispatchEvent(endEvent)
@@ -89,6 +109,7 @@ export function renderList(names, toggle) {
 				dropZoneClass: 'dragging',
 			}
 		})
-	} 
+	}
+	}
 }
 
