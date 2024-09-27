@@ -5,8 +5,8 @@ export function openDeleteModal(deleteNote) {
 	const modal = createModal({
 		maxWidth: 'max-w-[calc(100vw-32px)] sm:max-w-[400px]',
 		Height: 'h-fit',
-		borderColor: 'border-red-600',
-		borderWidth: 'border-2',
+		borderColor: 'border-black',
+		borderWidth: 'border',
 		modalHtml: modalHtml
 	})
 

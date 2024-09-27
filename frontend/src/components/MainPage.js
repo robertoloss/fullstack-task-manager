@@ -49,8 +49,8 @@ export class MainPage extends HTMLElement {
 			this.renderList(app.store.notes, this.state.toggle)
 		})
 		this.addEventListener('get-list', (event) => {
-			if (event.detail.titleModified) this.getList(true)
-			else this.getList()
+			if (event.detail?.titleModified) this.getList(true)
+			else this.getList(false)
 		})
 		this.style.width = ''
 		this.className = 'flex flex-col w-full items-center'	

@@ -153,9 +153,9 @@ export class Card extends HTMLElement {
 				id='card-${this.noteId}'
 				class="card flex flex-col justify-between w-full group cursor-pointer p-4 bg-white border-[0.5px]
 					border-gray-900 rounded-lg gap-y-6 min-w-[280px] ${this.toggleOn ? '' : 'max-w-[520px]'} 
-					${this.toggleOn ? 'h-[80px]' : 'h-[280px]'} transition-all"
+					${this.toggleOn ? 'h-[80px]' : 'h-[280px]'} transition-all overflow-hidden"
 			>
-				<div class="card flex flex-col gap-y-4 justify-start h-fit ${this.toggleOn ? 'justify-center' : ''}">
+				<div class="card flex flex-col gap-y-4 overflow-hidden justify-start h-full ${this.toggleOn ? 'justify-center' : ''}">
 					<div class="card flex flex-row w-full justify-between">
 						<div 
 							id="title" 
@@ -196,7 +196,8 @@ export class Card extends HTMLElement {
 					</div>
 					<div 
 						id="content"
-						class="card w-full text-wrap h-full cursor-pointer font-light text-base line-clamp-6 ${this.toggleOn ? 'hidden' : 'block'}" 
+						class="card w-full text-wrap cursor-pointer font-light text-base line-clamp-6 
+							${this.toggleOn ? 'hidden' : 'block'}" 
 						data-id="${this.noteId}"
 					>
 						${this.content}
