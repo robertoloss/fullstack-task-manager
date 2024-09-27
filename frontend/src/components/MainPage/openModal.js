@@ -30,6 +30,17 @@ export function	openModal(addNoteToList, getList, toggleState) {
 		}))
 		const noNotes = document.getElementById('no-notes');
 		noNotes?.remove()
+		const info = document.getElementById('info-h1');
+		const mainContainer = document.querySelector('#main-container')
+		if (!info) {
+			const infoH1 = document.createElement('h1')
+			infoH1.id = 'info-h1'
+			infoH1.classList = 'px-4 py-5 min-h-[96px] text-sm text-gray-600 text-center font-light'
+			infoH1.innerHTML = `
+				To create a new note press the + button below or use the shortcut 'CTRL+n'
+			`
+			mainContainer.prepend(infoH1)
+		}
 		addNoteToList(newName, content, toggleState);
 		form.reset();
 		const modal = document.querySelector('#modal')
