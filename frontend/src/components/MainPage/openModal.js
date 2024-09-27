@@ -4,7 +4,7 @@ import { serverURL } from '../../actions/server';
 
 export function	openModal(addNoteToList, getList, toggleState) {
 	const modal = createModal({
-		maxWidth: 'max-w-[600px]',
+		maxWidth: 'max-w-[calc(100vw-32px)] sm:max-w-[600px]',
 		Height: 'h-full max-h-[600px]',
 		borderColor: 'border-black',
 		borderWidth: 'border',
