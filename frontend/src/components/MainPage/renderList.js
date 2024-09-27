@@ -2,7 +2,7 @@ import { reactive, html } from "@arrow-js/core";
 import { dragAndDrop, handleEnd } from "@formkit/drag-and-drop";
 
 
-export function renderList(names, toggle) {
+export function renderList(names, toggle, titleModified) {
 	const list = document.getElementById('list')	
 
 	const noNotes = document.getElementById('no-notes') 
@@ -65,7 +65,7 @@ export function renderList(names, toggle) {
 		document.dispatchEvent(eventNoNotes)
 		const id = document.createElement('id')
 		id.id = 'no-notes'
-		id.className = "text-lg font-light max-w-[320px] text-center bg-gray-50/60 rounded-lg border-black border mt-10 p-10 h-fit"
+		id.className = "text-lg font-light max-w-[320px] text-center bg-gray-51/60 rounded-lg border-black border mt-10 p-10 h-fit"
 		id.innerHTML = `No notes to show. <br>Create a new note by pressing '+'<span class="hidden sm:block"> or via the shortcut 'CTRL+n'.</span>`
 		list.prepend(id)
 	} else {
@@ -90,8 +90,10 @@ export function renderList(names, toggle) {
 						if (!state.dndNames?.length) return
 						const first = typeof data.e.target.className === 'string' ? data.e.target.className.slice(0,4) : 'not a string'
 						if (first != 'card') {
-							const startEvent = new CustomEvent('start-saving-order')
-							document.dispatchEvent(startEvent)
+							if (!titleModified) {
+								const startEvent = new CustomEvent('start-saving-order')
+								document.dispatchEvent(startEvent)
+							}
 							mainPage.saveOrder(mainPage.newValues).catch(() => {
 								state.dndNames = reactive(mainPage.previousOrder);
 								console.error("There was a problem... reverting to previousOrder")

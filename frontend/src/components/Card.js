@@ -71,7 +71,6 @@ export class Card extends HTMLElement {
 			noteContent.classList.add('scrollable')
 			noteContent.addEventListener('click', (event)=>{
 				editContent(event)
-
 			})
 
 			modal.addEventListener('keydown', (event) => {

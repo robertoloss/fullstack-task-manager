@@ -26,6 +26,7 @@ const editTitle = (event) => {
 		if (newName !== currentName) {
 			nameItem.innerHTML = ''
 			nameItem.textContent = newName;
+			document.dispatchEvent(new CustomEvent('start-saving-order'))
 			try {
 				const id = nameItem.getAttribute('data-id');
 				const response = await fetch(`${serverURL}/list/${id}`, {
@@ -41,7 +42,12 @@ const editTitle = (event) => {
 				}
 				document.querySelector('#main-page').dispatchEvent(new CustomEvent(
 					'get-list',
-					{ 'bubbles': true }
+					{ 
+						'bubbles': true,
+						detail: {
+							titleModified: true
+						}
+					}
 				))
 			} catch (error) {
 				console.error('Error updating name:', error);
@@ -51,8 +57,17 @@ const editTitle = (event) => {
 			nameItem.textContent = currentName;
 		}
 	};
-	inputElement?.addEventListener('keypress', (e) => { if (e.key === 'Enter') updateNote(e) }) 
-	inputElement?.addEventListener('blur', updateNote)
+	let preventBlur = false;
+
+	inputElement?.addEventListener('keypress', (e) => { 
+		if (e.key === 'Enter') {
+			preventBlur = true;
+			updateNote(e)
+		}
+	}) 
+	inputElement?.addEventListener('blur', (e) => {
+		if (!preventBlur) updateNote(e)
+	})
 }
 
 export default editTitle

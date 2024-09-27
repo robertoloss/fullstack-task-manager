@@ -48,7 +48,10 @@ export class MainPage extends HTMLElement {
 		document.addEventListener('grid-list-toggle', () => {
 			this.renderList(app.store.notes, this.state.toggle)
 		})
-		this.addEventListener('get-list', this.getList)
+		this.addEventListener('get-list', (event) => {
+			if (event.detail.titleModified) this.getList(true)
+			else this.getList()
+		})
 		this.style.width = ''
 		this.className = 'flex flex-col w-full items-center'	
 		document.body.classList.add('bg-zinc-200')
@@ -77,7 +80,7 @@ export class MainPage extends HTMLElement {
 
 	saveOrder = saveOrder
 
-	getList = async ()=> {
+	getList = async (titleModified)=> {
 		const response = await fetch(`${serverURL}/list`, {
 			method: 'GET',
 			credentials: 'include'	
@@ -85,7 +88,7 @@ export class MainPage extends HTMLElement {
 		const { names  } = await response.json()
 		list.innerHTML = ''
 		app.store.notes = names
-		this.renderList(app.store.notes, this.state.toggle)
+		this.renderList(app.store.notes, this.state.toggle, titleModified)
 	}
 
 	addNoteToList = (name, content, toggleState) => {
