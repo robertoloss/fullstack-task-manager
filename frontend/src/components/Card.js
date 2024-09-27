@@ -179,7 +179,9 @@ export class Card extends HTMLElement {
 								id="svg-handle"
 								class="note-handle  hover:cursor-grab active:cursor-grabbing ${this.toggleOn ? 'self-center' : ''}"
 							>
-								${svgHandle}
+								<div class="hidden sm:block">
+									${svgHandle}
+								</div>
 							</div>
 						</div>
 					</div>
