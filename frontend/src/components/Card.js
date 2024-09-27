@@ -21,8 +21,9 @@ export class Card extends HTMLElement {
 		this.content = this.dataset.content
 		this.toggleOn = this.toggleOn ?? this.dataset.toggleon === "true" ? true : false
 		this.addEventListener('click', (event)=>{
-			const isCard = event.target.className.toString().slice(0,4) === 'card' 
+			const isCard = event.target.className.toString().slice(0,4) === 'card' || event.target.className.toString().slice(1,5) === 'card' 
 			console.log("isCard: ", isCard)
+			console.log("event.target: ", event.target)
 			event.stopPropagation()
 			if (['delete-button','title', 'delete-button-2'].includes(event.target.id)) return
 			if (['note-handle'].includes(event.target.className)) return
@@ -151,7 +152,7 @@ export class Card extends HTMLElement {
 		this.innerHTML = `
 			<div 
 				id='card-${this.noteId}'
-				class=" card flex flex-col justify-between w-full group cursor-pointer p-4 bg-white border-[0.5px]
+				class="card flex flex-col justify-between w-full group cursor-pointer p-4 bg-white border-[0.5px]
 					border-gray-900 rounded-lg gap-y-6 min-w-[280px] ${this.toggleOn ? '' : 'max-w-[520px]'} 
 					${this.toggleOn ? 'h-[80px]' : 'h-[280px]'} transition-all"
 			>

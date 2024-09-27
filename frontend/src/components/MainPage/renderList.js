@@ -23,7 +23,7 @@ export function renderList(names, toggle) {
 	html`
 		<ul 
 			id="dndNotes" 
-			class="${!toggle
+			class=" ${!toggle
 								? "w-full grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-4 h-fit"
 								: "w-full max-w-[800px] grid grid-cols-1 gap-2 h-fit" 
 			}"
@@ -56,6 +56,7 @@ export function renderList(names, toggle) {
 		</ul>
 	`(document.getElementById('list'))
 
+
 	const listEvent = new CustomEvent('list-rendered')
 	document.dispatchEvent(listEvent)
 
@@ -71,45 +72,47 @@ export function renderList(names, toggle) {
 		const mainPage = document.getElementById('main-main-page')
 		const dndNotes = document.getElementById('dndNotes');
 		if (dndNotes && state.dndNames.length > 0) {
-		dragAndDrop({
-			parent: document.getElementById("dndNotes"),
-			getValues: ()=>state.dndNames,
-			setValues: (newValues) => {
-				mainPage.previousOrder = [...state.dndNames];
-				mainPage.newValues = newValues
-				state.dndNames = reactive(newValues);
-			},
-			config: {
-				dragHandle: '.note-handle',
-				handleEnd: (data) => {
-					console.log("handle end - state.dndNames: ", state.dndNames)
-					if (!state.dndNames?.length) return
-					console.log(data.e)
-					const first = typeof data.e.target.className === 'string' ? data.e.target.className.slice(0,4) : 'not a string'
-					if (first != 'card') {
-						const startEvent = new CustomEvent('start-saving-order')
-						document.dispatchEvent(startEvent)
-						mainPage.saveOrder(mainPage.newValues).catch(() => {
-							state.dndNames = reactive(mainPage.previousOrder);
-							console.error("There was a problem... reverting to previousOrder")
-							mainPage.getList()
-						});
-						const endEvent = new CustomEvent('end-saving-order')
-						document.dispatchEvent(endEvent)
-						const draggingElements = document.querySelectorAll('.dragging');
-						draggingElements.forEach(el => el.classList.remove('dragging'));
-						handleEnd(data)
-					}
+			dndNotes.addEventListener('click', (e) => {
+				e.preventDefault()
+				console.log('click')
+			})
+			dragAndDrop({
+				parent: document.getElementById("dndNotes"),
+				getValues: ()=>state.dndNames,
+				setValues: (newValues) => {
+					mainPage.previousOrder = [...state.dndNames];
+					mainPage.newValues = newValues
+					state.dndNames = reactive(newValues);
 				},
-				plugins: toggle ? [ 
-					//
-				] : [
-					//
-				],
-				dropZoneClass: 'dragging',
-			}
-		})
-	}
+				config: {
+					dragHandle: '.note-handle',
+					handleEnd: (data) => {
+						if (!state.dndNames?.length) return
+						const first = typeof data.e.target.className === 'string' ? data.e.target.className.slice(0,4) : 'not a string'
+						if (first != 'card') {
+							const startEvent = new CustomEvent('start-saving-order')
+							document.dispatchEvent(startEvent)
+							mainPage.saveOrder(mainPage.newValues).catch(() => {
+								state.dndNames = reactive(mainPage.previousOrder);
+								console.error("There was a problem... reverting to previousOrder")
+								mainPage.getList()
+							});
+							const endEvent = new CustomEvent('end-saving-order')
+							document.dispatchEvent(endEvent)
+							const draggingElements = document.querySelectorAll('.dragging');
+							draggingElements.forEach(el => el.classList.remove('dragging'));
+							handleEnd(data)
+						}
+					},
+					plugins: toggle ? [ 
+						//
+					] : [
+						//
+					],
+					dropZoneClass: 'dragging',
+				}
+			})
+		}
 	}
 }
 
