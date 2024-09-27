@@ -66,7 +66,7 @@ export function renderList(names, toggle) {
 		const id = document.createElement('id')
 		id.id = 'no-notes'
 		id.className = "text-lg font-light max-w-[320px] text-center bg-gray-50/60 rounded-lg border-black border mt-10 p-10 h-fit"
-		id.innerHTML = "No notes to show. <br>Create a new note by pressing '+' or via the shortcut 'CTRL+n'."
+		id.innerHTML = `No notes to show. <br>Create a new note by pressing '+'<span class="hidden sm:block"> or via the shortcut 'CTRL+n'.</span>`
 		list.prepend(id)
 	} else {
 		const mainPage = document.getElementById('main-main-page')
