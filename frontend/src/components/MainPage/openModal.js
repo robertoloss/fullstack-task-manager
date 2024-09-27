@@ -28,8 +28,8 @@ export function	openModal(addNoteToList, getList, toggleState) {
 		console.log(JSON.stringify({
 			newName, content, toggleState
 		}))
-		const info = document.getElementById('info-h1');
-		info?.remove()
+		const noNotes = document.getElementById('no-notes');
+		noNotes?.remove()
 		addNoteToList(newName, content, toggleState);
 		form.reset();
 		const modal = document.querySelector('#modal')
