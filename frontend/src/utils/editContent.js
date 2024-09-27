@@ -57,14 +57,14 @@ const editContent = (event) => {
 		} 
 	}) 
 	inputElement?.addEventListener('keydown', (e) => { 
-    if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
+    if (!(e.metaKey || e.ctrlKey) && e.key === 'Enter') {
         e.preventDefault();
         const cursorPos = inputElement.selectionStart;
         const textBefore = inputElement.value.substring(0, cursorPos);
         const textAfter = inputElement.value.substring(cursorPos);
         inputElement.value = textBefore + '\n' + textAfter;
         inputElement.setSelectionRange(cursorPos + 1, cursorPos + 1); // move cursor after the new line
-    } else if (e.key === 'Enter') {
+    } else if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
         e.preventDefault();
         updateNote(e);
     }
