@@ -22,7 +22,6 @@ export default function checkInactivity(minutes) {
 		if (response.ok) {
 			app.router.go('/login')
 		}
-		alert('You have been logged out due to inactivity.');
 	}
 	
 	function resetInactivityTimeout() {
