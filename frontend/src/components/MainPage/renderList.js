@@ -23,7 +23,7 @@ export function renderList(names, toggle) {
 	html`
 		<ul 
 			id="dndNotes" 
-			class=" ${!toggle
+			class="mb-[120px] ${!toggle
 								? "w-full grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-4 h-fit"
 								: "w-full max-w-[800px] grid grid-cols-1 gap-2 h-fit" 
 			}"
