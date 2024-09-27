@@ -156,7 +156,7 @@ export class Card extends HTMLElement {
 					border-gray-900 rounded-lg gap-y-6 min-w-[280px] ${this.toggleOn ? '' : 'max-w-[520px]'} 
 					${this.toggleOn ? 'h-[80px]' : 'h-[280px]'} transition-all"
 			>
-				<div class="card flex flex-col gap-y-4 justify-start h-full ${this.toggleOn ? 'justify-center' : ''}">
+				<div class="card flex flex-col gap-y-4 justify-start h-fit ${this.toggleOn ? 'justify-center' : ''}">
 					<div class="card flex flex-row w-full justify-between">
 						<div 
 							id="title" 
@@ -182,12 +182,22 @@ export class Card extends HTMLElement {
 								<div class="hidden sm:block">
 									${svgHandle}
 								</div>
+								<div class="flex flex-col sm:hidden">
+									<div class="flex flex-row h-[14px]">
+										<div class="w-[8px]">${svgHandle}</div>
+										<div>${svgHandle}</div>
+									</div>
+									<div class="flex flex-row">
+										<div class="w-[8px]">${svgHandle}</div>
+										<div>${svgHandle}</div>
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>
 					<div 
 						id="content"
-						class="card w-full text-wrap  cursor-pointer font-light text-base line-clamp-6 ${this.toggleOn ? 'hidden' : 'block'}" 
+						class="card w-full text-wrap h-full cursor-pointer font-light text-base line-clamp-6 ${this.toggleOn ? 'hidden' : 'block'}" 
 						data-id="${this.noteId}"
 					>
 						${this.content}
