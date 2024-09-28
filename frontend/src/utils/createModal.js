@@ -10,7 +10,6 @@ export default function	openModal({
 
 	const modal = document.createElement('dialog')
 	modal.className = `${borderWidth} ${borderColor} ${Height} ${maxWidth} rounded-md p-6 w-full`
-	modal.id = 'modal'
 	modal.innerHTML =  modalHtml
 	document.body.appendChild(modal);
 	setTimeout(() => {

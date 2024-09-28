@@ -215,7 +215,7 @@ export class Card extends HTMLElement {
 		`
 		this.addEventListener('click', (event) => {
 				if (event.target.classList.contains('delete-button') || event.target.classList.contains('delete-button-2')) {
-					if (this.deleteButtonIsActive) openDeleteModal(()=>this.deleteName(event))
+					if (this.deleteButtonIsActive) openDeleteModal(()=>this.deleteName(event), this.noteTitle)
 				} else if (event.target.classList.contains('name-item')) {
 					editTitle(event);
 				}

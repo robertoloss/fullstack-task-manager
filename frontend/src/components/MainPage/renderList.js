@@ -111,7 +111,10 @@ export function renderList(names, toggle, titleModified) {
 					] : [
 						//
 					],
-					dropZoneClass: 'dragging',
+					synthDropZoneClass: 'dropzoneMobile',
+					//dragging: 'dragging',
+					dropZoneClass: 'dropzone',
+					//synthDraggingClass: 'dragging',
 				}
 			})
 		}
