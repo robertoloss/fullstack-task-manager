@@ -49,8 +49,15 @@ export class LoginPage extends HTMLElement {
 						class="flex flex-col gap-y-2 w-full"
 					>
 						<div id='auth-card-children' class="flex flex-col gap-y-2">
-							<input-component data-type="email"></input-component>
-							<input-component data-type="password" data-login="true" ></input-component>
+							<input-component 
+								data-type="email"
+							>
+							</input-component>
+							<input-component 
+								data-type="password" 
+								data-login="true"
+							>
+							</input-component>
 							<div id="error-message" class="min-h-[20px]"></div>
 							<button id="login-button" type="submit"
 								class="flex flex-col justify-center items-center rounded-md bg-gray-300 font-light 
