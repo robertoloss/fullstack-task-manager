@@ -22,8 +22,6 @@ export class Card extends HTMLElement {
 		this.toggleOn = this.toggleOn ?? this.dataset.toggleon === "true" ? true : false
 		this.addEventListener('click', (event)=>{
 			const isCard = event.target.className.toString().slice(0,4) === 'card' || event.target.className.toString().slice(1,5) === 'card' 
-			console.log("isCard: ", isCard)
-			console.log("event.target: ", event.target)
 			event.stopPropagation()
 			if (['delete-button','title', 'delete-button-2'].includes(event.target.id)) return
 			if (['note-handle'].includes(event.target.className)) return

@@ -80,15 +80,16 @@ export class MainPage extends HTMLElement {
 
 	saveOrder = saveOrder
 
-	getList = async (titleModified, ignore)=> {
+	getList = async (titleModified, ignoreWrapper)=> {
 		console.log("Fetching list...")
 		const response = await fetch(`${serverURL}/list`, {
 			method: 'GET',
 			credentials: 'include'	
 		});
 		const { names  } = await response.json()
-		if (!ignore) {
-			console.log("Rerendering list..")
+		console.log("ignore wrapped: ", ignoreWrapper?.name, ignoreWrapper?.ignore)
+		if (!ignoreWrapper?.ignore) {
+			console.log("Rerendering list..", ignoreWrapper?.name)
 			list.innerHTML = ''
 			app.store.notes = names
 			this.renderList(app.store.notes, this.state.toggle, titleModified)

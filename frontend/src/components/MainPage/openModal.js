@@ -3,7 +3,6 @@ import createModal from '../../utils/createModal'
 import { serverURL } from '../../actions/server';
 
 export function	openModal(addNoteToList, getList, toggleState) {
-	console.log(app.setIgnore)
 	const modal = createModal({
 		maxWidth: 'max-w-[calc(100vw-32px)] sm:max-w-[600px]',
 		Height: 'h-full max-h-[600px]',
@@ -26,14 +25,12 @@ export function	openModal(addNoteToList, getList, toggleState) {
 		let ignore = false;
 		app.setIgnore = (bool)=>{
 			if (bool) ignore = bool
+			console.log("ignore set to: ", ignore)
 		}
 		event.preventDefault();
 		const formObject = Object.fromEntries(new FormData(form))
 		const { name: newName, content } = formObject;
-		//debugger
-		console.log(JSON.stringify({
-			newName, content, toggleState
-		}))
+
 		const noNotes = document.getElementById('no-notes');
 		noNotes?.remove()
 		const info = document.getElementById('info-h1');
@@ -59,8 +56,12 @@ export function	openModal(addNoteToList, getList, toggleState) {
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify(formObject)
 		});
-		if (response.ok && !ignore) {
-			getList(null, ignore);
+		if (response.ok) {
+			const ignoreWrapper = {
+				name: newName,
+				ignore
+			}
+			getList(null, ignoreWrapper);
 		} else {
 			console.error('Failed to add name');
 			const firstItem = list.firstElementChild
