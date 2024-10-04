@@ -32,6 +32,9 @@ app.use(express.json())
 app.use(express.urlencoded({
 	extended: true
 }))
+app.get('/keep-alive', (_req: express.Request, res: express.Response) => {
+	res.status(200).send('Server is alive')
+})
 app.post('/auth/login', login)
 app.post('/auth/register', register)
 app.post('/auth/verify', verifyUser)
@@ -51,6 +54,17 @@ export const db = new Pool({
   connectionTimeoutMillis: 2000,
 });
 
+const agent = production ? undefined : new https.Agent({ rejectUnauthorized: false });
+
+setInterval(() => {
+  https.get(`${process.env.BASE_URL}/keep-alive`, { agent }, (res) => {
+    console.log('Keep-alive ping successful:', res.statusCode);
+  }).on('error', (e) => {
+    console.error('Keep-alive ping failed:', e);
+  });
+}, 10 * (60 * 1000)); 
+
+
 if (!production) {
 	const sslOptions = {
 		key: fs.readFileSync(path.join(__dirname, 'server.key')),
@@ -59,8 +73,6 @@ if (!production) {
 	https.createServer(sslOptions, app).listen(8090, () => {
 		console.log('HTTPS Server running on port 8090');
 	});
-
-
 	http.createServer((req, res) => {
 		res.writeHead(301, { 'Location': `https://${req.headers.host}${req.url}` });
 		res.end();
@@ -71,6 +83,7 @@ if (!production) {
 	app.listen(process.env.PORT || 3000, () => {
 		console.log(`Server running in production mode on port ${process.env.PORT || 3000}`);
 	});
+
 }
 
 
