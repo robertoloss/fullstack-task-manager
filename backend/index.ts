@@ -29,9 +29,6 @@ app.use(express.json())
 app.use(express.urlencoded({
 	extended: true
 }))
-app.get('/keep-alive', (_req: express.Request, res: express.Response) => {
-	res.status(200).send('Server is alive')
-})
 app.post('/auth/login', login)
 app.post('/auth/register', register)
 app.post('/auth/verify', verifyUser)
@@ -50,16 +47,6 @@ export const db = new Pool({
   idleTimeoutMillis: 30000, 
   connectionTimeoutMillis: 2000,
 });
-
-const agent = production ? undefined : new https.Agent({ rejectUnauthorized: false });
-
-setInterval(() => {
-  https.get(`${process.env.BASE_URL}/keep-alive`, { agent }, (res) => {
-    console.log('Keep-alive ping successful:', res.statusCode);
-  }).on('error', (e) => {
-    console.error('Keep-alive ping failed:', e);
-  });
-}, 1 * (60 * 1000)); 
 
 
 if (!production) {

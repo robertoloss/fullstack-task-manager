@@ -3,6 +3,7 @@ import createModal from '../../utils/createModal'
 import { serverURL } from '../../actions/server';
 
 export function	openModal(addNoteToList, getList, toggleState) {
+	console.log(app.setIgnore)
 	const modal = createModal({
 		maxWidth: 'max-w-[calc(100vw-32px)] sm:max-w-[600px]',
 		Height: 'h-full max-h-[600px]',
@@ -21,6 +22,11 @@ export function	openModal(addNoteToList, getList, toggleState) {
 
 	const submitButton = modal.querySelector('#new-note-button');
 	submitButton.addEventListener('click', async (event) => {
+		app.setIgnore(true)
+		let ignore = false;
+		app.setIgnore = (bool)=>{
+			if (bool) ignore = bool
+		}
 		event.preventDefault();
 		const formObject = Object.fromEntries(new FormData(form))
 		const { name: newName, content } = formObject;
@@ -43,7 +49,7 @@ export function	openModal(addNoteToList, getList, toggleState) {
 		}
 		addNoteToList(newName, content, toggleState);
 		form.reset();
-		const modal = document.querySelector('#modal')
+		const modal = document.getElementById('modal')
 		modal?.close()
 		app.modalIsOpen = false
 		modal?.remove()
@@ -53,8 +59,8 @@ export function	openModal(addNoteToList, getList, toggleState) {
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify(formObject)
 		});
-		if (response.ok) {
-			getList();
+		if (response.ok && !ignore) {
+			getList(null, ignore);
 		} else {
 			console.error('Failed to add name');
 			const firstItem = list.firstElementChild

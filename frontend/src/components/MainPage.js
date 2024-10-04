@@ -80,15 +80,19 @@ export class MainPage extends HTMLElement {
 
 	saveOrder = saveOrder
 
-	getList = async (titleModified)=> {
+	getList = async (titleModified, ignore)=> {
+		console.log("Fetching list...")
 		const response = await fetch(`${serverURL}/list`, {
 			method: 'GET',
 			credentials: 'include'	
 		});
 		const { names  } = await response.json()
-		list.innerHTML = ''
-		app.store.notes = names
-		this.renderList(app.store.notes, this.state.toggle, titleModified)
+		if (!ignore) {
+			console.log("Rerendering list..")
+			list.innerHTML = ''
+			app.store.notes = names
+			this.renderList(app.store.notes, this.state.toggle, titleModified)
+		}
 	}
 
 	addNoteToList = (name, content, toggleState) => {

@@ -12,6 +12,12 @@ window.app = {}
 app.router = Router
 app.store = Store
 
+let ignore = false;
+
+app.setIgnore = (bool)=>{
+	if (bool) ignore = bool
+}
+
 document.addEventListener('DOMContentLoaded', () => {
 	app.router.init()
 })
