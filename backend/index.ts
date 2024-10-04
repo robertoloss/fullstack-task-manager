@@ -14,14 +14,11 @@ import { checkUser } from './controllers/checkUser'
 import fs from 'fs'
 import https from 'https'
 
-
 dotenv.config()
-
 const dbUrl = process.env.DB_URL;
 const baseUrl = process.env.BASE_URL;
 const production = process.env.NODE_ENV === 'production'
 
-console.log("base url: ", baseUrl)
 const app = express()
 app.use(cors({
     origin: baseUrl, 
@@ -62,7 +59,7 @@ setInterval(() => {
   }).on('error', (e) => {
     console.error('Keep-alive ping failed:', e);
   });
-}, 10 * (60 * 1000)); 
+}, 1 * (60 * 1000)); 
 
 
 if (!production) {
