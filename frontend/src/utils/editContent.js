@@ -2,6 +2,7 @@ import { serverURL } from "../actions/server";
 
 const editContent = (event) => {
 	const contentItem = event.target;
+	console.log(contentItem)
 	const id = contentItem.getAttribute('data-id');
 	const currentName = contentItem.innerHTML.replace(/<br\s*\/?>/gi, '\n').replace(/&nbsp;/g, ' ').trim();
 	event.target.style.overflowY = 'hidden'
@@ -26,6 +27,14 @@ const editContent = (event) => {
 		if (newContent !== currentName) {
 			contentItem.innerHTML = ''
 			contentItem.innerHTML = newContent;
+			const mainPage = document.getElementById('main-main-page')
+			app.store.notes = app.store.notes.map(note => {
+				if (note.id === id) {
+					note.content = newContent
+				}
+				return note
+			})
+			mainPage?.renderList(app.store.notes, mainPage.toggleState, false)
 			try {
 				const response = await fetch(`${serverURL}/list/${id}`, {
 					method: 'PUT', 

@@ -4,6 +4,7 @@ import { serverURL } from "../actions/server";
 const editTitle = (event) => {
 	console.log(event.target)
 	const nameItem = event.target;
+	const id = nameItem.getAttribute('data-id');
 	const currentName = nameItem.textContent.trim();
 
 	let inputElement = document.querySelector('#title-input')
@@ -26,6 +27,14 @@ const editTitle = (event) => {
 		if (newName !== currentName) {
 			nameItem.innerHTML = ''
 			nameItem.textContent = newName;
+			const mainPage = document.getElementById('main-main-page')
+			app.store.notes = app.store.notes.map(note => {
+				if (note.id === id) {
+					note.title = newName
+				}
+				return note
+			})
+			mainPage?.renderList(app.store.notes, mainPage.toggleState, false)
 			document.dispatchEvent(new CustomEvent('start-saving-order'))
 			try {
 				const id = nameItem.getAttribute('data-id');
