@@ -48,7 +48,7 @@ const Router = {
 		} 
 		if (addToHistory) {
 			history.pushState({ route },null,route)
-			document.title = "Cool website"
+			document.title = "QwikNotes"
 		}
 		function switchPage() {
 			switch (origin + route) {
