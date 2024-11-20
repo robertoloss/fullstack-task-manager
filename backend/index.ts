@@ -50,11 +50,7 @@ export const db = new Pool({
 
 
 if (!production) {
-	const sslOptions = {
-		key: fs.readFileSync(path.join(__dirname, 'server.key')),
-		cert: fs.readFileSync(path.join(__dirname, 'server.cert')),
-	};
-	https.createServer(sslOptions, app).listen(8090, () => {
+	http.createServer(app).listen(8090, () => {
 		console.log('HTTPS Server running on port 8090');
 	});
 	http.createServer((req, res) => {
