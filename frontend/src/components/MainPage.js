@@ -49,7 +49,7 @@ export class MainPage extends HTMLElement {
 			this.renderList(app.store.notes, this.state.toggle)
 		})
 		this.addEventListener('get-list', (event) => {
-			if (event.detail?.titleModified) this.getList(true)
+			if (event.detail?.titleModified) this.getList(true, null, event.detail?.toggleOn)
 			else this.getList(false)
 		})
 		this.style.width = ''
@@ -80,7 +80,7 @@ export class MainPage extends HTMLElement {
 
 	saveOrder = saveOrder
 
-	getList = async (titleModified, ignoreWrapper)=> {
+	getList = async (titleModified, ignoreWrapper, toggleOn)=> {
 		console.log("Fetching list...")
 		const response = await fetch(`${serverURL}/list`, {
 			method: 'GET',

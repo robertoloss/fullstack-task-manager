@@ -15,17 +15,23 @@ export class Card extends HTMLElement {
 		}
 	}
 	connectedCallback() {
+		this.contentModalIsOpen = false;
 		this.deleteButtonIsActive = true
 		this.noteId = this.dataset.id
 		this.noteTitle = this.noteTitle ?? this.dataset.name
 		this.content = this.dataset.content
 		this.toggleOn = this.toggleOn ?? this.dataset.toggleon === "true" ? true : false
-		this.addEventListener('click', (event)=>{
+		this.openContentModal = (event)=>{
+			if (this.contentModalIsOpen) return
+			this.contentModalIsOpen = true;
+
 			const isCard = event.target.className.toString().slice(0,4) === 'card' || event.target.className.toString().slice(1,5) === 'card' 
 			event.stopPropagation()
-			if (['delete-button','title', 'delete-button-2'].includes(event.target.id)) return
+			if (['delete-button', 'delete-button-2'].includes(event.target.id)) return
+			if (event.target.id === 'title' && !this.toggleOn) return
 			if (['note-handle'].includes(event.target.className)) return
 			if (!isCard) return
+
 			const modal = document.createElement('dialog')
 			modal.id = `modal-note-${this.noteId}`
 			modal.className = `border border-black rounded-md p-6 pl-8  
@@ -63,12 +69,13 @@ export class Card extends HTMLElement {
 
 			const noteTitle = document.querySelector(`#note-title${this.noteId}`);
 			noteTitle.addEventListener('click', (event)=>{
-				editTitle(event)
+				console.log("edit title this toggleon", this.toggleOn)
+				editTitle(event, this.toggleOn)
 			})
 			const noteContent = document.querySelector(`#note-content${this.noteId}`)
 			noteContent.classList.add('scrollable')
 			noteContent.addEventListener('click', (event)=>{
-				editContent(event)
+				editContent(event, this.toggleOn)
 			})
 
 			modal.addEventListener('keydown', (event) => {
@@ -85,6 +92,7 @@ export class Card extends HTMLElement {
 					event.clientX <= rect.left + rect.width;
 				if (!isInDialog) {
 					modal.close();
+					this.contentModalIsOpen = false;
 					modal.remove()
 					document.body.style.overflow = 'auto'
 					if (mainPage.length != 0) mainPage.style.marginRight = '0px'
@@ -95,11 +103,13 @@ export class Card extends HTMLElement {
 			const closeButton = modal.querySelector('#closeButton');
 			closeButton.addEventListener('click', () => {
 				modal.close();
+				this.contentModalIsOpen = false;
 				document.body.style.overflow = 'auto'
 				document.body.removeChild(modal)
 				if (mainPage.length != 0) mainPage.style.marginRight = '0px'
 			});
-		})
+		}
+		this.addEventListener('click', this.openContentModal)
 
 		this.render()
 		const deactivateHandle = () => {
@@ -215,7 +225,12 @@ export class Card extends HTMLElement {
 				if (event.target.classList.contains('delete-button') || event.target.classList.contains('delete-button-2')) {
 					if (this.deleteButtonIsActive) openDeleteModal(()=>this.deleteName(event), this.noteTitle)
 				} else if (event.target.classList.contains('name-item')) {
-					editTitle(event);
+					if (!this.toggleOn) editTitle(event)
+					else {
+						event.stopPropagation()
+						console.log("not toggle on")
+						this.openContentModal(event)
+					}
 				}
 		});
 		

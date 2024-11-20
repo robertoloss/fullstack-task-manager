@@ -1,6 +1,6 @@
 import { serverURL } from "../actions/server";
 
-const editContent = (event) => {
+const editContent = (event,toggleOn) => {
 	const contentItem = event.target;
 	console.log(contentItem)
 	const id = contentItem.getAttribute('data-id');
@@ -34,7 +34,7 @@ const editContent = (event) => {
 				}
 				return note
 			})
-			mainPage?.renderList(app.store.notes, mainPage.toggleState, false)
+			mainPage?.renderList(app.store.notes, toggleOn, false)
 			try {
 				const response = await fetch(`${serverURL}/list/${id}`, {
 					method: 'PUT', 

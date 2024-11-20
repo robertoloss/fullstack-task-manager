@@ -1,11 +1,12 @@
 import { serverURL } from "../actions/server";
 
 
-const editTitle = (event) => {
+const editTitle = (event, toggleOn) => {
 	console.log(event.target)
 	const nameItem = event.target;
 	const id = nameItem.getAttribute('data-id');
 	const currentName = nameItem.textContent.trim();
+	console.log("editing title")
 
 	let inputElement = document.querySelector('#title-input')
 
@@ -34,7 +35,7 @@ const editTitle = (event) => {
 				}
 				return note
 			})
-			mainPage?.renderList(app.store.notes, mainPage.toggleState, false)
+			mainPage?.renderList(app.store.notes, toggleOn, false)
 			document.dispatchEvent(new CustomEvent('start-saving-order'))
 			try {
 				const id = nameItem.getAttribute('data-id');
@@ -54,7 +55,8 @@ const editTitle = (event) => {
 					{ 
 						'bubbles': true,
 						detail: {
-							titleModified: true
+							titleModified: true,
+							toggleOn: toggleOn
 						}
 					}
 				))
