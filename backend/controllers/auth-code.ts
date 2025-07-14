@@ -12,8 +12,8 @@ export async function createAuthCode(req: express.Request, res: express.Response
 	console.log("Auth code created: ", code)
 
 	const storedCodeRes = await db.query(`
-		INSERT INTO	auth_codes (email, code)
-		VALUES ($1, $2)
+		INSERT INTO	qwiknotes.auth_codes (email, code, is_valid)
+		VALUES ($1, $2, true)
 		RETURNING code
 	`, [email, code])
 	if (storedCodeRes.rowCount = 0) {
@@ -56,16 +56,17 @@ export async function verifyCode(req: express.Request, res: express.Response) {
 	console.log("verifyCode - email, body: ", email, code)
 	try {
 		const data = await db.query(`
-				SELECT 1 from auth_codes
+				SELECT 1 from qwiknotes.auth_codes
 				where email=$1 and code=$2 and is_valid=true 
 		`, [email, code])
+    console.log("verifyCode data", data)
 
 		const codeOk = data.rowCount > 0
 
 		if (codeOk) {
       res.status(200).json({ message: 'Code is valid.' });
 			const invalidation = await db.query(`
-				UPDATE auth_codes
+				UPDATE qwiknotes.auth_codes
 				SET is_valid=false
 				where email=$1 and code=$2 and is_valid=true
 			`, [email, code])

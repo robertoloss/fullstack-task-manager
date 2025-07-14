@@ -25,7 +25,7 @@ export async function register(req: express.Request, res: express.Response) {
 			const hash = await hashPassword(password)
 			console.log("Hash: ", hash)
 			const result = await db.query(`
-				INSERT INTO users
+				INSERT INTO qwiknotes.users
 				(email, password)
 				VALUES($1, $2)
 				RETURNING id
@@ -52,7 +52,7 @@ export async function login(req: express.Request, res: express.Response) {
 		if (!email) res.sendStatus(404)
 
 		const result = await db.query(`
-			SELECT * FROM users
+			SELECT * FROM qwiknotes.users
 			WHERE email = $1
 		`, [email])
 		const user = result.rows[0]
@@ -90,7 +90,7 @@ export async function resetPassword(req: express.Request, res: express.Response)
 	const hash = await hashPassword(password)
 	try {
 		const data = await db.query(`
-			UPDATE users
+			UPDATE qwiknotes.users
 			set password=$2
 			where email=$1
 		`, [email, hash])

@@ -1,18 +1,16 @@
 import express from 'express'
 import http from 'http'
+import https from 'https'
 import cookieParser from 'cookie-parser'
 import cors from 'cors'
 import pg from 'pg'
 import router from './router'
-import path from 'path'
 import dotenv from 'dotenv'
 import { verifyToken } from './middleware'
 import { login, register, resetPassword } from './controllers/authentication'
 import { verifyUser } from './controllers/verifyUser'
 import { createAuthCode, verifyCode } from './controllers/auth-code'
 import { checkUser } from './controllers/checkUser'
-import fs from 'fs'
-import https from 'https'
 
 dotenv.config()
 const dbUrl = process.env.DB_URL;
@@ -20,6 +18,16 @@ const baseUrl = process.env.BASE_URL;
 const production = process.env.NODE_ENV === 'production'
 
 const app = express()
+app.use((req, res, next) => {
+  // Set the Access-Control-Allow-Origin header to allow requests from http://localhost:5174
+  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:5174');
+
+  // You might also need to allow specific headers and methods
+  res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+
+  next();
+});
 app.use(cors({
     origin: baseUrl, 
 		credentials: true
@@ -29,6 +37,7 @@ app.use(express.json())
 app.use(express.urlencoded({
 	extended: true
 }))
+app.get('/test', (req, res)=> res.json({ message: "This route works!"}))
 app.post('/auth/login', login)
 app.post('/auth/register', register)
 app.post('/auth/verify', verifyUser)
@@ -54,7 +63,7 @@ if (!production) {
 		console.log('HTTPS Server running on port 8090');
 	});
 	http.createServer((req, res) => {
-		res.writeHead(301, { 'Location': `https://${req.headers.host}${req.url}` });
+		res.writeHead(301, { 'Location': `http://${req.headers.host}${req.url}` });
 		res.end();
 	}).listen(80, () => {
 		console.log('HTTP server listening on port 80 and redirecting to HTTPS');

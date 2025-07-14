@@ -7,7 +7,7 @@ const isDevelopment = process.env.NODE_ENV !== 'production';
 export default defineConfig({
   server: isDevelopment
     ? {
-        https: {
+        http: {
           key: fs.readFileSync(path.resolve(__dirname, 'localhost.key')),
           cert: fs.readFileSync(path.resolve(__dirname, 'localhost.crt')),
         },

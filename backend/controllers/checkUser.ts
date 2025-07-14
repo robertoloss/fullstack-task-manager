@@ -6,7 +6,7 @@ export async function checkUser(req: express.Request, res: express.Response) {
 	console.log("checkUser - email: ", email)
 	try {
 		const data = await db.query(`
-			SELECT 1 FROM users
+			SELECT 1 FROM qwiknotes.users
 			where email=$1
 		`, [email])
 		console.log("checkUser - data.rows: ", data.rows)

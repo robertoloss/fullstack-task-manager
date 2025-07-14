@@ -4,7 +4,7 @@ import { db } from '../index';
 export async function getAllUsers(_req: express.Request, res: express.Response) {
 	try {
 		const response = await db.query(`
-			SELECT * FROM users
+			SELECT * FROM qwiknotes.users
 		`)
 		if (response.rowCount && response.rowCount > 0) res.send(response.rows)
 		else res.sendStatus(400)
@@ -18,7 +18,7 @@ export async function deleteUser(req: express.Request, res: express.Response) {
 	console.log("Id of user to delete: ", id)
 	try {
 		const response = await db.query(`
-			DELETE FROM users
+			DELETE FROM qwiknotes.users
 			WHERE id = $1
 		`,[id])
 		if (response.rowCount && response.rowCount > 0) res.sendStatus(200)
@@ -33,7 +33,7 @@ export async function getCurrentUser(req: express.Request, res: express.Response
 	const userId = (req as any).user;
 	try {
 		const result = await db.query(`
-			SELECT email from users
+			SELECT email from qwiknotes.users
 			WHERE id = $1
 		`, [userId])
 		if (result.rowCount && result.rowCount > 0) {

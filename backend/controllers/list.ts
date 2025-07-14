@@ -13,9 +13,9 @@ export async function getList(req: express.Request, res: express.Response) {
 		console.log("User ID: ", userId)
 		const result = await db.query(`
 			SELECT *
-			FROM notes
+			FROM qwiknotes.notes
 			WHERE user_id = $1
-			ORDER BY date_created DESC
+			ORDER BY created_at DESC
 		`, [userId])
 		if (result.rows) {
 			const finalResult = {
@@ -40,7 +40,7 @@ export async function deleteListEntry(req: express.Request, res: express.Respons
 	}
 	try {
 		const delRes = await db.query(`
-		DELETE FROM notes
+		DELETE FROM qwiknotes.notes
 		WHERE id = $1 and user_id = $2
 	`, [id, userId])
 	if (delRes.rowCount && delRes.rowCount > 0) {
@@ -68,7 +68,7 @@ export async function postListEntry(req: express.Request, res: express.Response)
 	if (name && name != "") {
 		try {
 			const result = await db.query(`
-				INSERT INTO notes (title, content, user_id)
+				INSERT INTO qwiknotes.notes (title, content, user_id)
 				VALUES ($1, $2, $3)
 				RETURNING title
 			`, [name, content, userId]);
@@ -98,7 +98,7 @@ export async function updateListEntry(req: express.Request, res: express.Respons
 	}
 	try {
 		const result = await db.query(`
-			UPDATE notes SET	
+			UPDATE qwiknotes.notes SET	
 			title = COALESCE(NULLIF($1,NULL), title),
 			content = COALESCE(NULLIF($4,NULL), content)
 			where id = $2 and user_id = $3
@@ -124,7 +124,7 @@ export async function updateNotesPosition(req: express.Request, res: express.Res
 
   try {
 			const query = `
-      UPDATE notes
+      UPDATE qwiknotes.notes
       SET position = CASE
         ${notes.map((_, i) => `WHEN id = $${i * 2 + 1} THEN CAST($${i * 2 + 2} AS INTEGER)`).join(' ')}
       END

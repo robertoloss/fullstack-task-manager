@@ -7,6 +7,7 @@ import Store from "./services/Store.js"
 import checkInactivity from "./utils/checkInactivity.js"
 
 checkInactivity(10)
+console.log("hello")
 
 window.app = {}
 app.router = Router

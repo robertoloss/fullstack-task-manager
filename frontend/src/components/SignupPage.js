@@ -79,7 +79,7 @@ export class SignupPage extends HTMLElement {
 								</div>
 							</form>
 						` : `
-							<form id="verify-form" method="post" action="/auth-code/verify" 
+							<form id="verify-form" method="post"
 								class="flex flex-col gap-y-2 w-full"
 							>
 								<div id='auth-card-children' class="flex flex-col gap-y-2">
@@ -140,6 +140,7 @@ export class SignupPage extends HTMLElement {
 
 		const verifyForm = document.querySelector('#verify-form')
 		verifyForm?.addEventListener('submit', async (e)=> {
+      console.log("Verify form button clicked")
 			if (this.state.error) return
 			e.preventDefault()
 			this.showSpinnerInButton('verify-button')

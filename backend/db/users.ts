@@ -12,7 +12,7 @@ export async function userWithEmailExists(email: string)
 	}> {
 	try {
 		const result = await db.query(`
-			SELECT * FROM users 
+			SELECT * FROM qwiknotes.users 
 			WHERE email = $1
 		`, [email]);
 		console.log("userWithEmailExists: ", result.rows)

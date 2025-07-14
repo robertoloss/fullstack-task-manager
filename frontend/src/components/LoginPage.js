@@ -1,5 +1,6 @@
 //import useTailwind from "../utils/useTailwind.js"
 import login from "../actions/auth/login.js"
+import { serverURL } from "../actions/server.js"
 
 export class LoginPage extends HTMLElement {
 	constructor() {
@@ -73,6 +74,7 @@ export class LoginPage extends HTMLElement {
 		const loginForm = this.querySelector('#login-form')
 
 		loginForm?.addEventListener('submit', async (event) => {
+            console.log("Server URL (from login page):", serverURL)
 			event.preventDefault()
 			this.showSpinnerInButton('login-button')
 			const { email, password } = Object.fromEntries(new FormData(loginForm))
