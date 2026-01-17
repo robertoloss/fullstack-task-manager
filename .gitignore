@@ -7,4 +7,6 @@
 /backend/server.cert
 /backend/server.csr
 
+/node_modules
+
 .env
